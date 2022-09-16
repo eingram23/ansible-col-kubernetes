@@ -1,0 +1,11 @@
+- name: Copy definition to master node
+  ansible.builtin.copy:
+    src: "{{ manifest }}.yaml"
+    dest: /opt/kubernetes/defs/{{ manifest }}.yaml
+    mode: '0644'
+
+- name: Deploy from manifest
+  kubernetes.core.k8s:
+    state: present
+    src: /opt/kubernetes/defs/{{ manifest }}.yaml
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
