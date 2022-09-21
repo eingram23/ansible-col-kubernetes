@@ -1,0 +1,30 @@
+
+- name: Download traefik CRD definitions manifest
+  ansible.builtin.get_url:
+    url: "{{ traefik_crd_manifest_url }}"
+    dest: "{{ dest }}{{ traefik_crd_manifest }}"
+    mode: '0644'
+
+- name: Deploy traefik CRD definitions
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ traefik_crd_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Download traefik RBAC manifest
+  ansible.builtin.get_url:
+    url: "{{ traefik_rbac_manifest_url }}"
+    dest: "{{ dest }}{{ traefik_rbac_manifest }}"
+    mode: '0644'
+
+- name: Copy traefik service manifest to host
+  ansible.builtin.copy:
+    src: traefik-service.yaml
+    dest: "{{ dest }}traefik-service.yaml"
+    mode: '0644'
+
+- name: Deploy traefik service
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}traefik-service.yaml"
+    kubeconfig: "{{ kubeconfig }}"

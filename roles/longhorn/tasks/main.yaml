@@ -1,0 +1,64 @@
+- name: Download longhorn-iscsi-install manifest
+  ansible.builtin.get_url:
+    url: "{{ iscsi_manifest_url }}"
+    dest: "{{ dest }}{{ iscsi_manifest }}"
+    mode: '0644'
+
+- name: Deploy longhorn-iscsi-install
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ iscsi_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Pause for 20 seconds
+  ansible.builtin.pause:
+    seconds: 20
+
+- name: Download longhorn manifest
+  ansible.builtin.get_url:
+    url: "{{ longhorn_manifest_url }}"
+    dest: "{{ dest }}{{ longhorn_manifest }}"
+    mode: '0644'
+
+- name: Deploy longhorn
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ longhorn_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Remove longhorn-iscsi-install pods
+  kubernetes.core.k8s:
+    state: absent
+    src: "{{ dest }}{{ iscsi_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Delete default longhorn-frontend service so we can install new service with IngressRoute
+  kubernetes.core.k8s_service:
+    state: absent
+    name: longhorn-frontend
+    namespace: longhorn-system
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Copy longhorn-ui manifest to host
+  ansible.builtin.copy:
+    src: longhorn-ui.yaml
+    dest: "{{ dest }}longhorn-ui.yaml"
+    mode: '0644'
+
+- name: Deploy longhorn-ui
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}longhorn-ui.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Copy longhorn-ingress manifest to host
+  ansible.builtin.copy:
+    src: longhorn-ingress.yaml
+    dest: "{{ dest }}longhorn-ingress.yaml"
+    mode: '0644'
+
+- name: Deploy longhorn-ingress
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}longhorn-ingress.yaml"
+    kubeconfig: "{{ kubeconfig }}"
