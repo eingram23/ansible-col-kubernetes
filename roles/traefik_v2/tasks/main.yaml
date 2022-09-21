@@ -1,4 +1,3 @@
-
 - name: Download traefik CRD definitions manifest
   ansible.builtin.get_url:
     url: "{{ traefik_crd_manifest_url }}"
