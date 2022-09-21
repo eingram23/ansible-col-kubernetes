@@ -1,0 +1,32 @@
+- name: Install metallb load balancer for kubernetes
+  hosts: "{{ hostvar }}"
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Install metallb
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.manifest
+        tasks_from: apply_url
+      vars:
+        manifest_url: "https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml"
+        manifest: "metallb-native"
+
+    # - name: Make sure speaker DaemonSet is running before proceeding
+    #   ansible.builtin.shell: kubectl get daemonset speaker -n metallb-system
+    #   register: result
+    #   until: result.rc == 0
+    #   retries: 10
+    #   delay: 5
+
+    - name: Pause for 20 seconds
+      ansible.builtin.pause:
+        seconds: 20
+
+    - name: Create IP pool
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.manifest
+        tasks_from: apply
+      vars:
+        manifest: "metallb-ippool"
