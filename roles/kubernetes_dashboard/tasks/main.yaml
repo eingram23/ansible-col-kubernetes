@@ -7,14 +7,6 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: metallb_installed
 
-- name: Install dashboard
-  ansible.builtin.include_role:
-    name: eingram23.kubernetes.manifest
-    tasks_from: apply
-  vars:
-    manifest: "kubernetes-dashboard-lb"
-  when: metallb_installed['resources']
-
 - name: Get Kubernetes Dashboard version
   ansible.builtin.command: curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||'
   register: dashboard_version
