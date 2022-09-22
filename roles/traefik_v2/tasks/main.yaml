@@ -27,3 +27,15 @@
     state: present
     src: "{{ dest }}traefik-service.yaml"
     kubeconfig: "{{ kubeconfig }}"
+
+- name: Copy traefik dashbard ingressroute manifest to host
+  ansible.builtin.copy:
+    src: traefik-dashboard-ingress.yaml
+    dest: "{{ dest }}traefik-dashboard-ingress.yaml"
+    mode: '0644'
+
+- name: Deploy traefik dashboard ingressroute
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}traefik-dashboard-ingress.yaml"
+    kubeconfig: "{{ kubeconfig }}"
