@@ -1,2 +1,4 @@
+dest: "/opt/kubernetes/defs/"
+kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 metallb_manifest_url: "https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml"
 metallb_manifest: "metallb-native"
