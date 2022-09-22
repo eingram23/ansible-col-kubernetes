@@ -34,9 +34,10 @@
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Delete default longhorn-frontend service so we can install new service with IngressRoute
-  kubernetes.core.k8s_service:
+  kubernetes.core.k8s:
     state: absent
     name: longhorn-frontend
+    kind: service
     namespace: longhorn-system
     kubeconfig: "{{ kubeconfig }}"
 
