@@ -1,6 +1,0 @@
-dest: "/opt/kubernetes/defs/"
-kubeconfig: "/etc/rancher/k3s/k3s.yaml"
-traefik_crd_manifest_url: "https://raw.githubusercontent.com/traefik/traefik/v2.8/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml"
-traefik_crd_manifest: "kubernetes-crd-definition-v1.yaml"
-traefik_rbac_manifest_url: "https://raw.githubusercontent.com/traefik/traefik/v2.8/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml"
-traefik_rbac_manifest: "kubernetes-crd-rbac.yaml"
