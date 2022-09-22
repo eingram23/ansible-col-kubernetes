@@ -8,7 +8,8 @@
   register: metallb_installed
 
 - name: Get Kubernetes Dashboard version
-  ansible.builtin.command: curl -w '%{url_effective}' -I -L -s -S https://github.com/kubernetes/dashboard/releases/latest -o /dev/null | sed -e 's|.*/||'
+  ansible.builtin.command: |
+    curl -w '%{url_effective}' -I -L -s -S https://github.com/kubernetes/dashboard/releases/latest -o /dev/null | sed -e 's|.*/||'
   register: dashboard_version
 
 - name: Set fact with dashboard version
