@@ -30,7 +30,12 @@
 - name: Remove longhorn-iscsi-install pods
   kubernetes.core.k8s:
     state: absent
-    src: "{{ dest }}{{ iscsi_manifest }}"
+    definition:
+      kind: pods
+      metadata:
+        labels:
+          app: longhorn-iscsi-installation
+    # src: "{{ dest }}{{ iscsi_manifest }}"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Delete default longhorn-frontend service so we can install new service with IngressRoute
