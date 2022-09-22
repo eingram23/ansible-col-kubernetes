@@ -1,0 +1,27 @@
+- name: Download metallb definitions manifest
+  ansible.builtin.get_url:
+    url: "{{ metallb_manifest_url }}"
+    dest: "{{ dest }}{{ metallb_manifest }}"
+    mode: '0644'
+
+- name: Deploy metallb
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ metallb_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Pause for 20 seconds
+  ansible.builtin.pause:
+    seconds: 20
+
+- name: Install metallb
+  ansible.builtin.copy:
+    file: metallb-ippool.yaml
+    dest: "{{ dest }}/metallb-ippool.yaml"
+    mode: '0644'
+
+- name: Deploy metallb ippol
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}metallb-ippool.yaml"
+    kubeconfig: "{{ kubeconfig }}"
