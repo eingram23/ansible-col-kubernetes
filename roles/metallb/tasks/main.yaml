@@ -14,9 +14,9 @@
   ansible.builtin.pause:
     seconds: 20
 
-- name: Install metallb
+- name: Copy metallb-ippool manifest to host
   ansible.builtin.copy:
-    file: metallb-ippool.yaml
+    src: metallb-ippool.yaml
     dest: "{{ dest }}/metallb-ippool.yaml"
     mode: '0644'
 
