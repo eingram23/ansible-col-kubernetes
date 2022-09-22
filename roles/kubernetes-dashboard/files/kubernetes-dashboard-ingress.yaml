@@ -1,0 +1,30 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: ServersTransport
+metadata:
+  name: kubernetes-dashboard-transport
+  namespace: kubernetes-dashboard
+
+spec:
+  serverName: "kdash.local.lan" 
+  insecureSkipVerify: true
+
+---  
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`kdash.local.lan`)
+      services:
+        - kind: Service
+          port: 443
+          name: kubernetes-dashboard
+          namespace: kubernetes-dashboard
+          serversTransport: kubernetes-dashboard-transport
+  # tls:
+  #   secretName: kub.techlabnews-com-cert-secret-replica

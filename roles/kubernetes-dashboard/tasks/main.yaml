@@ -1,0 +1,59 @@
+- name: Check to see if metallb is installed
+  kubernetes.core.k8s_info:
+    api_version: metallb.io/v1beta1
+    kind: L2Advertisement
+    name: default-pool-l2adv
+    namespace: metallb-system
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+  register: metallb_installed
+
+- name: Install dashboard
+  ansible.builtin.include_role:
+    name: eingram23.kubernetes.manifest
+    tasks_from: apply
+  vars:
+    manifest: "kubernetes-dashboard-lb"
+  when: metallb_installed['resources']
+
+- name: Get Kubernetes Dashboard version
+  ansible.builtin.command: curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||'
+  register: dashboard_version
+
+- name: Set fact with dashboard version
+  ansible.builtin.set_fact:
+    dash_ver: "{{ dashboard_version.stdout }}"
+
+- name: Download kubernetes dashboard manifest
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/kubernetes/dashboard/{{ dash_ver }}/aio/deploy/recommended.yaml
+    dest: "{{ dest }}kubernetes-dashboard.yaml"
+
+- name: Apply kubernetes dashboard manifest
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}kubernetes-dashboard.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Copy kubernetes-dashboard-role manifest to host
+  ansible.builtin.copy:
+    src: kubernetes-dashboard-role.yaml
+    dest: "{{ dest }}kubernetes-dashboard-role.yaml"
+    mode: '0644'
+
+- name: Apply kubernetes dashboard role manifest
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}kubernetes-dashboard-role.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Copy kubernetes ingressroute manifest to host
+  ansible.builtin.copy:
+    src: kubernetes-dashboard-ingress.yaml
+    dest: "{{ dest }}kubernetes-dashboard-ingress.yaml"
+    mode: '0644'
+
+- name: Apply kubernetes ingressroute manifest
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}kubernetes-dashboard-ingress.yaml"
+    kubeconfig: "{{ kubeconfig }}"
