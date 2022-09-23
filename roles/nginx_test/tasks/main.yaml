@@ -17,3 +17,5 @@
     - nginx-deployment.yaml
     - nginx-service.yaml
     - nginx-ingress.yaml
+  loop_control:
+    loop_var: manifest_item
