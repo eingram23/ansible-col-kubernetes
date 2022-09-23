@@ -1,14 +1,14 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: longhorn-frontend
-  namespace: longhorn-system
+  name: nginx-ingress
+  namespace: default
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host('longhorn.local.lan') 
+  - match: Host('nginx-test.local.lan') 
     kind: Rule
     services:
-    - name: longhorn-frontend
-      port: 8000
+    - name: nginx-test
+      port: 80

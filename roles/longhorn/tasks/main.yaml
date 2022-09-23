@@ -4,7 +4,7 @@
     dest: "{{ dest }}{{ iscsi_manifest }}"
     mode: '0644'
 
-- name: Deploy longhorn-iscsi-install
+- name: Deploy longhorn-iscsi-install DaemonSet
   kubernetes.core.k8s:
     state: present
     namespace: default
@@ -27,16 +27,13 @@
     src: "{{ dest }}{{ longhorn_manifest }}"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Remove longhorn-iscsi-install pods
+- name: Remove longhorn-iscsi-install DaemonSet
   kubernetes.core.k8s:
     state: absent
-    definition:
-      kind: pods
-      metadata:
-        labels:
-          app: longhorn-iscsi-installation
-    # src: "{{ dest }}{{ iscsi_manifest }}"
-    kubeconfig: "{{ kubeconfig }}"
+    namespace: default
+    kind: DaemonSet
+    name: longhorn-iscsi-installation
+  kubeconfig: "{{ kubeconfig }}"
 
 - name: Delete default longhorn-frontend service so we can install new service with IngressRoute
   kubernetes.core.k8s:
