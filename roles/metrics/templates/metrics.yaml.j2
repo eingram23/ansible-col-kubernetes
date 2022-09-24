@@ -52,9 +52,9 @@ spec:
     name: vmware_exporter
     env:
     - name: VSPHERE_PASSWORD
-      value: B0Cadence&
+      value: {{ vsphere_password }}
     - name: VSPHERE_USER
-      value: administrator@vsphere.local
+      value: {{ vsphere_user}}
     - name: VSPHERE_IGNORE_SSL
       value: "True"
     - name: VSPHERE_HOST
