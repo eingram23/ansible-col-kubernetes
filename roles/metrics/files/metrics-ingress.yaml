@@ -1,0 +1,20 @@
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: grafana-ingress
+  namespace: metrics
+spec:
+  entryPoints: 
+    - grafana
+    - vmware_exporter
+  routes:
+  - match: Host(`grafana.local.lan`) 
+    kind: Rule
+    services:
+    - name: metrics-service
+      port: 8000
+  - match: Host(`vmware_exporter.local.lan`) 
+    kind: Rule
+    services:
+    - name: metrics-service
+      port: 9272

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-grafana_data-pvc
+  namespace: metrics
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-default
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-grafana_config-pvc
+  namespace: metrics
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-default
+  resources:
+    requests:
+      storage: 1Gi
