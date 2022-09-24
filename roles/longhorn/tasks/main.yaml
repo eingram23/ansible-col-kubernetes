@@ -33,7 +33,7 @@
     namespace: default
     kind: DaemonSet
     name: longhorn-iscsi-installation
-  kubeconfig: "{{ kubeconfig }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Delete default longhorn-frontend service so we can install new service with IngressRoute
   kubernetes.core.k8s:
