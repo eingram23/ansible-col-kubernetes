@@ -13,7 +13,7 @@ spec:
     services:
     - name: metrics-service
       port: 8000
-  - match: Host(`vmware_exporter.local.lan`) 
+  - match: Host(`vmware-exporter.local.lan`) 
     kind: Rule
     services:
     - name: metrics-service
