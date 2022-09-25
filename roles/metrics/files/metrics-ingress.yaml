@@ -1,7 +1,7 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: grafana-ingress
+  name: metrics-ingress
   namespace: metrics
 spec:
   entryPoints: 
