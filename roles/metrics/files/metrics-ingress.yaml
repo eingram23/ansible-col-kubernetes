@@ -5,16 +5,15 @@ metadata:
   namespace: metrics
 spec:
   entryPoints: 
-    - grafana
-    - vmwareexporter
+    - web
   routes:
   - match: Host(`grafana.local.lan`) 
     kind: Rule
     services:
-    - name: metrics-service
+    - name: grafana-service
       port: 3000
   - match: Host(`vmware-exporter.local.lan`) 
     kind: Rule
     services:
-    - name: metrics-service
+    - name: vmware-exporter-service
       port: 9272

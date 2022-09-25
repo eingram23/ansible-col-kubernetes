@@ -3,13 +3,27 @@ kind: Service
 metadata:
   labels:
     app: metrics
-  name: metrics-service
+  name: grafana-service
   namespace: metrics
 spec:
   ports:
   - name: web
     port: 3000
     targetPort: 3000
+  selector:
+    app: metrics
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metrics
+  name: vmware-exporter-service
+  namespace: metrics
+spec:
+  ports:
   - name: web
     port: 9272
     targetPort: 9272
