@@ -36,8 +36,7 @@ spec:
         app: metrics
     spec:
       securityContext:
-        runAsUser: 472
-        fsGroup: 472
+        runAsUser: 0
       containers:
       - image: docker.io/grafana/grafana:9.0.1
         name: grafana
