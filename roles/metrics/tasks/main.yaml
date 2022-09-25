@@ -22,7 +22,7 @@
   loop:
     - metrics-namespace.yaml
     - metrics-pvc.yaml
-    # - metrics.yaml
+    - metrics.yaml
     # - metrics-ingress.yaml
   loop_control:
     loop_var: manifest_item
