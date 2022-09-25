@@ -7,10 +7,10 @@ metadata:
   namespace: metrics
 spec:
   ports:
-  - name: grafana
+  - name: web
     port: 3000
     targetPort: 3000
-  - name: vmwareexporter
+  - name: web
     port: 9272
     targetPort: 9272
   selector:
