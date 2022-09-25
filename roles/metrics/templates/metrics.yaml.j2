@@ -71,7 +71,7 @@ spec:
         #     - CAP_MKNOD
         #     - CAP_AUDIT_WRITE
       volumes:
-      - name: grafana_data-pvc
+      - name: grafana-data-pvc
         persistentVolumeClaim:
           claimName: longhorn-grafana-data-pvc
       - name: grafana_config-pvc
