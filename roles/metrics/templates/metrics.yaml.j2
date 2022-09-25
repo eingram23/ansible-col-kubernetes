@@ -48,11 +48,11 @@ spec:
         #     drop:
         #     - CAP_MKNOD
         #     - CAP_AUDIT_WRITE
-        volumeMounts:
+        {# volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-data-pvc
         - mountPath: /etc/grafana
-          name: grafana-config-pvc
+          name: grafana-config-pvc #}
       - image: docker.io/pryorda/vmware_exporter:v0.18.3
         name: vmware-exporter
         env:
