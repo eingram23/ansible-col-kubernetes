@@ -6,7 +6,7 @@ metadata:
 spec:
   entryPoints: 
     - http-grafana
-    - http-vmware_exporter
+    - http-vmware-exporter
   routes:
   - match: Host(`grafana.local.lan`) 
     kind: Rule
