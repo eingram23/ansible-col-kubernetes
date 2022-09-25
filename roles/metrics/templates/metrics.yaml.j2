@@ -7,10 +7,10 @@ metadata:
   namespace: metrics
 spec:
   ports:
-  - name: grafana
+  - name: http-grafana
     port: 3000
     targetPort: 3000
-  - name: vmware_exporter
+  - name: http-vmware-exporter
     port: 9272
     targetPort: 9272
   selector:
@@ -25,46 +25,55 @@ metadata:
     app: metrics
   name: metrics
 spec:
-  containers:
-  - image: docker.io/grafana/grafana:9.0.1
-    name: grafana
-    ports:
-    - containerPort: 3000
-    # resources: {}
-    # securityContext:
-    #   capabilities:
-    #     drop:
-    #     - CAP_MKNOD
-    #     - CAP_AUDIT_WRITE
-    volumeMounts:
-    - mountPath: /var/lib/grafana
-      name: grafana-data-pvc
-    - mountPath: /etc/grafana
-      name: grafana-config-pvc
-  - image: docker.io/pryorda/vmware_exporter:v0.18.3
-    name: vmware_exporter
-    env:
-    - name: VSPHERE_PASSWORD
-      value: {{ vsphere_password }}
-    - name: VSPHERE_USER
-      value: {{ vsphere_user}}
-    - name: VSPHERE_IGNORE_SSL
-      value: "True"
-    - name: VSPHERE_HOST
-      value: vcsa.local.lan
-    ports:
-    - containerPort: 9272
-    # resources: {}
-    # securityContext:
-    #   capabilities:
-    #     drop:
-    #     - CAP_MKNOD
-    #     - CAP_AUDIT_WRITE
-  volumes:
-  - name: grafana_data-pvc
-    persistentVolumeClaim:
-      claimName: longhorn-grafana-data-pvc
-  - name: grafana_config-pvc
-    persistentVolumeClaim:
-      claimName: longhorn-grafana-config-pvc
-# status: {}
+  selector:
+    matchLabels:
+      app: metrics
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: metrics
+    spec:
+      containers:
+      - image: docker.io/grafana/grafana:9.0.1
+        name: grafana
+        ports:
+        - containerPort: 3000
+        # resources: {}
+        # securityContext:
+        #   capabilities:
+        #     drop:
+        #     - CAP_MKNOD
+        #     - CAP_AUDIT_WRITE
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-data-pvc
+        - mountPath: /etc/grafana
+          name: grafana-config-pvc
+      - image: docker.io/pryorda/vmware_exporter:v0.18.3
+        name: vmware_exporter
+        env:
+        - name: VSPHERE_PASSWORD
+          value: {{ vsphere_password }}
+        - name: VSPHERE_USER
+          value: {{ vsphere_user}}
+        - name: VSPHERE_IGNORE_SSL
+          value: "True"
+        - name: VSPHERE_HOST
+          value: vcsa.local.lan
+        ports:
+        - containerPort: 9272
+        # resources: {}
+        # securityContext:
+        #   capabilities:
+        #     drop:
+        #     - CAP_MKNOD
+        #     - CAP_AUDIT_WRITE
+      volumes:
+      - name: grafana_data-pvc
+        persistentVolumeClaim:
+          claimName: longhorn-grafana-data-pvc
+      - name: grafana_config-pvc
+        persistentVolumeClaim:
+          claimName: longhorn-grafana-config-pvc
+    # status: {}

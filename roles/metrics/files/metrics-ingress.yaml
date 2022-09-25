@@ -5,8 +5,8 @@ metadata:
   namespace: metrics
 spec:
   entryPoints: 
-    - grafana
-    - vmware_exporter
+    - http-grafana
+    - http-vmware_exporter
   routes:
   - match: Host(`grafana.local.lan`) 
     kind: Rule
