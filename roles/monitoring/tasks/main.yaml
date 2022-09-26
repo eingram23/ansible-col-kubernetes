@@ -1,0 +1,28 @@
+---
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - monitoring-namespace.yaml
+    - monitoring-ingress.yaml
+    - monitoring-pvc.yaml
+
+- name: Create monitoring.yaml manifest on host
+  ansible.builtin.template:
+    src: monitoring.yaml.j2
+    dest: "{{ dest }}monitoring.yaml"
+
+- name: Deploy monitoring
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ manifest_item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - monitoring-namespace.yaml
+    - monitoring-pvc.yaml
+    - monitoring.yaml
+    - monitoring-ingress.yaml
+  loop_control:
+    loop_var: manifest_item
