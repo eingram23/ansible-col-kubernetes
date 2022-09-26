@@ -66,3 +66,8 @@
     state: present
     src: "{{ dest }}longhorn-ingress.yaml"
     kubeconfig: "{{ kubeconfig }}"
+
+- name: Make longhorn the default storage class
+  ansible.builtin.shell: |
+    kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
