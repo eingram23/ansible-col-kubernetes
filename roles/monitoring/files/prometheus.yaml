@@ -23,7 +23,7 @@ spec:
       values:
       - longhorn-prometheus-servicemonitor
       - kube-state-metrics
-#     - node-exporter
+      - node-exporter
       - kubelet
       - traefik
   storage:

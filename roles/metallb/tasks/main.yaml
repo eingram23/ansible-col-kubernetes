@@ -22,7 +22,7 @@
     dest: "{{ dest }}/metallb-ippool.yaml"
     mode: '0644'
 
-- name: Deploy metallb ippol
+- name: Deploy metallb ippool
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}metallb-ippool.yaml"

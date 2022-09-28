@@ -1,17 +1,12 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: monitoring-ingress
+  name: vmware-exporter
   namespace: monitoring
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`grafana.local.lan`) 
-    kind: Rule
-    services:
-    - name: grafana-service
-      port: 3000
   - match: Host(`vmware-exporter.local.lan`) 
     kind: Rule
     services:

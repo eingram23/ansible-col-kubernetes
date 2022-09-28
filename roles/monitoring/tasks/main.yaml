@@ -4,25 +4,74 @@
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  loop:
-    - monitoring-namespace.yaml
-    - monitoring-ingress.yaml
-    - monitoring-pvc.yaml
+  with_fileglob: "*"
 
-- name: Create monitoring.yaml manifest on host
+- name: Create vmware-exporter-deployment.yaml manifest on host
   ansible.builtin.template:
-    src: monitoring.yaml.j2
-    dest: "{{ dest }}monitoring.yaml"
+    src: vmware-exporter-deployment.yaml.j2
+    dest: "{{ dest }}vmware-exporter-deployment.yaml"
 
-- name: Deploy monitoring
+- name: Create monitoring namespace
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}{{ manifest_item }}"
+    src: "{{ dest }}monitoring-namespace.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy prometheus operator
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}prometheus-operator.yaml"
+    server_side_apply: true
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy service monitors
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - monitoring-namespace.yaml
-    - monitoring-pvc.yaml
-    - monitoring.yaml
-    - monitoring-ingress.yaml
-  loop_control:
-    loop_var: manifest_item
+    - longhorn-servicemonitor.yaml
+    - kubelet-servicemonitor.yaml
+    - node-exporter-role.yaml
+    - node-exporter-service.yaml
+    - node-exporter-daemonset.yaml
+    - node-exporter-servicemonitor.yaml
+    - kube-state-metrics-role.yaml
+    - kube-state-metrics-service.yaml
+    - kube-state-metrics-deployment.yaml
+    - kube-state-metrics-servicemonitor.yaml
+    - kubelet-servicemonitor.yaml
+    - traefik-servicemonitor.yaml
+
+- name: Deploy prometheus
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - prometheus.yaml
+    - prometheus-service-ext.yaml
+    - prometheus-service-local.yaml
+    - prometheus-role.yaml
+    - prometheus-ingress.yaml
+
+- name: Deploy vmware-exporter
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vmware-exporter-service.yaml
+    - vmware-exporter-deployment.yaml
+    - vmware-exporter-ingress.yaml
+
+- name: Deploy grafana
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafana-pvc.yaml
+    - grafana-deployment.yaml
+    - grafana-service.yaml
+    - grafana-ingress.yaml
