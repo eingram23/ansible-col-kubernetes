@@ -17,13 +17,16 @@
     src: "{{ dest }}monitoring-namespace.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy prometheus operator
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}prometheus-operator.yaml"
-    server_side_apply:
-      field_manager: kubectl
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Deploy prometheus operator
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}prometheus-operator.yaml"
+#     server_side_apply:
+#       field_manager: kubectl
+#     kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy prometheus operator using shell
+  ansible.builtin.shell: kubectl apply --server-side -f {{ dest }}prometheus-operator.yaml
 
 - name: Deploy service monitors
   kubernetes.core.k8s:
