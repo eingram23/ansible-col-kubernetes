@@ -16,7 +16,7 @@
         namespace: postgres
       type: Opaque
       data:
-        defaultpassword: "{{ defaultpassword }}"
+        defaultpassword: "{{ defaultpassword | b64encode }}"
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
