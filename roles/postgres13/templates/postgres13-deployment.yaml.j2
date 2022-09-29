@@ -52,6 +52,9 @@ spec:
           subPath: postgres
       - name: pgadmin4
         image: dpage/pgadmin4:{{ pgadmin4_ver }}
+        securityContext:
+          fsGroup: 0
+          runAsUser: 0
         env:
           - name: PGADMIN_DEFAULT_EMAIL
             value: 'edward.ingram23@gmail.com'
