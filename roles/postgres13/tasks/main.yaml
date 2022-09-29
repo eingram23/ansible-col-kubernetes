@@ -30,6 +30,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - pgadmin4-configmap.yaml
     - postgres13-pvc.yaml
     - postgres13-service.yaml
     - postgres13-deployment.yaml
