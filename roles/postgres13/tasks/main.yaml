@@ -10,7 +10,7 @@
       data:
         postgres13_password: "{{ postgres13_password }}"
     state: present
-  kubeconfig: "{{ kubeconfig }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Download manifests to host
   ansible.builtin.copy:
