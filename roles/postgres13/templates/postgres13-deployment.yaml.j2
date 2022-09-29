@@ -26,6 +26,7 @@ spec:
             secretKeyRef:
               name: homelab-secrets
               key: defaultpassword
+              optional: false
         - name: POSTGRES_USER
           value: postgres
         image: postgres:{{ postgres13_ver }}

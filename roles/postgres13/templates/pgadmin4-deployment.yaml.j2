@@ -29,11 +29,11 @@ spec:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
           - name: PGADMIN_DEFAULT_PASSWORD
-            value: password
-            # valueFrom:
-            #   secretKeyRef:
-            #     name: homelab-secrets
-            #     key: defaultpassword
+            valueFrom:
+              secretKeyRef:
+                name: homelab-secrets
+                key: defaultpassword
+                optional: false
         ports:
           - containerPort: 80
             name: web
