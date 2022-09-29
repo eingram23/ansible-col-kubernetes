@@ -23,8 +23,8 @@ spec:
         securityContext:
           # runAsUser: 5050
           # runAsGroup: 5050
-          # fsGroup: 5050
-          fsGroupChangePolicy: "OnRootMismatch"
+          fsGroup: 5050
+          # fsGroupChangePolicy: "OnRootMismatch"
         env:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
@@ -40,8 +40,8 @@ spec:
         - name: pgadmin4-config
           mountPath: /pgadmin4/servers.json
           subPath: servers.json
-        # - mountPath: /var/lib/pgadmin
-        #   name: pgadmin4-data
+        - mountPath: /var/lib/pgadmin
+          name: pgadmin4-data
       restartPolicy: Always
       volumes:
       - name: pgadmin4-data
