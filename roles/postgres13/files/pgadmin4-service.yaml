@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin4
+  namespace: postgres
+spec:
+  selector:
+    app: pgadmin4
+  ports:
+  - name: web
+    port: 80
+    targetPort: 80

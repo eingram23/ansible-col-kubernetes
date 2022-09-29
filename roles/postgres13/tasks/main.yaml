@@ -4,11 +4,11 @@
       apiVersion: v1
       kind: Secret
       metadata:
-        name: postgres13-secrets
-        namespace: default
+        name: homelab-secrets
+        namespace: postgres
       type: Opaque
       data:
-        postgres13-password: "{{ postgres13_password }}"
+        defaultpassword: "{{ defaultpassword }}"
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
@@ -24,6 +24,11 @@
     src: postgres13-deployment.yaml.j2
     dest: "{{ dest }}postgres13-deployment.yaml"
 
+- name: Create pgadmin4-deployment.yaml manifest on host
+  ansible.builtin.template:
+    src: pgadmin4-deployment.yaml.j2
+    dest: "{{ dest }}pgadmin4-deployment.yaml"
+
 - name: Deploy postgres13 + pgadmin4
   kubernetes.core.k8s:
     state: present
@@ -32,6 +37,10 @@
   loop:
     - pgadmin4-configmap.yaml
     - postgres13-pvc.yaml
+    - pgadmin4-pvc.yaml
     - postgres13-service.yaml
+    - pgadmin4-service.yaml
     - postgres13-deployment.yaml
+    - pgadmin4-deployment.yaml
     - postgres13-ingress.yaml
+    - pgadmin4-ingress.yaml

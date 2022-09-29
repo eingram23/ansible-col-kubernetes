@@ -4,7 +4,7 @@ metadata:
   name: postgres13
   labels: 
     app: postgres13
-  namespace: default
+  namespace: postgres
 spec:
   replicas: 1
   selector: 
@@ -24,8 +24,8 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres13-secrets
-              key: postgres13-password
+              name: homelab-secrets
+              key: defaultpassword
         - name: POSTGRES_USER
           value: postgres
         image: postgres:{{ postgres13_ver }}
@@ -50,38 +50,9 @@ spec:
         - mountPath: /var/lib/postgresql/data
           name: postgres13-data
           subPath: postgres
-      - name: pgadmin4
-        image: dpage/pgadmin4:{{ pgadmin4_ver }}
-        securityContext:
-          runAsUser: 5050
-          runAsGroup: 5050
-          fsGroup: 5050
-          fsGroupChangePolicy: "OnRootMismatch"
-        env:
-          - name: PGADMIN_DEFAULT_EMAIL
-            value: edward.ingram23@gmail.com
-          - name: PGADMIN_DEFAULT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres13-secrets
-                key: postgres13-password
-        ports:
-          - containerPort: 80
-            name: web
-        volumeMounts:
-        - name: pgadmin4-config
-          mountPath: /pgadmin4/servers.json
-          subPath: servers.json
-        - mountPath: /var/lib/pgadmin
-          name: pgadmin4-data
       restartPolicy: Always
       volumes:
       - name: postgres13-data
         persistentVolumeClaim:
           claimName: postgres13-pvc
-      - name: pgadmin4-data
-        persistentVolumeClaim:
-          claimName: pgadmin4-pvc
-      - name: pgadmin4-config
-        configMap:
-          name: pgadmin4-config
+      
