@@ -1,8 +1,8 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: nginx-ingress
-  namespace: default
+  name: nginx-test
+  namespace: test
 spec:
   entryPoints: 
     - web
@@ -10,5 +10,5 @@ spec:
   - match: Host(`nginx-test.local.lan`) 
     kind: Rule
     services:
-    - name: nginx-service
+    - name: nginx-test
       port: 80

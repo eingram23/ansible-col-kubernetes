@@ -1,9 +1,18 @@
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: test
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
 - name: Copy nginx-test manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   loop:
+    - nginx-pvc.yaml
     - nginx-deployment.yaml
     - nginx-ingress.yaml
     - nginx-service.yaml
@@ -11,11 +20,10 @@
 - name: Deploy nginx-test
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}{{ manifest_item }}"
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - nginx-pvc.yaml
     - nginx-deployment.yaml
     - nginx-service.yaml
     - nginx-ingress.yaml
-  loop_control:
-    loop_var: manifest_item

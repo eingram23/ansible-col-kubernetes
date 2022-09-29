@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
-  namespace: default
+  name: nginx-test
+  namespace: test
 spec:
   selector:
     matchLabels:
@@ -15,6 +15,14 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14.2
+        image: nginx:latest
         ports:
         - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/lib/nginx-test
+          name: nginx-test
+      restartPolicy: Always
+      volumes:
+      - name: nginx-test
+        persistentVolumeClaim:
+          claimName: nginx-test-pvc
