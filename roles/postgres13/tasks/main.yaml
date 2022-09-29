@@ -44,11 +44,11 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - pgadmin4-configmap.yaml
-    - postgres13-pvc.yaml
+    # - postgres13-pvc.yaml
     - pgadmin4-pvc.yaml
-    - postgres13-service.yaml
+    # - postgres13-service.yaml
     - pgadmin4-service.yaml
-    - postgres13-deployment.yaml
+    # - postgres13-deployment.yaml
     - pgadmin4-deployment.yaml
-    - postgres13-ingress.yaml
+    # - postgres13-ingress.yaml
     - pgadmin4-ingress.yaml
