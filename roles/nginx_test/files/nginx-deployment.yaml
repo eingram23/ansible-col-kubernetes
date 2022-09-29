@@ -22,6 +22,10 @@ spec:
         - mountPath: /var/lib/nginx-test
           name: nginx-test
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       volumes:
       - name: nginx-test
         persistentVolumeClaim:
