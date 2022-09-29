@@ -58,8 +58,8 @@ spec:
           - name: PGADMIN_DEFAULT_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-secrets
-                key: postgres_password
+                name: postgres13-secrets
+                key: postgres13-password
         ports:
           - containerPort: 80
             name: web
