@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres13
+  labels: 
+    app: postgres13
+  namespace: default
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: postgres13
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres13
+    spec:
+      containers:
+      - env:
+        # - name: POSTGRES_DB
+        #   value: mydb
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres_secrets
+              key: postgres_password
+        # - name: POSTGRES_USER
+        #   value: myuser
+        image: postgres:{{ postgres13_ver }}
+        name: postgres
+        # Readiness and Liveness Probe
+        readinessProbe:
+          exec:
+            # command: ["psql", "-Umyuser", "-dmydb", "-c", "SELECT 1"]
+            command: ["pg_isready, "-h" "localhost", "-p", "5432" ]
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+        livenessProbe:
+          exec:
+            # command: ["psql", "-Umyuser", "-dmydb", "-c", "SELECT 1"]
+            command: ["pg_isready, "-h" "localhost", "-p", "5432" ]
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+        ports:
+          - containerPort: 5432
+            name: postgres13     
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres13-data
+          subPath: postgres
+      - name: pgadmin4
+        image: dpage/pgadmin4:{{ pgadmin4_ver }}
+        env:
+          PGADMIN_DEFAULT_EMAIL: "edward.ingram23@gmail.com"
+          - name: PGADMIN_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres_secrets
+                key: postgres_password
+        ports:
+          - containerPort: 80
+            name: web
+        volumeMounts:
+        - mountPath: /var/lib/pgadmin
+          name: pgadmin4-storage
+          readOnly: false
+      restartPolicy: Always
+      volumes:
+      - name: postgres13-data
+        persistentVolumeClaim:
+          claimName: postgres13-data-pvc
+      - name: pgadmin4-data
+        persistentVolumeClaim:
+          claimName: pgadmin4-data-pvc

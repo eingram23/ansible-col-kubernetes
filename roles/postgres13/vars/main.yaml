@@ -1,0 +1,5 @@
+dest: "/opt/kubernetes/defs/"
+kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+postgres13_password: "{{ lookup('hashi_vault', 'secret=secret/data/ssh/eingram:ssh_password') }}"
+postgres13_ver: "13.8"
+pgadmin4_ver: "6.13"

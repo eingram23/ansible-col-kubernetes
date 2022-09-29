@@ -1,0 +1,31 @@
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: postgres13
+  namespace: default
+spec:
+  entryPoints: 
+    - web
+  routes:
+  - match: Host(`postgres13.local.lan`) 
+    kind: Rule
+    services:
+    - name: postgres13
+      port: 5432
+
+---
+
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: pgadmin4
+  namespace: default
+spec:
+  entryPoints: 
+    - web
+  routes:
+  - match: Host(`pgadmin4.local.lan`) 
+    kind: Rule
+    services:
+    - name: pgadmin4
+      port: 80

@@ -1,0 +1,35 @@
+- name: Create secret for deployment
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: postgres13_secrets
+        namespace: default
+      type: Opaque
+      data:
+        postgres13_password: "{{ postgres13_password }}"
+    state: present
+
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create postgres13-deployment.yaml manifest on host
+  ansible.builtin.template:
+    src: postgres13-deployment.yaml.j2
+    dest: "{{ dest }}postgres13-deployment.yaml"
+
+- name: Deploy postgres13 + pgadmin4
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - postgres13-pvc.yaml
+    - postgres13-service.yaml
+    - postgres13-deployment.yaml
+    - postgres13-ingress.yaml
