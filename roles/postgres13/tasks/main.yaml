@@ -1,5 +1,5 @@
 - name: Create secret for deployment
-  k8s:
+  kubernetes.core.k8s:
     definition:
       apiVersion: v1
       kind: Secret
@@ -10,6 +10,7 @@
       data:
         postgres13_password: "{{ postgres13_password }}"
     state: present
+  kubeconfig: "{{ kubeconfig }}"
 
 - name: Download manifests to host
   ansible.builtin.copy:
