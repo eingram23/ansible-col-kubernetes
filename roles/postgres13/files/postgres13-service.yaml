@@ -20,7 +20,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: pgadmin4
+    app: postgres13
   ports:
   - name: web
     port: 80

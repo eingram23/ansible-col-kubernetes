@@ -29,7 +29,7 @@ spec:
         - name: POSTGRES_USER
           value: postgres
         image: postgres:{{ postgres13_ver }}
-        name: postgres
+        name: postgres13
         # Readiness and Liveness Probe
         readinessProbe:
           exec:
