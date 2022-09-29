@@ -53,8 +53,10 @@ spec:
       - name: pgadmin4
         image: dpage/pgadmin4:{{ pgadmin4_ver }}
         securityContext:
-          fsGroup: 0
-          runAsUser: 0
+          runAsUser: 5050
+          runAsGroup: 5050
+          fsGroup: 5050
+          fsGroupChangePolicy: "OnRootMismatch"
         env:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
