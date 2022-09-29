@@ -59,11 +59,10 @@ spec:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
           - name: PGADMIN_DEFAULT_PASSWORD
-            value: password
-            # valueFrom:
-            #   secretKeyRef:
-            #     name: postgres13-secrets
-            #     key: postgres13-password
+            valueFrom:
+              secretKeyRef:
+                name: postgres13-secrets
+                key: postgres13-password
         ports:
           - containerPort: 80
             name: web
