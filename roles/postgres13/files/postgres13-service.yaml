@@ -9,7 +9,7 @@ spec:
   ports:
   - name: postgres13
     port: 5432
-    targetPort: postgres13
+    targetPort: 5432
 
 ---
 
@@ -24,4 +24,4 @@ spec:
   ports:
   - name: web
     port: 80
-    targetPort: web
+    targetPort: 80
