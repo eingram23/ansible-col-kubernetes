@@ -53,7 +53,8 @@ spec:
       - name: pgadmin4
         image: dpage/pgadmin4:{{ pgadmin4_ver }}
         env:
-          PGADMIN_DEFAULT_EMAIL: "edward.ingram23@gmail.com"
+          - name: PGADMIN_DEFAULT_EMAIL
+            value: 'edward.ingram23@gmail.com'
           - name: PGADMIN_DEFAULT_PASSWORD
             valueFrom:
               secretKeyRef:
