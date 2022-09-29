@@ -12,7 +12,7 @@ data:
            "Group": "Servers",
            "Port": 5432,
            "Username": "postgres",
-           "Host": "postgres13.local.lan",
+           "Host": "postgres13",
            "SSLMode": "prefer",
            "MaintenanceDB": "postgres"
          }
