@@ -20,11 +20,11 @@ spec:
       containers:
       - name: pgadmin4
         image: dpage/pgadmin4:{{ pgadmin4_ver }}
-        securityContext:
-          # runAsUser: 5050
-          # runAsGroup: 5050
-          fsGroup: 5050
-          fsGroupChangePolicy: "Always"
+        # securityContext:
+        #   runAsUser: 5050
+        #   runAsGroup: 5050
+        #   fsGroup: 5050
+        #   fsGroupChangePolicy: "Always"
         env:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
@@ -42,6 +42,13 @@ spec:
           subPath: servers.json
         - mountPath: /var/lib/pgadmin
           name: pgadmin4-data
+      initContainers:
+      - name: pgadmin-data-permission-fix
+        image: busybox
+        command: ["/bin/chown", "-R", "5050:5050", "/var/lib/pgadmin"]
+        volumeMounts:
+        - name: pgadmin4-data
+          mountPath: /var/lib/pgadmin
       restartPolicy: Always
       volumes:
       - name: pgadmin4-data
