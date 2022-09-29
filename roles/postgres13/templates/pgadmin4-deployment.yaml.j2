@@ -23,8 +23,8 @@ spec:
         securityContext:
           # runAsUser: 5050
           # runAsGroup: 5050
-          fsGroup: 5050
-          # fsGroupChangePolicy: "OnRootMismatch"
+          fsGroup: 0
+          fsGroupChangePolicy: "Always"
         env:
           - name: PGADMIN_DEFAULT_EMAIL
             value: edward.ingram23@gmail.com
