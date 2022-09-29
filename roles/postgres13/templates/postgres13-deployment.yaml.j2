@@ -34,14 +34,12 @@ spec:
         # Readiness and Liveness Probe
         readinessProbe:
           exec:
-            # command: ["psql", "-Umyuser", "-dmydb", "-c", "SELECT 1"]
-            command: ["pg_isready", "-h", "localhost", "-p", "5432" ]
+            command: ["pg_isready", "-U", "$(POSTGRES_USER)", "-h", "localhost", "-p", "5432" ]
           initialDelaySeconds: 10
           timeoutSeconds: 10
         livenessProbe:
           exec:
-            # command: ["psql", "-Umyuser", "-dmydb", "-c", "SELECT 1"]
-            command: ["pg_isready", "-h", "localhost", "-p", "5432" ]
+            command: ["pg_isready", "-U", "$(POSTGRES_USER)", "-h", "localhost", "-p", "5432" ]
           initialDelaySeconds: 30
           timeoutSeconds: 10
         ports:
