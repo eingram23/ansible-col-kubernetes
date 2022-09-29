@@ -1,3 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: pgadmin4-config
+data:
+ servers.json: |
+   {
+       "Servers": {
+         "1": {
+           "Name": "PostgreSQL DB",
+           "Group": "Servers",
+           "Port": 5432,
+           "Username": "postgres",
+           "Host": "postgres13.local.lan",
+           "SSLMode": "prefer",
+           "MaintenanceDB": "postgres"
+         }
+       }
+   }
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,8 +48,8 @@ spec:
             secretKeyRef:
               name: postgres13-secrets
               key: postgres13-password
-        # - name: POSTGRES_USER
-        #   value: myuser
+        - name: POSTGRES_USER
+          value: postgres
         image: postgres:{{ postgres13_ver }}
         name: postgres
         # Readiness and Liveness Probe
@@ -64,9 +86,11 @@ spec:
           - containerPort: 80
             name: web
         volumeMounts:
+        - name: pgadmin4-config
+          mountPath: /pgadmin4/servers.json
+          subPath: servers.json
         - mountPath: /var/lib/pgadmin
           name: pgadmin4-data
-          readOnly: false
       restartPolicy: Always
       volumes:
       - name: postgres13-data
@@ -75,3 +99,6 @@ spec:
       - name: pgadmin4-data
         persistentVolumeClaim:
           claimName: pgadmin4-pvc
+      - name: pgadmin4-config
+        configMap:
+          name: pgadmin4-config
