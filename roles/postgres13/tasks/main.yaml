@@ -8,7 +8,7 @@
         namespace: default
       type: Opaque
       data:
-        postgres13-password: "{{ postgres13-password }}"
+        postgres13-password: "{{ postgres13_password }}"
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
