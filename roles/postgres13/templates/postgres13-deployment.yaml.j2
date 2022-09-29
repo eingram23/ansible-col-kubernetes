@@ -57,12 +57,13 @@ spec:
           runAsUser: 0
         env:
           - name: PGADMIN_DEFAULT_EMAIL
-            value: eingram
+            value: edward.ingram23@gmail.com
           - name: PGADMIN_DEFAULT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres13-secrets
-                key: postgres13-password
+            value: password
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: postgres13-secrets
+            #     key: postgres13-password
         ports:
           - containerPort: 80
             name: web
