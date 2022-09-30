@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: pihole
-        image: pihole/pihole:"{{ pihole_ver }}"
+        image: pihole/pihole:{{ pihole_ver }}
         env:
         - name: TZ
           valueFrom:
