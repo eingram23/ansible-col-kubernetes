@@ -1,0 +1,14 @@
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: pihole
+  namespace: dns
+spec:
+  entryPoints: 
+    - web
+  routes:
+  - match: Host(`pihole-test.local.lan`) 
+    kind: Rule
+    services:
+    - name: pihole-web
+      port: 80

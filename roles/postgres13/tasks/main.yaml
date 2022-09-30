@@ -12,7 +12,7 @@
       apiVersion: v1
       kind: Secret
       metadata:
-        name: homelab-secrets
+        name: postgres-secrets
         namespace: postgres
       type: Opaque
       data:

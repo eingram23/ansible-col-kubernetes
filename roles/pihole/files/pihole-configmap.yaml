@@ -1,0 +1,147 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-adlists
+  namespace: dns
+data:
+  adlists.list: |
+    https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+    https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+    https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+    https://v.firebog.net/hosts/static/w3kbl.txt
+    https://adaway.org/hosts.txt
+    https://v.firebog.net/hosts/AdguardDNS.txt
+    https://v.firebog.net/hosts/Admiral.txt
+    https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+    https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+    https://v.firebog.net/hosts/Easylist.txt
+    https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+    https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+    https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+    https://v.firebog.net/hosts/Easyprivacy.txt
+    https://v.firebog.net/hosts/Prigent-Ads.txt
+    https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+    https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+    https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+    https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+    https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+    https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+    https://v.firebog.net/hosts/Prigent-Crypto.txt
+    https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+    https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+    https://phishing.army/download/phishing_army_blocklist_extended.txt
+    https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+    https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+    https://v.firebog.net/hosts/RPiList-Malware.txt
+    https://v.firebog.net/hosts/RPiList-Phishing.txt
+    https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+    https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+    https://urlhaus.abuse.ch/downloads/hostfile/
+    https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-regex
+  namespace: dns
+data:
+  regex.list: |
+    ^(.+[-_.])??adse?rv(er?|ice)?s?[0-9]*[-.]
+    ^(.+[-_.])??m?ad[sxv]?[0-9]*[-_.]
+    ^(.+[-_.])??telemetry[-.]
+    ^(.+[-_.])??xn--
+    ^adim(age|g)s?[0-9]*[-_.]
+    ^adtrack(er|ing)?[0-9]*[-.]
+    ^advert(s|is(ing|ements?))?[0-9]*[-_.]
+    ^aff(iliat(es?|ion))?[-.]
+    ^analytics?[-.]
+    ^banners?[-.]
+    ^beacons?[0-9]*[-.]
+    ^count(ers?)?[0-9]*[-.]
+    ^pixels?[-.]
+    ^stat(s|istics)?[0-9]*[-.]
+    ^track(ers?|ing)?[0-9]*[-.]
+    ^traff(ic)?[-.]
+    ^(.*)\.g00\.(.*)
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-env
+  namespace: dns
+data:
+  TZ: America/Los_Angeles
+  DNS1: 127.0.0.1 
+  DNS2: 192.168.1.251
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-customlist
+  namespace: dns
+data:
+  custom.list: |
+    192.168.1.210 homenas.local.lan
+    192.168.1.211 homenas-r.local.lan
+    192.168.1.213 homeassistant.local.lan
+    192.168.1.220 vcsa.local.lan
+    192.168.1.201 esxi1.local.lan
+    192.168.1.202 esxi2.local.lan
+    192.168.1.204 esxinuc1.local.lan
+    192.168.1.11 esxi1-r.local.lan
+    192.168.1.12 esxi2-r.local.lan
+    192.168.1.215 minecraft.local.lan
+    192.168.1.216 veeam.local.lan
+    192.168.1.203 esxiwit.local.lan
+    192.168.1.208 vsanwitness7.local.lan
+    10.10.0.21 debian7.local.lan
+    10.10.0.21 test.yandcdisplay.com
+    192.168.1.205 esxinuc2.local.lan
+    192.168.1.214 librenms.local.lan
+    10.10.0.51 esxivm1.local.lan
+    10.10.0.52 esxivm2.local.lan
+    10.10.0.53 esxivm3.local.lan
+    192.168.1.218 upsmon.local.lan
+    10.10.0.20 splunk.local.lan
+    192.168.1.217 docker1.local.lan
+    192.168.1.217 unifi.local.lan
+    192.168.1.217 admin1.local.lan
+    192.168.1.217 mc.local.lan
+    192.168.1.217 podhost1.local.lan
+    192.168.1.213 yandchome.duckdns.org
+    34.94.14.166 yc-srv1
+    138.68.18.20 yc-appsrv1
+    10.10.0.23 yc-appsrv1-dev.local.lan
+    10.10.0.25 tower.local.lan
+    192.168.1.217 vault.local.lan
+    10.10.0.230 grafana.local.lan
+    10.10.0.91 rocky1.local.lan
+    10.10.0.95 wincore1.local.lan
+    10.10.0.50 dbsrv1.local.lan
+    10.10.0.230 kdash.local.lan
+    10.10.0.230 longhorn.local.lan
+    10.10.0.51 k3s1.local.lan
+    10.10.0.52 k3s2.local.lan
+    10.10.0.53 k3s3.local.lan
+    10.10.0.230 traefik.local.lan
+    10.10.0.230 nginx-test.local.lan
+    10.10.0.230 vmware-exporter.local.lan
+    10.10.0.230 promk3s.local.lan
+    10.10.0.230 postgres13.local.lan
+    
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-customdns
+  namespace: dns
+data:
+  05-custom.conf: |
+    server=/homelab.local/10.10.0.10

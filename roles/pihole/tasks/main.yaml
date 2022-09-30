@@ -1,0 +1,45 @@
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: dns
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Create secret for webpassword
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: pihole-secrets
+        namespace: dns
+      type: Opaque
+      data:
+        defaultpassword: "{{ webpassword | b64encode }}"
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create pihole-deployment.yaml manifest on host
+  ansible.builtin.template:
+    src: pihole-deployment.yaml.j2
+    dest: "{{ dest }}pihole-deployment.yaml"
+
+- name: Deploy pihole
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - pihole-configmap.yaml
+    - pihole-pvc.yaml
+    - pihole-service.yaml
+    - pihole-deployment.yaml
+    - pihole-ingress.yaml
