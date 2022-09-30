@@ -34,6 +34,12 @@ spec:
             configMapKeyRef:
               name: pihole-env
               key: DNS2
+        - name: WEBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pihole-secrets
+              key: webpassword
+              optional: false
         ports:
         - name: web
           containerPort: 80
