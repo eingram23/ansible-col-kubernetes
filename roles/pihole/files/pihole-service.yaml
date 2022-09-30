@@ -4,7 +4,6 @@ metadata:
   name: pihole-web
   namespace : dns
   annotations:
-    metallb.universe.tf/address-pool: 10.10.0.231
     metallb.universe.tf/allow-shared-ip: "pihole-shared-svc"
 spec:
   selector:
@@ -15,6 +14,7 @@ spec:
     targetPort: 80
     name : web
   type: LoadBalancer 
+  LoadBalancerIP: 10.10.0.231
 
 ---
 
@@ -24,7 +24,6 @@ metadata:
   name: pihole-dns-udp
   namespace: dns
   annotations:
-    metallb.universe.tf/address-pool: 10.10.0.231
     metallb.universe.tf/allow-shared-ip: "pihole-shared-svc"
 spec:
   externalTrafficPolicy: Local
@@ -36,6 +35,7 @@ spec:
     targetPort: 53
     name : dns
   type: LoadBalancer 
+  LoadBalancerIP: 10.10.0.231
 
 ---
 
@@ -45,7 +45,6 @@ metadata:
   name: pihole-dns-tcp
   namespace: dns
   annotations:
-    metallb.universe.tf/address-pool: 10.10.0.231
     metallb.universe.tf/allow-shared-ip: "pihole-shared-svc"
 spec:
   externalTrafficPolicy: Local
@@ -57,3 +56,4 @@ spec:
     targetPort: 53
     name : dns
   type: LoadBalancer 
+  LoadBalancerIP: 10.10.0.231
