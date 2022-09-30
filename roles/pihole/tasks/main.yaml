@@ -16,7 +16,7 @@
         namespace: dns
       type: Opaque
       data:
-        defaultpassword: "{{ webpassword | b64encode }}"
+        webpassword: "{{ webpassword | b64encode }}"
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
