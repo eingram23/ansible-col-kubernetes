@@ -6,6 +6,21 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-test2-pvc
+  namespace: test
+spec:
+  accessModes:
+    - ReadWriteOnce
   storageClassName: longhorn-homelab
   resources:
     requests:
