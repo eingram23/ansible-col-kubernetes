@@ -18,7 +18,7 @@
     src: unifi-deployment.yaml.j2
     dest: "{{ dest }}unifi-deployment.yaml"
 
-- name: Deploy pihole
+- name: Deploy unifi
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
