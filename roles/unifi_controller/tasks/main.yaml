@@ -1,0 +1,30 @@
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: unifi
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create unifi-deployment.yaml manifest on host
+  ansible.builtin.template:
+    src: unifi-deployment.yaml.j2
+    dest: "{{ dest }}unifi-deployment.yaml"
+
+- name: Deploy pihole
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - unifi-pvc.yaml
+    - unifi-service.yaml
+    - unifi-deployment.yaml
+    - unifi-ingress.yaml

@@ -1,0 +1,14 @@
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: unifi-controller
+  namespace: unifi
+spec:
+  entryPoints: 
+    - web
+  routes:
+  - match: Host(`unifi-test.local.lan`) 
+    kind: Rule
+    services:
+    - name: unifi-tcp
+      port: 8443

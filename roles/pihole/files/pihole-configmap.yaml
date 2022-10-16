@@ -87,42 +87,26 @@ metadata:
   namespace: dns
 data:
   custom.list: |
+    10.10.0.230 pihole1.local.lan
+    192.168.1.251 pihole2.local.lan
     192.168.1.210 homenas.local.lan
     192.168.1.211 homenas-r.local.lan
     192.168.1.213 homeassistant.local.lan
     192.168.1.220 vcsa.local.lan
-    192.168.1.201 esxi1.local.lan
-    192.168.1.202 esxi2.local.lan
     192.168.1.204 esxinuc1.local.lan
-    192.168.1.11 esxi1-r.local.lan
-    192.168.1.12 esxi2-r.local.lan
-    192.168.1.215 minecraft.local.lan
-    192.168.1.216 veeam.local.lan
-    192.168.1.203 esxiwit.local.lan
-    192.168.1.208 vsanwitness7.local.lan
-    10.10.0.21 debian7.local.lan
-    10.10.0.21 test.yandcdisplay.com
     192.168.1.205 esxinuc2.local.lan
+    192.168.1.216 veeam.local.lan
     192.168.1.214 librenms.local.lan
-    10.10.0.51 esxivm1.local.lan
-    10.10.0.52 esxivm2.local.lan
-    10.10.0.53 esxivm3.local.lan
     192.168.1.218 upsmon.local.lan
     10.10.0.20 splunk.local.lan
-    192.168.1.217 docker1.local.lan
     192.168.1.217 unifi.local.lan
-    192.168.1.217 admin1.local.lan
-    192.168.1.217 mc.local.lan
     192.168.1.217 podhost1.local.lan
     192.168.1.213 yandchome.duckdns.org
-    34.94.14.166 yc-srv1
     138.68.18.20 yc-appsrv1
     10.10.0.23 yc-appsrv1-dev.local.lan
     10.10.0.25 tower.local.lan
     192.168.1.217 vault.local.lan
     10.10.0.230 grafana.local.lan
-    10.10.0.91 rocky1.local.lan
-    10.10.0.95 wincore1.local.lan
     10.10.0.50 dbsrv1.local.lan
     10.10.0.230 kdash.local.lan
     10.10.0.230 longhorn.local.lan
