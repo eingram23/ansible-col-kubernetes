@@ -1,10 +1,10 @@
-- name: Copy nginx-test manifests to host
+- name: Copy manifest to host
   ansible.builtin.template:
     src: data_migration.yaml.j2
-    dest: "{{ dest }}"
+    dest: "{{ dest }}data_migration.yaml"
     mode: '0644'
 
-- name: Deploy nginx-test
+- name: Deploy manifest
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}data_migration.yaml"
