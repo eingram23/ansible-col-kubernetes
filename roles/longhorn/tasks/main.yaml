@@ -43,31 +43,27 @@
     namespace: longhorn-system
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Copy longhorn-ui manifest to host
+- name: Copy longhorn manifests to host
   ansible.builtin.copy:
-    src: longhorn-ui.yaml
-    dest: "{{ dest }}longhorn-ui.yaml"
+    src: "{{ item }}"
+    dest: "{{ dest }}"
     mode: '0644'
+  loop:
+    - longhorn-ui.yaml
+    - longhorn-ingress.yaml
+    - longhorn-storageclass.yaml
 
-- name: Deploy longhorn-ui
+- name: Deploy longhorn
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}longhorn-ui.yaml"
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
-
-- name: Copy longhorn-ingress manifest to host
-  ansible.builtin.copy:
-    src: longhorn-ingress.yaml
-    dest: "{{ dest }}longhorn-ingress.yaml"
-    mode: '0644'
-
-- name: Deploy longhorn-ingress
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}longhorn-ingress.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - longhorn-ui.yaml
+    - longhorn-ingress.yaml
+    - longhorn-storageclass.yaml
 
 - name: Make longhorn the default storage class
   ansible.builtin.shell: |
     kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-
+    kubectl patch storageclass longhorn -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
