@@ -12,23 +12,23 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-      name: 8080
+      name: control
     - protocol: TCP
       port: 8443
       targetPort: 8443
-      name: 8443
+      name: api
     - protocol: TCP
       port: 8843
       targetPort: 8843
-      name: 8843
+      name: https
     - protocol: TCP
       port: 8880
       targetPort: 8880
-      name: 8880
+      name: http
     - protocol: TCP
       port: 6789
       targetPort: 6789
-      name: 6789
+      name: speedtest
   type: LoadBalancer 
   LoadBalancerIP: 10.10.0.231
 
@@ -48,6 +48,6 @@ spec:
     - protocol: UDP
       port: 3478
       targetPort: 3478
-      name: 3478
+      name: stun
   type: LoadBalancer 
   LoadBalancerIP: 10.10.0.231
