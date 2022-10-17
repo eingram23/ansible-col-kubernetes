@@ -2,7 +2,7 @@ kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
   name: vmware-exporter
-  namespace: monitoring
+  namespace: homelab-monitoring
 spec:
   entryPoints: 
     - web
@@ -10,5 +10,5 @@ spec:
   - match: Host(`vmware-exporter.local.lan`) 
     kind: Rule
     services:
-    - name: vmware-exporter-service
+    - name: vmware-exporter
       port: 9272

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: longhorn-grafana-pvc
+  name: grafana-data-pvc
   namespace: monitoring
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn
+  storageClassName: longhorn-homelab
   resources:
     requests:
       storage: 10Gi

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres13-pvc
+  name: postgres13-data-pvc
   namespace: postgres
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn
+  storageClassName: longhorn-homelab
   resources:
     requests:
       storage: 10Gi

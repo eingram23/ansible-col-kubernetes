@@ -4,8 +4,9 @@ metadata:
   labels:
     app: vmware-exporter
   name: vmware-exporter
-  namespace: monitoring
+  namespace: homelab-monitoring
 spec:
+  serviceAccountName: vmware-exporter
   selector:
     matchLabels:
       app: vmware-exporter
@@ -16,7 +17,7 @@ spec:
         app: vmware-exporter
     spec:
       containers:
-      - image: docker.io/pryorda/vmware_exporter:latest
+      - image: docker.io/pryorda/vmware_exporter:{{ vmware_exporter_ver}}
         name: vmware-exporter
         env:
         - name: VSPHERE_PASSWORD

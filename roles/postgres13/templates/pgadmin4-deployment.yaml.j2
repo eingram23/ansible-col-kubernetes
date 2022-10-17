@@ -54,7 +54,7 @@ spec:
       volumes:
       - name: pgadmin4-data
         persistentVolumeClaim:
-          claimName: pgadmin4-pvc
+          claimName: pgadmin4-data-pvc
       - name: pgadmin4-config
         configMap:
           name: pgadmin4-config

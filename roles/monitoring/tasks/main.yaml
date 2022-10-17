@@ -6,24 +6,11 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create vmware-exporter-deployment.yaml manifest on host
-  ansible.builtin.template:
-    src: vmware-exporter-deployment.yaml.j2
-    dest: "{{ dest }}vmware-exporter-deployment.yaml"
-
 - name: Create monitoring namespace
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}monitoring-namespace.yaml"
     kubeconfig: "{{ kubeconfig }}"
-
-# - name: Deploy prometheus operator
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}prometheus-operator.yaml"
-#     server_side_apply:
-#       field_manager: kubectl
-#     kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy prometheus operator using shell
   ansible.builtin.shell: kubectl apply --server-side -f {{ dest }}prometheus-operator.yaml
@@ -58,16 +45,6 @@
     - prometheus-service-local.yaml
     - prometheus-role.yaml
     - prometheus-ingress.yaml
-
-- name: Deploy vmware-exporter
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - vmware-exporter-service.yaml
-    - vmware-exporter-deployment.yaml
-    - vmware-exporter-ingress.yaml
 
 - name: Deploy grafana
   kubernetes.core.k8s:
