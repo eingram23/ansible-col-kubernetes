@@ -30,7 +30,7 @@ spec:
       targetPort: 6789
       name: speedtest
   type: LoadBalancer 
-  LoadBalancerIP: 10.10.0.231
+  LoadBalancerIP: {{ unifi_ip }}
 
 ---
 
@@ -50,4 +50,4 @@ spec:
       targetPort: 3478
       name: stun
   type: LoadBalancer 
-  LoadBalancerIP: 10.10.0.231
+  LoadBalancerIP: {{ unifi_ip }}
