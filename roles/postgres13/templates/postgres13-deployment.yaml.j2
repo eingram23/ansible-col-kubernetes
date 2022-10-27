@@ -24,7 +24,7 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: homelab-secrets
+              name: postgres-secrets
               key: defaultpassword
               optional: false
         - name: POSTGRES_USER
