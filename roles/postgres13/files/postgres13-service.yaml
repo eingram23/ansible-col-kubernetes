@@ -10,5 +10,5 @@ spec:
   - name: postgres13
     port: 5432
     targetPort: 5432
-  type: LoadBalancer 
-  LoadBalancerIP: {{ postgres13_ip }}
+  # type: LoadBalancer 
+  # LoadBalancerIP: {{ postgres13_ip }}
