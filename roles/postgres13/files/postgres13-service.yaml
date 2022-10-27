@@ -11,4 +11,4 @@ spec:
     port: 5432
     targetPort: 5432
   type: LoadBalancer 
-  LoadBalancerIP: {{ dbsrv_ip }}
+  LoadBalancerIP: {{ postgres13_ip }}

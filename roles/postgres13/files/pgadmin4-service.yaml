@@ -11,4 +11,4 @@ spec:
     port: 80
     targetPort: 80
   type: LoadBalancer 
-  LoadBalancerIP: {{ dbsrv_ip }}
+  LoadBalancerIP: {{ pgadmin4_ip }}

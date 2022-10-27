@@ -21,11 +21,14 @@
     dest: "{{ dest }}{{ longhorn_manifest }}"
     mode: '0644'
 
-- name: Deploy longhorn
+- name: Deploy longhorn deployment
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ longhorn_manifest }}"
     kubeconfig: "{{ kubeconfig }}"
+
+- name: Wait for metallb pods become ready
+  shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
 
 - name: Remove longhorn-iscsi-install DaemonSet
   kubernetes.core.k8s:
@@ -53,7 +56,7 @@
     - longhorn-ingress.yaml
     - longhorn-storageclass.yaml
 
-- name: Deploy longhorn
+- name: Deploy longhorn UI, ingress and storageclass
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
