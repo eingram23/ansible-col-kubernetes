@@ -29,7 +29,7 @@
 #     seconds: 10
 
 - name: Wait for vault pod to become ready
-  shell: "kubectl wait --namespace=vault --for=condition=ContainersReady pods --all --timeout=600s"
+  shell: "kubectl wait --namespace=vault --for=condition=PodScheduled pods --all --timeout=600s"
 
 # - name: Export cluster-keys.json
 #   kubernetes.core.k8s_exec:
