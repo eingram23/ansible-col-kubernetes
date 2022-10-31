@@ -37,7 +37,6 @@
       kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-      kubectl exec vault-0 -n vault -- vault secrets enable -path=secret/ kv
 
 - name: Deploy vault ingress
   kubernetes.core.k8s:
