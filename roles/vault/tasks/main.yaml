@@ -8,7 +8,7 @@
 
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
-    name: vault
+    name: hashicorp
     repo_url: "https://helm.releases.hashicorp.com"
 
 - name: Install hashicorp/vault chart from repo
@@ -16,9 +16,12 @@
     release_name: vault
     release_namespace: vault
     create_namespace: true
-    chart_ref: vault
+    chart_ref: hashicorp/vault
     wait: true
     update_repo_cache: true
+    values:
+      injector:
+        enabled: false
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Export cluster-keys.json
