@@ -19,9 +19,7 @@
     chart_ref: hashicorp/vault
     wait: true
     update_repo_cache: true
-    values:
-      injector:
-        enabled: false
+    values_files: "{{ dest }}vault-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Wait for vault pod to become ready
