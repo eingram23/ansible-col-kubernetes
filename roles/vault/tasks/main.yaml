@@ -32,7 +32,8 @@
   kubernetes.core.k8s_exec:
     namespace: vault
     pod: vault-0
-    command: 'vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json'
+    command: >-
+      sh -ec "vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Set VAULT_UNSEAL_KEY
