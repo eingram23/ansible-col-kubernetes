@@ -33,12 +33,12 @@
     namespace: vault
     pod: vault-0
     command: >-
-      sh -ec "vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json"
+      sh -ec "vault operator init -key-shares=1 -key-threshold=1 -format=json > /home/ansible/cluster-keys.json"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Set VAULT_UNSEAL_KEY
   ansible.builtin.shell:
-    cmd: VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+    cmd: VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" /home/ansible/cluster-keys.json)
 
 - name: Unseal vault
   kubernetes.core.k8s_exec:
@@ -57,7 +57,7 @@
     
 - name: Set VAULT_UNSEAL_KEY
   ansible.builtin.shell:
-    cmd: jq -r ".root_token" cluster-keys.json
+    cmd: jq -r ".root_token" /home/ansible/cluster-keys.json
   register: root_token
 
 - name: Show root_token
