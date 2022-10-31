@@ -6,12 +6,16 @@
     mode: '0644'
   with_fileglob: "*"
 
+- name: Add hashicorp/vault chart repo
+  kubernetes.core.helm_repository:
+    name: hashicorp/vault
+    repo_url: "https://helm.releases.hashicorp.com"
+
 - name: Install hashicorp/vault chart from repo
   kubernetes.core.helm:
     release_name: vault
     release_namespace: vault
     create_namespace: true
-    chart_repo_url: https://helm.releases.hashicorp.com
     chart_ref: hashicorp/vault
     wait: true
     update_repo_cache: true
