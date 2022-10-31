@@ -24,12 +24,12 @@
         enabled: false
     kubeconfig: "{{ kubeconfig }}"
 
-# - name: Wait 10 seconds for vault pod to start
-#   ansible.builtin.pause:
-#     seconds: 10
-
 - name: Wait for vault pod to become ready
   shell: "kubectl wait --namespace=vault --for=condition=Initialized pods --all --timeout=600s"
+
+- name: Wait 10 seconds for vault pod to start
+  ansible.builtin.pause:
+    seconds: 5
 
 # - name: Export cluster-keys.json
 #   kubernetes.core.k8s_exec:
