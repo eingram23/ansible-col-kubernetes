@@ -31,40 +31,21 @@
   ansible.builtin.pause:
     seconds: 5
 
-# - name: Export cluster-keys.json
-#   kubernetes.core.k8s_exec:
-#     namespace: vault
-#     pod: vault-0
-#     command: >-
-#       sh -ec "vault operator init -key-shares=1 -key-threshold=1 -format=json > /home/ansible/cluster-keys.json"
-#     kubeconfig: "{{ kubeconfig }}"
-
 - name: Export cluster-keys.json
   ansible.builtin.shell:
     cmd: |
       kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+      kubectl exec vault-0 -n vault -- vault secrets enable -path=secret/ kv
 
-# - name: Set VAULT_UNSEAL_KEY
-#   ansible.builtin.shell:
-#     cmd: VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
-
-# - name: Unseal vault
-#   kubernetes.core.k8s_exec:
-#     namespace: vault
-#     pod: vault-0
-#     command: vault operator unseal $VAULT_UNSEAL_KEY
-#     kubeconfig: "{{ kubeconfig }}"
-
-- name: Deploy vault middleware and ingressroute manifests
+- name: Deploy vault ingress
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingress.yaml
-    # - vault-middleware.yaml
 
 - name: Set VAULT_UNSEAL_KEY
   ansible.builtin.shell:
