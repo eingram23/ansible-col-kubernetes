@@ -61,7 +61,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingress.yaml
-    
+
 - name: Set VAULT_UNSEAL_KEY
   ansible.builtin.shell:
     cmd: jq -r ".root_token" cluster-keys.json
@@ -69,4 +69,4 @@
 
 - name: Show root_token
   ansible.builtin.debug:
-    var: root_token.results
+    var: root_token.stdout
