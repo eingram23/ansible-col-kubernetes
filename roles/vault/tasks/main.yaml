@@ -36,7 +36,7 @@
     command: vault operator unseal $VAULT_UNSEAL_KEY
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy vault manifests
+- name: Deploy vault middleware and ingressroute manifests
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
@@ -44,3 +44,11 @@
   loop:
     - vault-ingress.yaml
     
+- name: Set VAULT_UNSEAL_KEY
+  ansible.builtin.shell:
+    cmd: jq -r ".root_token" cluster-keys.json
+  register: root_token
+
+- name: Show root_token
+  ansible.builtin.debug:
+    var: root_token.results
