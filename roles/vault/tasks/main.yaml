@@ -16,7 +16,7 @@
     release_name: vault
     release_namespace: vault
     create_namespace: true
-    chart_ref: hashicorp/vault
+    chart_ref: vault
     wait: true
     update_repo_cache: true
     kubeconfig: "{{ kubeconfig }}"
