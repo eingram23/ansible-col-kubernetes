@@ -24,12 +24,15 @@
         enabled: false
     kubeconfig: "{{ kubeconfig }}"
 
+- name: Wait 10 seconds for vault pod to start
+  ansible.builtin.pause:
+    seconds: 10
+    
 - name: Export cluster-keys.json
   kubernetes.core.k8s_exec:
     namespace: vault
     pod: vault-0
-    command: |
-      vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
+    command: vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Set VAULT_UNSEAL_KEY
