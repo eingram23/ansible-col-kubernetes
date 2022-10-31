@@ -1,0 +1,46 @@
+---
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Install hashicorp/vault chart from repo
+  kubernetes.core.helm:
+    release_name: vault
+    release_namespace: vault
+    create_namespace: true
+    chart_repo_url: https://helm.releases.hashicorp.com
+    chart_ref: hashicorp/vault
+    wait: true
+    update_repo_cache: true
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Export cluster-keys.json
+  kubernetes.core.k8s_exec:
+    namespace: vault
+    pod: vault-0
+    command: |
+      vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Set VAULT_UNSEAL_KEY
+  ansible.builtin.shell:
+    cmd: VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+
+- name: Unseal vault
+  kubernetes.core.k8s_exec:
+    namespace: vault
+    pod: vault-0
+    command: vault operator unseal $VAULT_UNSEAL_KEY
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy vault manifests
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vault-ingress.yaml
+    
