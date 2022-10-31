@@ -1,17 +1,20 @@
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
 metadata:
   name: vault-ingress
   namespace: vault
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    ingress.kubernetes.io/rewrite-target: /ui
 spec:
-  entryPoints: 
-    - web
-  routes:
-  - match: Host(`vault.local.lan`) 
-    kind: Rule
-    middlewares:
-     - name: vault
-    services:
-    - name: vault
-      port: 8200
+  rules:
+  - host: vault.local.lan
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service: 
+              name: vault
+              port: 
+                number: 8200
