@@ -29,3 +29,12 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingress.yaml
+
+- name: Wait for 20 seconds
+  ansible.builtin.pause:
+    seconds: 20
+
+- name: Init and export cluster-keys.json
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
