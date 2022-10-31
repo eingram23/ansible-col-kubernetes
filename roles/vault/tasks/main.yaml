@@ -61,6 +61,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingress.yaml
+    - vault-middleware.yaml
 
 - name: Set VAULT_UNSEAL_KEY
   ansible.builtin.shell:
