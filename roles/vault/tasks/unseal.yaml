@@ -1,0 +1,15 @@
+- name: Export cluster-keys.json
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+      kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+
+- name: Set VAULT_UNSEAL_KEY
+  ansible.builtin.shell:
+    cmd: jq -r ".root_token" cluster-keys.json
+  register: root_token
+
+- name: Show root_token
+  ansible.builtin.debug:
+    var: root_token.stdout

@@ -1,11 +1,12 @@
 server:
-    dataStorage:
-        enabled: true
-        size: 10Gi
-        storageClass: longhorn
-    auditStorage:
-        enabled: true
-        size: 10Gi
-        storageClass: longhorn
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: longhorn
+  auditStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: longhorn
+
 injector:
   enabled: false
