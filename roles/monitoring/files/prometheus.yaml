@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  name: prometheus-persistant
+  name: prometheus-persistent
   namespace: monitoring
 spec:
   replicas: 1
@@ -26,6 +26,9 @@ spec:
       - node-exporter
       - kubelet
       - traefik
+  additionalScrapeConfigs:
+    name: scrape-configs
+    key: prom-job-servers.yaml
   storage:
     volumeClaimTemplate:
       spec:

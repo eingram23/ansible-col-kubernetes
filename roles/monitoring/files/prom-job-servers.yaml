@@ -1,0 +1,4 @@
+- job_name: "servers"
+  static_configs:
+    - targets: ["HL-DC1.homelab.local:9182"]
+    - targets: ["tower.local.lan:9100"]
