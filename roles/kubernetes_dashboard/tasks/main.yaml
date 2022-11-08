@@ -7,14 +7,15 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: metallb_installed
 
-- name: Get Kubernetes Dashboard version
-  ansible.builtin.shell: |
-    curl -w '%{url_effective}' -I -L -s -S https://github.com/kubernetes/dashboard/releases/latest -o /dev/null | sed -e 's|.*/||'
-  register: dashboard_version
+# - name: Get Kubernetes Dashboard version
+#   ansible.builtin.shell: >
+#     curl -w '%{url_effective}' -I -L -s -S
+#     https://github.com/kubernetes/dashboard/releases/latest -o /dev/null | sed -e 's|.*/||'
+#   register: dashboard_version
 
-- name: Set fact with dashboard version
-  ansible.builtin.set_fact:
-    dash_ver: "{{ dashboard_version.stdout }}"
+# - name: Set fact with dashboard version
+#   ansible.builtin.set_fact:
+#     dash_ver: "{{ dashboard_version.stdout }}"
 
 - name: Download kubernetes dashboard manifest
   ansible.builtin.get_url:
