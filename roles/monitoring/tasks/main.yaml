@@ -59,12 +59,12 @@
     path: /var/tmp/ssh-key-git.key
     state: absent
 
-- name: Deploy monitoring manifests
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
+# - name: Deploy monitoring manifests
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     kubeconfig: "{{ kubeconfig }}"
+#   loop:
     # - longhorn-servicemonitor.yaml
     # - kubelet-servicemonitor.yaml
     # - node-exporter-role.yaml
