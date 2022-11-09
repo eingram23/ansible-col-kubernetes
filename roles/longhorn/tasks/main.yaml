@@ -53,7 +53,6 @@
     mode: '0644'
   loop:
     - longhorn-ui.yaml
-    - longhorn-ingress.yaml
     - longhorn-storageclass.yaml
 
 - name: Create longhorn ingress manifest on host
