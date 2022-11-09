@@ -48,6 +48,8 @@
     kubectl create configmap prometheus-server-conf
     --namespace=monitoring
     --from-file=/var/tmp/configs/prometheus
+    -o yaml --dry-run |
+    kubectl apply -f -
 
 - name: Clean up tmp files
   ansible.builtin.file:
