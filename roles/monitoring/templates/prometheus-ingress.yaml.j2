@@ -1,14 +1,14 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: longhorn-frontend
-  namespace: longhorn-system
+  name: prometheus
+  namespace: monitoring
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`longhorn.local.lan`) 
+  - match: Host(`promk3s{{ suffix }}.local.lan`) 
     kind: Rule
     services:
-    - name: longhorn-frontend
-      port: 8000
+    - name: prometheus-external
+      port: 9090

@@ -56,6 +56,12 @@
     - longhorn-ingress.yaml
     - longhorn-storageclass.yaml
 
+- name: Create longhorn ingress manifest on host
+  ansible.builtin.template:
+    src: longhorn-ingress.yaml.j2
+    dest: "{{ dest }}longhorn-ingress.yaml"
+    mode: '0644'
+
 - name: Deploy longhorn UI, ingress and storageclass
   kubernetes.core.k8s:
     state: present

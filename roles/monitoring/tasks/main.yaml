@@ -6,6 +6,18 @@
     mode: '0644'
   with_fileglob: "*"
 
+- name: Create grafana ingress manifests on host
+  ansible.builtin.template:
+    src: grafana-ingress.yaml.j2
+    dest: "{{ dest }}grafana-ingress.yaml"
+    mode: '0644'
+
+- name: Create prometheus ingress manifests on host
+  ansible.builtin.template:
+    src: prometheus-ingress.yaml.j2
+    dest: "{{ dest }}prometheus-ingress.yaml"
+    mode: '0644'
+
 - name: Create monitoring namespace
   kubernetes.core.k8s:
     state: present

@@ -1,3 +1,4 @@
 dest: "/opt/kubernetes/defs/"
 kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 dash_ver: "v2.7.0"
+suffix: "{{ env | default([]) }}"

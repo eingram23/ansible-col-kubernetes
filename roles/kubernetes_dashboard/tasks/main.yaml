@@ -7,26 +7,10 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: metallb_installed
 
-# - name: Get Kubernetes Dashboard version
-#   ansible.builtin.shell: >
-#     curl -w '%{url_effective}' -I -L -s -S
-#     https://github.com/kubernetes/dashboard/releases/latest -o /dev/null | sed -e 's|.*/||'
-#   register: dashboard_version
-
-# - name: Set fact with dashboard version
-#   ansible.builtin.set_fact:
-#     dash_ver: "{{ dashboard_version.stdout }}"
-
 - name: Download kubernetes dashboard manifest
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/kubernetes/dashboard/{{ dash_ver }}/aio/deploy/recommended.yaml
     dest: "{{ dest }}kubernetes-dashboard.yaml"
-
-- name: Apply kubernetes dashboard manifest
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}kubernetes-dashboard.yaml"
-    kubeconfig: "{{ kubeconfig }}"
 
 - name: Copy kubernetes-dashboard-role manifest to host
   ansible.builtin.copy:
@@ -34,20 +18,18 @@
     dest: "{{ dest }}kubernetes-dashboard-role.yaml"
     mode: '0644'
 
-- name: Apply kubernetes dashboard role manifest
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}kubernetes-dashboard-role.yaml"
-    kubeconfig: "{{ kubeconfig }}"
-
-- name: Copy kubernetes ingressroute manifest to host
-  ansible.builtin.copy:
-    src: kubernetes-dashboard-ingress.yaml
+- name: Create kubernetes-dashboard-ingress manifest on host
+  ansible.builtin.template:
+    src: kubernetes-dashboard-ingress.yaml.j2
     dest: "{{ dest }}kubernetes-dashboard-ingress.yaml"
     mode: '0644'
 
-- name: Apply kubernetes ingressroute manifest
+- name: Apply kubernetes dashboard role manifest
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}kubernetes-dashboard-ingress.yaml"
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - kubernetes-dashboard.yaml
+    - kubernetes-dashboard-role.yaml
+    - kubernetes-dashboard-ingress.yaml

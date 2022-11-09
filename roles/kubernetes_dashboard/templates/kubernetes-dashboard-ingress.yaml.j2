@@ -5,7 +5,7 @@ metadata:
   namespace: kubernetes-dashboard
 
 spec:
-  serverName: "kdash.local.lan" 
+  serverName: "kdash{{ suffix }}.local.lan" 
   insecureSkipVerify: true
 
 ---  
@@ -19,7 +19,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`kdash.local.lan`)
+      match: Host(`kdash{{ suffix }}.local.lan`)
       services:
         - kind: Service
           port: 443
