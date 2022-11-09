@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   selector:
-    prometheus: prometheus-persistant
+    prometheus: prometheus-persistent
   # type: LoadBalancer
   ports:
     - name: web
