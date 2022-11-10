@@ -34,13 +34,13 @@ spec:
               mountPath: /etc/prometheus/
             - name: prometheus-data-volume
               mountPath: /prometheus/
-      # initContainers:
-      # - name: prometheus-data-permission-fix
-      #   image: busybox
-      #   command: ["chown", "-R", "1000:2000", /prometheus/]
-      #   volumeMounts:
-      #   - name: prometheus-data-volume
-      #     mountPath: /prometheus/
+      initContainers:
+      - name: prometheus-data-permission-fix
+        image: busybox
+        command: ["chown", "-R", "65534:65534", /prometheus/]
+        volumeMounts:
+        - name: prometheus-data-volume
+          mountPath: /prometheus/
       volumes:
         - name: prometheus-config-volume
           configMap:
