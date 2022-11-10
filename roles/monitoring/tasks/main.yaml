@@ -1,8 +1,10 @@
 ---
 - name: Create monitoring namespace
   kubernetes.core.k8s:
+    name: monitoring
+    api_version: v1
+    kind: Namespace
     state: present
-    src: "{{ dest }}monitoring-namespace.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Download manifests to host
