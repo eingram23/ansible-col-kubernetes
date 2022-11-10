@@ -80,7 +80,13 @@
     - kube-state-metrics-deployment.yaml
     - kube-state-metrics-service.yaml
 
-- name: Create grafana ingress manifests on host
+- name: Create grafana deployment manifest on host
+  ansible.builtin.template:
+    src: grafana-deployment.yaml.j2
+    dest: "{{ dest }}grafana-deployment.yaml"
+    mode: '0644'
+
+- name: Create grafana ingress manifest on host
   ansible.builtin.template:
     src: grafana-ingress.yaml.j2
     dest: "{{ dest }}grafana-ingress.yaml"
