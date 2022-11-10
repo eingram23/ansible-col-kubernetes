@@ -14,12 +14,6 @@
     mode: '0644'
   with_fileglob: "*"
 
-# - name: Create grafana ingress manifests on host
-#   ansible.builtin.template:
-#     src: grafana-ingress.yaml.j2
-#     dest: "{{ dest }}grafana-ingress.yaml"
-#     mode: '0644'
-
 - name: Create prometheus ingress manifests on host
   ansible.builtin.template:
     src: prometheus-ingress.yaml.j2
@@ -63,25 +57,6 @@
     path: /var/tmp/ssh-key-git.key
     state: absent
 
-# - name: Deploy monitoring manifests
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-    # - longhorn-servicemonitor.yaml
-    # - kubelet-servicemonitor.yaml
-    # - node-exporter-role.yaml
-    # - node-exporter-service.yaml
-    # - node-exporter-daemonset.yaml
-    # - node-exporter-servicemonitor.yaml
-    # - kube-state-metrics-role.yaml
-    # - kube-state-metrics-service.yaml
-    # - kube-state-metrics-deployment.yaml
-    # - kube-state-metrics-servicemonitor.yaml
-    # - kubelet-servicemonitor.yaml
-    # - traefik-servicemonitor.yaml
-
 - name: Deploy prometheus
   kubernetes.core.k8s:
     state: present
@@ -94,13 +69,31 @@
     - prometheus-service.yaml
     - prometheus-ingress.yaml
 
-# - name: Deploy grafana
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-#     - grafana-pvc.yaml
-#     - grafana-deployment.yaml
-#     - grafana-service.yaml
-#     - grafana-ingress.yaml
+- name: Deploy kube-state-metrics manifests
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - kube-state-metrics-role.yaml
+    - kube-state-metrics-service-account.yaml
+    - kube-state-metrics-deployment.yaml
+    - kube-state-metrics-service.yaml
+
+- name: Create grafana ingress manifests on host
+  ansible.builtin.template:
+    src: grafana-ingress.yaml.j2
+    dest: "{{ dest }}grafana-ingress.yaml"
+    mode: '0644'
+
+- name: Deploy grafana
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafana-service-account.yaml
+    - grafana-pvc.yaml
+    - grafana-deployment.yaml
+    - grafana-service.yaml
+    - grafana-ingress.yaml

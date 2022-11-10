@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmware-exporter
+  namespace: monitoring
+  labels:
+    app: vmware-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vmware-exporter
+  template:
+    metadata:
+      labels:
+        app: vmware-exporter
+    spec:
+      containers:
+        - name: vmware-exporter
+          image: pryorda/vmware_exporter:{{ vmware_exporter_ver }}
+          args:
+            - "VSPHERE_USER={{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_username') }}"
+            - "VSPHERE_PASSWORD={{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }}"
+            - "VSPHERE_HOST=vcsa.local.lan"
+            - "VSPHERE_IGNORE_SSL=True"
+          ports:
+            - containerPort: 9272

@@ -1,14 +1,14 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: prometheus
+  name: vmware-exporter
   namespace: monitoring
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`prom{{ suffix }}.local.lan`) 
+  - match: Host(`vmware-exporter{{ suffix }}.local.lan`) 
     kind: Rule
     services:
-    - name: prometheus
-      port: 9090
+    - name: vmware-exporter
+      port: 9272
