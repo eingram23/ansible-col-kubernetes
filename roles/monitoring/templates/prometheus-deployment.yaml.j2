@@ -39,13 +39,12 @@ spec:
           command: ["chown", "-R", "1000:2000", /var/prometheus/data]
           volumeMounts:
           - name: prometheus-data-volume
-            mmountPath: /var/prometheus/data
+            mmountPath: /prometheus/
       volumes:
         - name: prometheus-config-volume
           configMap:
             defaultMode: 420
             name: prometheus-server-conf
-  
         - name: prometheus-data-volume
           persistentVolumeClaim:
             claimName: prometheus-data-pvc
