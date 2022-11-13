@@ -6,10 +6,28 @@
     mode: '0644'
   with_fileglob: "*"
 
+- name: Create grafana deployment manifest on host
+  ansible.builtin.template:
+    src: grafana-deployment.yaml.j2
+    dest: "{{ dest }}grafana-deployment.yaml"
+    mode: '0644'
+
 - name: Create grafana ingress manifests on host
   ansible.builtin.template:
     src: grafana-ingress.yaml.j2
     dest: "{{ dest }}grafana-ingress.yaml"
+    mode: '0644'
+
+- name: Create vmware-exporter  deployment manifest on host
+  ansible.builtin.template:
+    src: vmware-exporter-deployment.yaml.j2
+    dest: "{{ dest }}vmware-exporter-deployment.yaml"
+    mode: '0644'
+
+- name: Create vmware-exporter ingress manifests on host
+  ansible.builtin.template:
+    src: vmware-exporter-ingress.yaml.j2
+    dest: "{{ dest }}vmware-exporter.yaml"
     mode: '0644'
 
 - name: Create prometheus ingress manifests on host
@@ -101,3 +119,13 @@
     - grafana-deployment.yaml
     - grafana-service.yaml
     - grafana-ingress.yaml
+
+- name: Deploy vnware-exporter
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vmware-exporter-deployment.yaml
+    - vmware-exporter-service.yaml
+    - vmware-exporter-ingress.yaml
