@@ -1,12 +1,4 @@
 ---
-- name: Create monitoring namespace
-  kubernetes.core.k8s:
-    name: monitoring
-    api_version: v1
-    kind: Namespace
-    state: present
-    kubeconfig: "{{ kubeconfig }}"
-
 - name: Download manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
@@ -14,17 +6,26 @@
     mode: '0644'
   with_fileglob: "*"
 
+- name: Create grafana ingress manifests on host
+  ansible.builtin.template:
+    src: grafana-ingress.yaml.j2
+    dest: "{{ dest }}grafana-ingress.yaml"
+    mode: '0644'
+
 - name: Create prometheus ingress manifests on host
   ansible.builtin.template:
     src: prometheus-ingress.yaml.j2
     dest: "{{ dest }}prometheus-ingress.yaml"
     mode: '0644'
 
-- name: Create prometheus deployment manifest on host
-  ansible.builtin.template:
-    src: prometheus-deployment.yaml.j2
-    dest: "{{ dest }}prometheus-deployment.yaml"
-    mode: '0644'
+- name: Create monitoring namespace
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}monitoring-namespace.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy prometheus operator using shell
+  ansible.builtin.shell: kubectl apply --server-side -f {{ dest }}prometheus-operator.yaml
 
 - name: Create github key
   ansible.builtin.template:
@@ -39,13 +40,14 @@
     key_file: /var/tmp/ssh-key-git.key
     accept_hostkey: true
 
-- name: Create prometheus ConfigMap
+- name: Create secret for additional prometheus jobs
   ansible.builtin.shell: >
-    kubectl create configmap prometheus-server-conf
+    kubectl create secret generic scrape-configs
+    --from-file=/var/tmp/configs/prometheus/prometheus.yml
+    --dry-run=client
     --namespace=monitoring
-    --from-file=/var/tmp/configs/prometheus
-    -o yaml --dry-run |
-    kubectl apply -f -
+    -oyaml >
+    {{ dest }}prom-scrape-servers.yaml
 
 - name: Clean up tmp files
   ansible.builtin.file:
@@ -57,40 +59,37 @@
     path: /var/tmp/ssh-key-git.key
     state: absent
 
+- name: Deploy monitoring manifests
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - longhorn-servicemonitor.yaml
+    - kubelet-servicemonitor.yaml
+    - node-exporter-role.yaml
+    - node-exporter-service.yaml
+    - node-exporter-daemonset.yaml
+    - node-exporter-servicemonitor.yaml
+    - kube-state-metrics-role.yaml
+    - kube-state-metrics-service.yaml
+    - kube-state-metrics-deployment.yaml
+    - kube-state-metrics-servicemonitor.yaml
+    - kubelet-servicemonitor.yaml
+    - traefik-servicemonitor.yaml
+    - prom-scrape-servers.yaml
+
 - name: Deploy prometheus
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - prometheus.yaml
+    - prometheus-service-ext.yaml
+    - prometheus-service-local.yaml
     - prometheus-role.yaml
-    - prometheus-pvc.yaml
-    - prometheus-deployment.yaml
-    - prometheus-service.yaml
     - prometheus-ingress.yaml
-
-- name: Deploy kube-state-metrics manifests
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - kube-state-metrics-role.yaml
-    - kube-state-metrics-service-account.yaml
-    - kube-state-metrics-deployment.yaml
-    - kube-state-metrics-service.yaml
-
-- name: Create grafana deployment manifest on host
-  ansible.builtin.template:
-    src: grafana-deployment.yaml.j2
-    dest: "{{ dest }}grafana-deployment.yaml"
-    mode: '0644'
-
-- name: Create grafana ingress manifest on host
-  ansible.builtin.template:
-    src: grafana-ingress.yaml.j2
-    dest: "{{ dest }}grafana-ingress.yaml"
-    mode: '0644'
 
 - name: Deploy grafana
   kubernetes.core.k8s:
@@ -98,7 +97,6 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - grafana-service-account.yaml
     - grafana-pvc.yaml
     - grafana-deployment.yaml
     - grafana-service.yaml
