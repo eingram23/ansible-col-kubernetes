@@ -19,4 +19,9 @@ spec:
     - name: calibre
       port: 8081
     middlewares:
-    - name: calibre-stripprefix
+    - name: calibre-stripprefix  
+  - match: Host(`calibre-web{{env}}.local.lan`) 
+    kind: Rule
+    services:
+    - name: calibre-web
+      port: 8083

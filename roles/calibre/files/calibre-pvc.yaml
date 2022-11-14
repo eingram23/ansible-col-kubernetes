@@ -5,6 +5,21 @@ metadata:
   namespace: calibre
 spec:
   accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn-homelab
+  resources:
+    requests:
+      storage: 10Gi
+
+--- 
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: calibre-books-pvc
+  namespace: calibre
+spec:
+  accessModes:
     - ReadWriteOnce
   storageClassName: longhorn-homelab
   resources:
