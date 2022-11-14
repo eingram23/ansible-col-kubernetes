@@ -18,10 +18,14 @@ spec:
       containers:
         - name: vmware-exporter
           image: pryorda/vmware_exporter:{{ vmware_exporter_ver }}
-          args:
-            - "VSPHERE_USER={{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_username') }}"
-            - "VSPHERE_PASSWORD={{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }}"
-            - "VSPHERE_HOST=vcsa.local.lan"
-            - "VSPHERE_IGNORE_SSL=True"
+          env:
+            - name: VSPHERE_USER
+              value: "{{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_username') }}"
+            - name: VSPHERE_PASSWORD
+              value: "{{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }}"
+            - name: VSPHERE_HOST
+              value: "vcsa.local.lan"
+            - name: VSPHERE_IGNORE_SSL
+              value: "True"
           ports:
             - containerPort: 9272
