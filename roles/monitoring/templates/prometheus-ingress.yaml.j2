@@ -7,7 +7,7 @@ spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`promk3s{{ suffix }}.local.lan`) 
+  - match: Host(`prom{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: prometheus-external
