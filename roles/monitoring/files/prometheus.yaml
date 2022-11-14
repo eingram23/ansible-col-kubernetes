@@ -28,7 +28,7 @@ spec:
       - traefik
   additionalScrapeConfigs:
     name: scrape-configs
-    key: prometheus.yaml
+    key: prometheus.yml
   storage:
     volumeClaimTemplate:
       spec:
