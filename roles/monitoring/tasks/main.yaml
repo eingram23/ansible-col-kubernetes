@@ -115,6 +115,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - grafana-configmap.yaml
     - grafana-pvc.yaml
     - grafana-deployment.yaml
     - grafana-service.yaml

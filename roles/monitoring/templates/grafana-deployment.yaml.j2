@@ -37,6 +37,9 @@ spec:
         - mountPath: /var/lib/grafana
           name: grafana-storage
           readOnly: false
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+          readOnly: false
       # nodeSelector:
       #   node-type: worker
       securityContext:
@@ -48,3 +51,7 @@ spec:
         - name: grafana-storage
           persistentVolumeClaim:
             claimName: grafana-data-pvc
+        - name: grafana-datasources
+          configMap:
+            defaultMode: 420
+            name: grafana-datasources
