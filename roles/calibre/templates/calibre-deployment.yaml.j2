@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre
+  namespace: unifi
+  labels:
+    app: calibre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calibre
+  template:
+    metadata:
+      labels:
+        app: calibre
+    spec:
+      containers:
+        - name: calibre
+          image: lscr.io/linuxserver/calibre:{{ calibre_ver }}
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          securityContext:
+            fsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - name: calibre-data
+              mountPath: /config
+      volumes:
+        - name: calibre-data
+          persistentVolumeClaim:
+            claimName: calibre-data-pvc

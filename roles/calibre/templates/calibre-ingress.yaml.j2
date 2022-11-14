@@ -1,14 +1,15 @@
+---
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: prometheus
-  namespace: monitoring
+  name: calibre
+  namespace: calibre
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`prom{{ suffix }}.local.lan`) 
+  - match: Host(`calibre{{env}}.local.lan`) 
     kind: Rule
     services:
-    - name: prometheus
-      port: 9090
+    - name: calibre
+      port: 8080

@@ -1,0 +1,35 @@
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: calibre
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create calibre-deployment.yaml manifest on host
+  ansible.builtin.template:
+    src: calibre-deployment.yaml.j2
+    dest: "{{ dest }}calibre-deployment.yaml"
+
+- name: Create calibre-ingress.yaml manifest on host
+  ansible.builtin.template:
+    src: calibre-ingress.yaml.j2
+    dest: "{{ dest }}calibre-ingress.yaml"
+
+- name: Deploy calibre
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - calibre-pvc.yaml
+    - calibre-service.yaml
+    - calibre-deployment.yaml
+    - calibre-ingress.yaml
