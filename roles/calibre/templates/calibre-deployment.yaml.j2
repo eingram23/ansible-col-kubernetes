@@ -31,6 +31,13 @@ spec:
           volumeMounts:
             - name: calibre-data
               mountPath: /config
+      initContainers:
+        - name: calibre-data-permission-fix
+          image: busybox
+          command: ["/bin/chown", "-R", "1000:1000", "/config"]
+          volumeMounts:
+          - name: calibre-data
+            mountPath: /config
       volumes:
         - name: calibre-data
           persistentVolumeClaim:
