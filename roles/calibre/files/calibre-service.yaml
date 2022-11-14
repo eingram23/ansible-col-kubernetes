@@ -25,7 +25,7 @@ metadata:
   namespace: calibre
 spec:
   selector:
-    app: calibr-web
+    app: calibre-web
   ports:
     - protocol: TCP
       port: 8083
