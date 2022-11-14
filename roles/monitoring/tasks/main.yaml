@@ -27,7 +27,7 @@
 - name: Create vmware-exporter ingress manifests on host
   ansible.builtin.template:
     src: vmware-exporter-ingress.yaml.j2
-    dest: "{{ dest }}vmware-ingress.yaml"
+    dest: "{{ dest }}vmware-exporter-ingress.yaml"
     mode: '0644'
 
 - name: Create prometheus ingress manifests on host
