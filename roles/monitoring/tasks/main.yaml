@@ -120,7 +120,7 @@
     - grafana-service.yaml
     - grafana-ingress.yaml
 
-- name: Deploy vnware-exporter
+- name: Deploy vmware-exporter
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
