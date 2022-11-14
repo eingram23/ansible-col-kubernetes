@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   replicas: 1
-  retention: 2d
+  retention: 5d
   resources:
     requests:
       memory: 400Mi
@@ -28,7 +28,7 @@ spec:
       - traefik
   additionalScrapeConfigs:
     name: scrape-configs
-    key: prom-job-servers.yaml
+    key: prometheus.yaml
   storage:
     volumeClaimTemplate:
       spec:
