@@ -33,25 +33,25 @@ spec:
           volumeMounts:
             - name: calibre-data
               mountPath: /config
-        - name: calibre-web
-          image: lscr.io/linuxserver/calibre-web:{{ calibre_web_ver }}
-          env:
-            - name: TZ
-              value: "America/Los_Angeles"            
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: DOCKER_MODS
-              value: "linuxserver/mods:universal-calibre"
-          ports:
-            - containerPort: 8083
-              protocol: TCP
-          volumeMounts:
-            - name: calibre-data
-              mountPath: /config
-            - name: calibre-books
-              mountPath: /books
+        # - name: calibre-web
+        #   image: lscr.io/linuxserver/calibre-web:{{ calibre_web_ver }}
+        #   env:
+        #     - name: TZ
+        #       value: "America/Los_Angeles"            
+        #     - name: PUID
+        #       value: "1000"
+        #     - name: PGID
+        #       value: "1000"
+        #     - name: DOCKER_MODS
+        #       value: "linuxserver/mods:universal-calibre"
+        #   ports:
+        #     - containerPort: 8083
+        #       protocol: TCP
+        #   volumeMounts:
+        #     - name: calibre-data
+        #       mountPath: /config
+        #     - name: calibre-books
+        #       mountPath: /books
       # initContainers:
       #   - name: calibre-data-permission-fix
       #     image: busybox
