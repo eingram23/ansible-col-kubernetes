@@ -52,13 +52,19 @@ spec:
               mountPath: /config
             - name: calibre-books
               mountPath: /books
-      initContainers:
-        - name: calibre-data-permission-fix
-          image: busybox
-          command: ["/bin/chown", "-R", "1000:1000", "/config"]
-          volumeMounts:
-          - name: calibre-data
-            mountPath: /config
+      # initContainers:
+      #   - name: calibre-data-permission-fix
+      #     image: busybox
+      #     command: ["/bin/chown", "-R", "1000:1000", "/config", "/books"]
+      #     volumeMounts:
+      #     - name: calibre-data
+      #       mountPath: /config
+      #     - name: calibre-books
+      #       mountPath: /books
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
       volumes:
         - name: calibre-data
           persistentVolumeClaim:
