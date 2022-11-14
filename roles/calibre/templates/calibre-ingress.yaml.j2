@@ -13,3 +13,8 @@ spec:
     services:
     - name: calibre
       port: 8080
+  - match: Host(`calibre-srv{{env}}.local.lan`) 
+    kind: Rule
+    services:
+    - name: calibre
+      port: 8081
