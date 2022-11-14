@@ -32,4 +32,5 @@
     - calibre-pvc.yaml
     - calibre-service.yaml
     - calibre-deployment.yaml
+    - calibre-middleware.yaml
     - calibre-ingress.yaml
