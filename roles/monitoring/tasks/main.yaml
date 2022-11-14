@@ -12,16 +12,22 @@
     dest: "{{ dest }}grafana-deployment.yaml"
     mode: '0644'
 
-- name: Create grafana ingress manifests on host
+- name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
-    src: grafana-ingress.yaml.j2
-    dest: "{{ dest }}grafana-ingress.yaml"
+    src: node-exporter-daemonset.yaml.j2
+    dest: "{{ dest }}node-exporter-daemonset.yaml"
     mode: '0644'
 
 - name: Create vmware-exporter deployment manifest on host
   ansible.builtin.template:
     src: vmware-exporter-deployment.yaml.j2
     dest: "{{ dest }}vmware-exporter-deployment.yaml"
+    mode: '0644'
+
+- name: Create grafana ingress manifests on host
+  ansible.builtin.template:
+    src: grafana-ingress.yaml.j2
+    dest: "{{ dest }}grafana-ingress.yaml"
     mode: '0644'
 
 - name: Create vmware-exporter ingress manifests on host

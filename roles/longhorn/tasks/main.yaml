@@ -1,6 +1,6 @@
 - name: Download longhorn-iscsi-install manifest
   ansible.builtin.get_url:
-    url: "{{ iscsi_manifest_url }}"
+    url: "https://raw.githubusercontent.com/longhorn/longhorn/{{ longhorn_ver }}/deploy/prerequisite/longhorn-iscsi-installation.yaml"
     dest: "{{ dest }}{{ iscsi_manifest }}"
     mode: '0644'
 
@@ -17,7 +17,7 @@
 
 - name: Download longhorn manifest
   ansible.builtin.get_url:
-    url: "{{ longhorn_manifest_url }}"
+    url: "https://raw.githubusercontent.com/longhorn/longhorn/{{ longhorn_ver }}/deploy/longhorn.yaml"
     dest: "{{ dest }}{{ longhorn_manifest }}"
     mode: '0644'
 

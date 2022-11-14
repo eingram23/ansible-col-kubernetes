@@ -8,7 +8,7 @@ spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`unifi-test.local.lan`) 
+  - match: Host(`unifi{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: unifi-tcp
