@@ -34,7 +34,7 @@ spec:
             - name: calibre-data
               mountPath: /config
         - name: calibre-web
-          image: lscr.io/linuxserver/calibre:{{ calibre_web_ver }}
+          image: lscr.io/linuxserver/calibre-web:{{ calibre_web_ver }}
           env:
             - name: TZ
               value: "America/Los_Angeles"            
