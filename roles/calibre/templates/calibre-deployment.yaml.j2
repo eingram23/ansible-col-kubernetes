@@ -63,8 +63,9 @@ spec:
       #       mountPath: /books
       securityContext:
         fsGroup: 1000
-        runAsNonRoot: true
-        # runAsUser: 1000
+        # runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
       volumes:
         - name: calibre-data
           persistentVolumeClaim:
