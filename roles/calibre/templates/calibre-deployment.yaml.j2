@@ -24,17 +24,13 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          securityContext:
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
           volumeMounts:
             - name: calibre-data
               mountPath: /config
       initContainers:
         - name: calibre-data-permission-fix
           image: busybox
-          command: ["/bin/chown", "-R", "1000:1000", "/config"]
+          command: ["/bin/chown", "-R", "911:911", "/config"]
           volumeMounts:
           - name: calibre-data
             mountPath: /config
