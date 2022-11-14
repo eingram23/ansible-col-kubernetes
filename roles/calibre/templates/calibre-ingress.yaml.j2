@@ -8,19 +8,19 @@ spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`calibre{{env}}.local.lan`) 
+  - match: Host(`calibre{{ env }}.local.lan`) 
     kind: Rule
     services:
     - name: calibre
       port: 8080
-  - match: Host(`calibre{{env}}.local.lan`) && PathPrefix(`/admin`)
+  - match: Host(`calibre{{ env }}.local.lan`) && PathPrefix(`/admin`)
     kind: Rule
     services:
     - name: calibre
       port: 8081
     middlewares:
     - name: calibre-stripprefix  
-  - match: Host(`calibre-web{{env}}.local.lan`) 
+  - match: Host(`calibre-web{{ env }}.local.lan`) 
     kind: Rule
     services:
     - name: calibre
