@@ -13,8 +13,10 @@ spec:
     services:
     - name: calibre
       port: 8080
-  - match: Host(`calibre-srv{{env}}.local.lan`) 
+  - match: Host(`calibre{{env}}.local.lan`) && PathPrefix(`/admin`)
     kind: Rule
     services:
     - name: calibre
       port: 8081
+    middlewares:
+    - name: calibre-stripprefix
