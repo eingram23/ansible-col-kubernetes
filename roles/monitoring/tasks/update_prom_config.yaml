@@ -20,6 +20,14 @@
     -oyaml >
     {{ dest }}prom-scrape-servers.yaml
 
+- name: Deploy prometheus job secret
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - prom-scrape-servers.yaml
+
 - name: Clean up tmp files
   ansible.builtin.file:
     path: /var/tmp/configs
