@@ -6,6 +6,12 @@
     mode: '0644'
   with_fileglob: "*"
 
+- name: Create vault ingress
+  ansible.builtin.template:
+    src: vault-ingress.yaml.j2
+    dest: "{{ dest }}vault-ingress.yaml"
+    mode: '0644'
+    
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: hashicorp

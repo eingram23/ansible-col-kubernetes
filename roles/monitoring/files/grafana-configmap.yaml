@@ -11,7 +11,7 @@ data:
             {
                "access":"proxy",
                 "editable": true,
-                "name": "prometheus",
+                "name": "Prometheus",
                 "orgId": 1,
                 "type": "prometheus",
                 "url": "http://prometheus.monitoring.svc.cluster.local:9090",
@@ -22,7 +22,7 @@ data:
                 "editable": true,
                 "name": "HA-InfluxDB",
                 "orgId": 1,
-                "type": "InfluxDB",
+                "type": "influxdb",
                 "url": "http://homeassistant.local.lan:8086",
                 "database": "grafana",
                 "user": "grafana",

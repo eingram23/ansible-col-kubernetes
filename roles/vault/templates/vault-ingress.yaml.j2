@@ -8,7 +8,7 @@ metadata:
     ingress.kubernetes.io/rewrite-target: /ui
 spec:
   rules:
-  - host: vault.local.lan
+  - host: vault{{ suffix }}.local.lan
     http:
       paths:
         - path: /
