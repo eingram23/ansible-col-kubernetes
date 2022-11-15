@@ -20,10 +20,12 @@ data:
             {
                "access":"proxy",
                 "editable": true,
-                "name": "influxdb",
+                "name": "HA-InfluxDB",
                 "orgId": 1,
-                "type": "influxdb",
+                "type": "InfluxDB",
                 "url": "http://homeassistant.local.lan:8086",
+                "database": "grafana",
+                "user": "grafana",
                 "version": 1
             }
         ]
