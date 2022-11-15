@@ -16,6 +16,15 @@ data:
                 "type": "prometheus",
                 "url": "http://prometheus.monitoring.svc.cluster.local:9090",
                 "version": 1
+            },
+            {
+               "access":"proxy",
+                "editable": true,
+                "name": "influxdb",
+                "orgId": 1,
+                "type": "influxdb",
+                "url": "http://homeassistant.local.lan:8086",
+                "version": 1
             }
         ]
     }
