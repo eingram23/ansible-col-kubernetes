@@ -56,6 +56,9 @@
     src: ssh-key-git.key.j2
     dest: /var/tmp/ssh-key-git.key
     mode: '0400'
+  tags:
+    - always
+    - update_prom
 
 - name: Pull down prometheus.yml from git
   ansible.builtin.git:
@@ -63,6 +66,9 @@
     dest: /var/tmp/configs
     key_file: /var/tmp/ssh-key-git.key
     accept_hostkey: true
+  tags:
+    - always
+    - update_prom
 
 - name: Create secret for additional prometheus jobs
   ansible.builtin.shell: >
@@ -72,16 +78,34 @@
     --namespace=monitoring
     -oyaml >
     {{ dest }}prom-scrape-servers.yaml
+  tags:
+    - always
+    - update_prom
 
+- name: Deploy prometheus job secret
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - prom-scrape-servers.yaml
+  tags: update_prom
+  
 - name: Clean up tmp files
   ansible.builtin.file:
     path: /var/tmp/configs
     state: absent
+  tags:
+    - always
+    - update_prom
 
 - name: Clean up key
   ansible.builtin.file:
     path: /var/tmp/ssh-key-git.key
     state: absent
+  tags:
+    - always
+    - update_prom
 
 - name: Deploy monitoring manifests
   kubernetes.core.k8s:
