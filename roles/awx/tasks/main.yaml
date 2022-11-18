@@ -18,6 +18,7 @@
       type: Opaque
       stringData:
         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Create db encryption key secret
   kubernetes.core.k8s:
@@ -30,6 +31,7 @@
       type: Opaque
       stringData:
         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Create awx kustomize folder
   ansible.builtin.file:
