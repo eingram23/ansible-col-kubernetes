@@ -5,6 +5,8 @@
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
+  tags:
+    - always
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
@@ -208,4 +210,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-k3s.yaml
     - graf-dash-cm-longhorn.yaml
+  tags:
+    - always
+    - update_graf
 
