@@ -4,6 +4,9 @@ kind: AWX
 metadata:
   name: awx
 spec:
+  admin_user: admin
+  admin_email: edward.ingram23@gmail.com
+  admin_password_secret: awx-admin-password
   service_type: ClusterIP
   # default nodeport_port is 30080
   # nodeport_port: <nodeport_port>
