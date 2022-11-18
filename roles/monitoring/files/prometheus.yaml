@@ -29,6 +29,15 @@ spec:
   additionalScrapeConfigs:
     name: scrape-configs
     key: prometheus.yml
+  alerting:
+    alertmanagers:
+    - namespace: monitoring
+      name: alertmanager-operated
+      port: web
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: alertmanager
   storage:
     volumeClaimTemplate:
       spec:
