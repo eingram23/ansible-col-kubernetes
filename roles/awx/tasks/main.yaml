@@ -16,7 +16,7 @@
         name: awx-admin-password
         namespace: awx
       type: Opaque
-      data:
+      stringData:
         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
     kubeconfig: "{{ kubeconfig }}"
 
@@ -26,10 +26,10 @@
       apiVersion: v1
       kind: Secret
       metadata:
-        name: awx-secret-key
+        name: secret-key
         namespace: awx
       type: Opaque
-      data:
+      stringData:
         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
     kubeconfig: "{{ kubeconfig }}"
 
