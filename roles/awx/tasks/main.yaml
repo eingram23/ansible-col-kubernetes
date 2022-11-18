@@ -7,31 +7,52 @@
     state: present
     kubeconfig: "{{ kubeconfig }}"
      
-- name: Create admin password secret
-  kubernetes.core.k8s:
-    definition:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: awx-admin-password
-        namespace: awx
-      type: Opaque
-      stringData:
-        password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Create admin password secret
+#   kubernetes.core.k8s:
+#     definition:
+#       apiVersion: v1
+#       kind: Secret
+#       metadata:
+#         name: awx-admin-password
+#         namespace: awx
+#       type: Opaque
+#       stringData:
+#         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+#     kubeconfig: "{{ kubeconfig }}"
 
-- name: Create db encryption key secret
+# - name: Create db encryption key secret
+#   kubernetes.core.k8s:
+#     definition:
+#       apiVersion: v1
+#       kind: Secret
+#       metadata:
+#         name: secret-key
+#         namespace: awx
+#       type: Opaque
+#       stringData:
+#         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+#     kubeconfig: "{{ kubeconfig }}"
+
+- name: Create db encryption secret key
+  ansible.builtin.template:
+    src: awx-secret-key.yaml.j2
+    dest: "{{ dest }}awx-secret-key.yaml"
+    mode: '0644'
+
+- name: Create awx admin password secret key
+  ansible.builtin.template:
+    src: awx-admin-password.yaml.j2
+    dest: "{{ dest }}awx-admin-password.yaml"
+    mode: '0644'
+
+- name: Deploy awx-secrets
   kubernetes.core.k8s:
-    definition:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: secret-key
-        namespace: awx
-      type: Opaque
-      stringData:
-        password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+    state: present
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-secret-key.yaml
+    - awx-admin-password.yaml
 
 - name: Remove awx kustomize folder if already exists
   ansible.builtin.file:
