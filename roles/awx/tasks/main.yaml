@@ -41,8 +41,8 @@
 
 - name: Create awx-kustomization.yaml file
   ansible.builtin.template:
-    src: awx-kustomize.yaml.j2
-    dest: "{{ dest }}awx/awx-kustomize.yaml"
+    src: kustomize.yaml.j2
+    dest: "{{ dest }}awx/kustomize.yaml"
     mode: '0644'
 
 - name: Create awx.yaml file
