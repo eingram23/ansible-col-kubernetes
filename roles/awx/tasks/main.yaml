@@ -39,10 +39,10 @@
     state: directory
     mode: '0755'
 
-- name: Create awx-kustomization.yaml file
+- name: Create kustomization.yaml file
   ansible.builtin.template:
-    src: kustomize.yaml.j2
-    dest: "{{ dest }}awx/kustomize.yaml"
+    src: kustomization.yaml.j2
+    dest: "{{ dest }}awx/kustomization.yaml"
     mode: '0644'
 
 - name: Create awx.yaml file
