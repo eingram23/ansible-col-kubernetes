@@ -11,5 +11,5 @@ spec:
   - match: Host(`awx{{ suffix }}.local.lan`) 
     kind: Rule
     services:
-    - name: awx-operator-controller-manager-metrics-service
-      port: 8443
+    - name: awx-service
+      port: 80
