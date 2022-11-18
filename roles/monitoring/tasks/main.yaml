@@ -6,12 +6,6 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create grafana deployment manifest on host
-  ansible.builtin.template:
-    src: grafana-deployment.yaml.j2
-    dest: "{{ dest }}grafana-deployment.yaml"
-    mode: '0644'
-
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
     src: node-exporter-daemonset.yaml.j2
@@ -139,18 +133,6 @@
     - prometheus-role.yaml
     - prometheus-ingress.yaml
 
-- name: Deploy grafana
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - grafana-configmap.yaml
-    - grafana-pvc.yaml
-    - grafana-deployment.yaml
-    - grafana-service.yaml
-    - grafana-ingress.yaml
-
 - name: Deploy vmware-exporter
   kubernetes.core.k8s:
     state: present
@@ -181,3 +163,41 @@
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
+
+- name: Add hashicorp/vault chart repo
+  kubernetes.core.helm_repository:
+    name: grafana
+    repo_url: "https://grafana.github.io/helm-charts"
+
+- name: Install hashicorp/vault chart from repo
+  kubernetes.core.helm:
+    release_name: grafana
+    release_namespace: monitoring
+    create_namespace: false
+    chart_ref: grafana/grafana
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}grafana-values.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy grafana dashboard configmaps
+    kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - graf-dash-cm-climate.yaml
+    - graf-dash-cm-energy.yaml
+    - graf-dash-cm-windows.yaml
+    - graf-dash-cm-node-exporter.yaml
+    - graf-dash-cm-vmware.yaml
+    - graf-dash-cm-k3s.yaml
+    - graf-dash-cm-longhorn.yaml
+
+- name: Deploy grafana
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafana-ingress.yaml
