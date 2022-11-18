@@ -23,6 +23,11 @@
     src: unifi-service.yaml.j2
     dest: "{{ dest }}unifi-service.yaml"
 
+- name: Create unifi-ingress.yaml manifest on host
+  ansible.builtin.template:
+    src: unifi-ingress.yaml.j2
+    dest: "{{ dest }}unifi-ingress.yaml"
+
 - name: Deploy unifi
   kubernetes.core.k8s:
     state: present

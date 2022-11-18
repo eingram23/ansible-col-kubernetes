@@ -1,0 +1,15 @@
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: awx
+  namespace: awx
+spec:
+  entryPoints: 
+    - web
+  routes:
+  - match: Host(`awx{{ suffix }}.local.lan`) 
+    kind: Rule
+    services:
+    - name: awx-operator-controller-manager-metrics-service
+      port: 8443

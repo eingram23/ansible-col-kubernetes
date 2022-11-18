@@ -69,3 +69,18 @@
 - name: Deploy awx instance
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
+
+- name: Create awx-ingress manifest
+  ansible.builtin.template:
+    src: awx-ingress.yaml.j2
+    dest: "{{ dest }}awx-ingress.yaml"
+    mode: '0644'
+
+- name: Deploy awx-ingress
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-ingress.yaml
+    
