@@ -181,7 +181,7 @@
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy grafana dashboard configmaps
-    kubernetes.core.k8s:
+  kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
