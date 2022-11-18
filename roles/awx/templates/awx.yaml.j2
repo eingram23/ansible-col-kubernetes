@@ -51,3 +51,8 @@ spec:
     limits:
       cpu: 500m
       memory: 1Gi
+  redis_capabilities:
+    - CHOWN
+    - SETUID
+    - SETGID
+  # task_privileged: true
