@@ -90,7 +90,7 @@
   loop:
     - prom-scrape-servers.yaml
   tags: update_prom
-  
+
 - name: Clean up tmp files
   ansible.builtin.file:
     path: /var/tmp/configs
@@ -160,3 +160,18 @@
     - vmware-exporter-deployment.yaml
     - vmware-exporter-service.yaml
     - vmware-exporter-ingress.yaml
+
+- name: Deploy alertmanager and rules
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - alertmanager.yaml
+    - alertmanager-service.yaml
+    - alertmanager-main-rules.yaml
+    - node-exporter-rules.yaml
+    - alertmanager-ingress.yaml
+    - general-rules.yaml
+    - etcd-rules.yaml
+    - kube-prometheus-rules.yaml
