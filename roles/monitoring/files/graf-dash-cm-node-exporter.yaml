@@ -6,7 +6,7 @@ metadata:
   labels:
      grafana_dashboard: "1"
 data:
-  node-exporter-dashboard.json: |-
+  ne-dashboard.json: |-
     {
       "annotations": {
         "list": [
