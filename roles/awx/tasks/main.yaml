@@ -1,0 +1,54 @@
+---
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: awx
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+     
+- name: Create admin password secret
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: awx-admin-password
+        namespace: awx
+      type: Opaque
+      stringData:
+        password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+
+- name: Create db encryption key secret
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: awx-secret-key
+        namespace: awx
+      type: Opaque
+      stringData:
+        password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+
+- name: Create awx kustomize folder
+  ansible.builtin.file:
+    path: "{{ dest }}awx"
+    state: directory
+    mode: '0755'
+
+- name: Create awx-kustomization.yaml file
+  ansible.builtin.template:
+    src: awx-kustomize.yaml.j2
+    dest: "{{ dest }}awx/awx-kustomize.yaml"
+    mode: '0644'
+
+- name: Create awx.yaml file
+  ansible.builtin.template:
+    src: awx.yaml.j2
+    dest: "{{ dest }}awx/awx.yaml"
+    mode: '0644'
+
+- name: Deploy awx operator and instance
+  ansible.builtin.shell: >
+    kustomize build {{ dest }}awx/ | kubectl apply -f -
