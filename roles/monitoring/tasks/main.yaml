@@ -24,6 +24,12 @@
     dest: "{{ dest }}grafana-ingress.yaml"
     mode: '0644'
 
+- name: Create grafana admin password secret
+  ansible.builtin.template:
+    src: grafana-admin-pass.yaml.j2
+    dest: "{{ dest }}grafana-admin-pass.yaml"
+    mode: '0644'
+
 - name: Create vmware-exporter ingress manifests on host
   ansible.builtin.template:
     src: vmware-exporter-ingress.yaml.j2
@@ -164,6 +170,15 @@
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
 
+- name: Deploy grafana secret and ingress
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafana-ingress.yaml
+    - grafana-admin-pass.yaml
+
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: grafana
@@ -194,10 +209,3 @@
     - graf-dash-cm-k3s.yaml
     - graf-dash-cm-longhorn.yaml
 
-- name: Deploy grafana
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - grafana-ingress.yaml
