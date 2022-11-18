@@ -161,6 +161,12 @@
     - vmware-exporter-service.yaml
     - vmware-exporter-ingress.yaml
 
+- name: Create alertmanager ingress
+  ansible.builtin.template:
+    src: alertmanager-ingress.yaml.j2
+    dest: "{{ dest }}alertmanager-ingress.yaml"
+    mode: '0644'
+
 - name: Deploy alertmanager and rules
   kubernetes.core.k8s:
     state: present
