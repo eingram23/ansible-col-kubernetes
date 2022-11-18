@@ -4,7 +4,7 @@ metadata:
   name: graf-dash-cm-node-exporter
   namespace: monitoring
   labels:
-     grafana_dashboard: "5"
+     grafana_dashboard: "1"
 data:
   k8s-dashboard.json: |-
     {
