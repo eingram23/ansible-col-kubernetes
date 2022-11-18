@@ -37,7 +37,7 @@
   ansible.builtin.file:
     path: "{{ dest }}awx"
     state: absent
-    
+
 - name: Create awx kustomize folder
   ansible.builtin.file:
     path: "{{ dest }}awx"
@@ -60,6 +60,12 @@
     dest: "{{ dest }}awx/awx.yaml"
     mode: '0644'
 
+- name: Add awx resource to kustomization.yaml
+  ansible.builtin.lineinfile:
+    path: "{{ dest }}awx/kustomization.yaml"
+    line: "  - awx.yaml"
+    insertafter: "resources:"
+    
 - name: Deploy awx instance
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
