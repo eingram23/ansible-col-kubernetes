@@ -33,6 +33,11 @@
         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
     kubeconfig: "{{ kubeconfig }}"
 
+- name: Remove awx kustomize folder if already exists
+  ansible.builtin.file:
+    path: "{{ dest }}awx"
+    state: absent
+    
 - name: Create awx kustomize folder
   ansible.builtin.file:
     path: "{{ dest }}awx"
@@ -45,12 +50,16 @@
     dest: "{{ dest }}awx/kustomization.yaml"
     mode: '0644'
 
+- name: Deploy awx operator
+  ansible.builtin.shell: >
+    kustomize build {{ dest }}awx/ | kubectl apply -f -
+
 - name: Create awx.yaml file
   ansible.builtin.template:
     src: awx.yaml.j2
     dest: "{{ dest }}awx/awx.yaml"
     mode: '0644'
 
-- name: Deploy awx operator and instance
+- name: Deploy awx instance
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
