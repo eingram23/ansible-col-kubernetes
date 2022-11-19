@@ -4,9 +4,14 @@
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
-  tags:
-    - always
+  with_fileglob: "*.yaml"
+
+- name: Download dashboard configmaps to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*.json"
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
