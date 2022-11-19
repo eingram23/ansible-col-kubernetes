@@ -8,11 +8,11 @@
 
 - name: Download dashboard configmaps to host
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: "dashboards/{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*.json"
-  tags: 
+  tags:
     - always
     - update
 
