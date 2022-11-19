@@ -221,3 +221,7 @@
   tags:
     - always
     - update
+
+- name: Closing comments
+  ansible.builtin.debug:
+    msg: "Set password for HA-InfluxDB"
