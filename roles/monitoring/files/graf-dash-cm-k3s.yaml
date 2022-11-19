@@ -4,7 +4,7 @@ metadata:
   name: graf-dash-cm-k3s
   namespace: monitoring
   labels:
-     grafana_dashboard: "1"
+    grafana_dashboard: "1"
 data:
   k3s.json: |-
 {{ .Files.Get "/opt/kubernetes/defs/k3s.json" | indent 4 }}

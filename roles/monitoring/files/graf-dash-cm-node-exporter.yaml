@@ -4,7 +4,7 @@ metadata:
   name: graf-dash-cm-node-exporter
   namespace: monitoring
   labels:
-     grafana_dashboard: "1"
+    grafana_dashboard: "1"
 data:
-  node-exporter.json: |
+  node-exporter.json: |-
 {{ .Files.Get "/opt/kubernetes/defs/node-exporter.json" | indent 4 }}

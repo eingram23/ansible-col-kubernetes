@@ -4,7 +4,7 @@ metadata:
   name: graf-dash-cm-vmware
   namespace: monitoring
   labels:
-     grafana_dashboard: "1"
+    grafana_dashboard: "1"
 data:
   vmware.json: |-
 {{ .Files.Get "/opt/kubernetes/defs/vmware.json" | indent 4 }}

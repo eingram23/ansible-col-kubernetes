@@ -194,7 +194,7 @@
     name: grafana
     repo_url: "https://grafana.github.io/helm-charts"
 
-- name: Install hashicorp/vault chart from repo
+- name: Install grafana/grafana chart from repo
   kubernetes.core.helm:
     release_name: grafana
     release_namespace: monitoring

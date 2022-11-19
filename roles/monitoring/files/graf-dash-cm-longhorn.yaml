@@ -4,7 +4,7 @@ metadata:
   name: graf-dash-cm-longhorn
   namespace: monitoring
   labels:
-     grafana_dashboard: "1"
+    grafana_dashboard: "1"
 data:
   longhorn.json: |-
 {{ .Files.Get "/opt/kubernetes/defs/longhorn.json" | indent 4 }}
