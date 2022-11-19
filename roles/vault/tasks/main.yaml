@@ -36,9 +36,9 @@
   loop:
     - vault-ingress.yaml
 
-- name: Wait for 20 seconds
+- name: Wait for 40 seconds
   ansible.builtin.pause:
-    seconds: 20
+    seconds: 40
 
 - name: Init and export cluster-keys.json
   ansible.builtin.shell:
