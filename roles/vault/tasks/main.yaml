@@ -43,6 +43,7 @@
     namespace: vault
     field_selectors:
       - status.phase=Running
+    kubeconfig: "{{ kubeconfig }}"
   register: vault_running
 
 - name: Wait for 40 seconds
