@@ -79,6 +79,7 @@
     command: |
       vault secrets enable pki
       vault secrets tune -max-lease-ttl=8760h pki
+    kubeconfig: "{{ kubeconfig }}"
 
 - block:
     - name: Extract root token
