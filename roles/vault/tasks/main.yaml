@@ -68,7 +68,9 @@
     cmd: |
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags: unseal
+  tags: 
+    - never
+    - unseal
 
 - name: Enable pki engine
   kubernetes.core.k8s_exec:
