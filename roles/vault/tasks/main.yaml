@@ -55,6 +55,12 @@
       ansible.builtin.shell:
         cmd: |
           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
+
+    - name: Unseal vault
+      ansible.builtin.shell:
+        cmd: |
+          VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+          kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
   when: vault_running is not defined
 
 - name: Unseal vault
@@ -62,9 +68,7 @@
     cmd: |
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags:
-    - always
-    - unseal
+  tags: unseal
 
 - name: Enable pki engine
   kubernetes.core.k8s_exec:
