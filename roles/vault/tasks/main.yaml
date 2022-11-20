@@ -36,9 +36,19 @@
   loop:
     - vault-ingress.yaml
 
+- name: Search for all running pods
+  kubernetes.core.k8s_info:
+    kind: Pod
+    name: vault-0
+    namespace: vault
+    field_selectors:
+      - status.phase=Running
+  register: vault_running
+
 - name: Wait for 40 seconds
   ansible.builtin.pause:
     seconds: 40
+  when: vault_running is not defined
 
 - name: Init and export cluster-keys.json
   ansible.builtin.shell:
