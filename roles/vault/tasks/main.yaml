@@ -45,9 +45,12 @@
     #   - status.phase=Running
     kubeconfig: "{{ kubeconfig }}"
   register: vault_running
+  until: vault_running | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool
+  retries: 10
+  delay: 5
 
-- ansible.builtin.debug:
-    var: vault_running
+# - ansible.builtin.debug:
+#     var: vault_running
 
 # - block:
 #     - name: Wait for 40 seconds
