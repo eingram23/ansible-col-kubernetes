@@ -41,55 +41,57 @@
     kind: Pod
     name: vault-0
     namespace: vault
-    field_selectors:
-      - status.phase=Running
+    # field_selectors:
+    #   - status.phase=Running
     kubeconfig: "{{ kubeconfig }}"
   register: vault_running
 
-- block:
-    - name: Wait for 40 seconds
-      ansible.builtin.pause:
-        seconds: 40
+- ansible.builtin.debug:
+    var: vault_running
 
-    - name: Init and export cluster-keys.json
-      ansible.builtin.shell:
-        cmd: |
-          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
+# - block:
+#     - name: Wait for 40 seconds
+#       ansible.builtin.pause:
+#         seconds: 40
 
-    - name: Unseal vault
-      ansible.builtin.shell:
-        cmd: |
-          VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
-          kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  when: vault_running is not defined
+#     - name: Init and export cluster-keys.json
+#       ansible.builtin.shell:
+#         cmd: |
+#           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
 
-- name: Unseal vault
-  ansible.builtin.shell:
-    cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
-      kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags: 
-    - never
-    - unseal
+#     - name: Unseal vault
+#       ansible.builtin.shell:
+#         cmd: |
+#           VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+#           kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+#   when: vault_running not exists
 
-- name: Enable pki engine
-  kubernetes.core.k8s_exec:
-    namespace: vault
-    pod: vault-0
-    command: |
-      vault secrets enable pki
-      vault secrets tune -max-lease-ttl=8760h pki
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Unseal vault
+#   ansible.builtin.shell:
+#     cmd: |
+#       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+#       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+#   tags: 
+#     - never
+#     - unseal
 
-- block:
-    - name: Extract root token
-      ansible.builtin.shell:
-        cmd: jq -r ".root_token" cluster-keys.json
-      register: root_token
+# - name: Enable pki engine
+#   ansible.builtin.shell:
+#     cmd: |
+#       VAULT_ROOT_TOKEN=$(cat init-keys.json | jq -r ".root_token")
+#       kubectl exec vault-0 -n vault -- vault login $VAULT_ROOT_TOKEN
+#       kubectl exec vault-0 -n vault -- vault secrets enable pki
+#       kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
 
-    - name: Show root_token
-      ansible.builtin.debug:
-        var: root_token.stdout
-  tags:
-    - always
-    - show_token
+# - block:
+#     - name: Extract root token
+#       ansible.builtin.shell:
+#         cmd: jq -r ".root_token" cluster-keys.json
+#       register: root_token
+
+#     - name: Show root_token
+#       ansible.builtin.debug:
+#         var: root_token.stdout
+#   tags:
+#     - always
+#     - show_token
