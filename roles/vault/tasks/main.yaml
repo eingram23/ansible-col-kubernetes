@@ -99,10 +99,7 @@
   kubernetes.core.k8s_exec:
     namespace: vault
     pod: vault-0
-    command: |
-      vault login {{ root_token }}
-      vault secrets enable pki
-      vault secrets tune -max-lease-ttl=8760h pki
+    command: vault login {{ root_token }} && vault secrets enable pki && vault secrets tune -max-lease-ttl=8760h pki
     kubeconfig: "{{ kubeconfig }}"
 
 # - block:
