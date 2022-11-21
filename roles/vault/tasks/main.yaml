@@ -94,12 +94,12 @@
 
 - name: get content of remote file
   slurp:
-    src: "root_token"
+    src: "oot_token"
   register: root_token_enc
 
 - name: decode remote content
   set_fact:
-    root_token: "{{root_token_enc | b64decode }}"
+    root_token: "{{ root_token_enc | b64decode }}"
 
 - name: Execute a command
   kubernetes.core.k8s_exec:
