@@ -71,6 +71,7 @@
     pod: vault-0
     command: >
       vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Unseal vault
   ansible.builtin.shell:
@@ -108,7 +109,8 @@
       vault login {{ root_token }}
       vault secrets enable pki
       vault secrets tune -max-lease-ttl=8760h pki
-
+    kubeconfig: "{{ kubeconfig }}"
+    
 # - block:
 #     - name: Extract root token
 #       ansible.builtin.shell:
