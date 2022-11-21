@@ -62,22 +62,16 @@
   retries: 10
   delay: 5
 
-# - block:
-#     - name: Wait for 40 seconds
-#       ansible.builtin.pause:
-#         seconds: 40
+- name: Init and export cluster-keys.json
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
 
-    - name: Init and export cluster-keys.json
-      ansible.builtin.shell:
-        cmd: |
-          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > cluster-keys.json
-
-    - name: Unseal vault
-      ansible.builtin.shell:
-        cmd: |
-          VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
-          kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  when: vault_running not exists
+- name: Unseal vault
+  ansible.builtin.shell:
+    cmd: |
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+      kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
 
 - name: Unseal vault
   ansible.builtin.shell:
