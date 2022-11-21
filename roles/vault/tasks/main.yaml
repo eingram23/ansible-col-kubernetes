@@ -63,15 +63,9 @@
   delay: 5
 
 - name: Init and export cluster-keys.json
-  # ansible.builtin.shell:
-  #   cmd: |
-  #     kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
-  kubernetes.core.k8s_exec:
-    namespace: vault
-    pod: vault-0
-    command: >
-      sh -ec "vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json"
-    kubeconfig: "{{ kubeconfig }}"
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
 
 - name: Unseal vault
   ansible.builtin.shell:
