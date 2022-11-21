@@ -83,7 +83,7 @@
     - unseal
 
 - ansible.builtin.shell:
-    cmd: >
+    cmd: |
       cat init-keys.json | jq -r ".root_token" > root_token
 
 - name: get content of remote file
@@ -96,11 +96,11 @@
     root_token: "{{ root_token_enc['content'] | b64decode }}"
 
 - name: Execute a command
-  kubernetes.core.k8s_exec:
-    namespace: vault
-    pod: vault-0
-    command: vault login {{ root_token }} && vault secrets enable pki && vault secrets tune -max-lease-ttl=8760h pki
-    kubeconfig: "{{ kubeconfig }}"
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault login {{ root_token }} 
+      kubectl exec vault-0 -n vault -- vault secrets enable pki
+      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
 
 # - block:
 #     - name: Extract root token
