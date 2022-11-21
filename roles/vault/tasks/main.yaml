@@ -40,6 +40,9 @@
   kubernetes.core.k8s_info:
     kind: Pod
     wait: yes
+    wait_condition:
+      type: PodScheduled
+      status: True
     name: vault-0
     namespace: vault
     wait_sleep: 10
@@ -51,8 +54,8 @@
     kind: Pod
     name: vault-0
     namespace: vault
-    # field_selectors:
-    #   - status.phase=Running
+    field_selectors:
+      - status.phase=Running
     kubeconfig: "{{ kubeconfig }}"
   register: vault_running
   until: vault_running | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool
