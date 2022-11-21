@@ -36,6 +36,15 @@
   loop:
     - vault-ingress.yaml
 
+- name: Wait till the Object is created
+  kubernetes.core.k8s_info:
+    kind: Pod
+    wait: yes
+    name: vault-0
+    namespace: vault
+    wait_sleep: 10
+    wait_timeout: 360
+
 - name: Search for all running pods
   kubernetes.core.k8s_info:
     kind: Pod
