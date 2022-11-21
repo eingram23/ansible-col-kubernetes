@@ -70,35 +70,49 @@
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
 
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" cluster-keys.json)
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
   tags: 
     - never
     - unseal
 
-- name: Enable pki engine
-  ansible.builtin.shell:
-    cmd: |
-      VAULT_ROOT_TOKEN=$(cat init-keys.json | jq -r ".root_token")
-      kubectl exec vault-0 -n vault -- vault login $VAULT_ROOT_TOKEN
-      kubectl exec vault-0 -n vault -- vault secrets enable pki
-      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
+- ansible.builtin.shell:
+    cmd: >
+      cat init-keys.json | jq -r ".root_token" > root_token
 
-- block:
-    - name: Extract root token
-      ansible.builtin.shell:
-        cmd: jq -r ".root_token" cluster-keys.json
-      register: root_token
+- name: get content of remote file
+  slurp:
+    src: "root_token"
+  register: root_token_enc
 
-    - name: Show root_token
-      ansible.builtin.debug:
-        var: root_token.stdout
-  tags:
-    - always
-    - show_token
+- name: decode remote content
+  set_fact:
+    root_token: "{{root_token_enc | b64decode }}"
+
+- name: Execute a command
+  kubernetes.core.k8s_exec:
+    namespace: vault
+    pod: vault-0
+    command: |
+      vault login {{ root_token }}
+      vault secrets enable pki
+      vault secrets tune -max-lease-ttl=8760h pki
+
+# - block:
+#     - name: Extract root token
+#       ansible.builtin.shell:
+#         cmd: jq -r ".root_token" cluster-keys.json
+#       register: root_token
+
+#     - name: Show root_token
+#       ansible.builtin.debug:
+#         var: root_token.stdout
+#   tags:
+#     - always
+#     - show_token
