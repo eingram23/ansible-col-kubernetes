@@ -96,7 +96,7 @@
 - name: Create pki policy
   ansible.builtin.shell:
     cmd: |
-      vault policy write pki - <<EOF
+      kubectl exec vault-0 -n vault -- vault policy write pki - <<EOF
       path "pki*"                        { capabilities = ["read", "list"] }
       path "pki/sign/local-dot-lan"    { capabilities = ["create", "update"] }
       path "pki/issue/local-dot-lan"   { capabilities = ["create"] }
