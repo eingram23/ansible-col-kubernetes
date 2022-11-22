@@ -1,4 +1,4 @@
-- name: Create a k8s namespace
+- name: Create unifi k8s namespace
   kubernetes.core.k8s:
     name: unifi
     api_version: v1
