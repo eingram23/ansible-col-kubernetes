@@ -156,20 +156,20 @@
 - name: Create vault issuer service account
   kubernetes.core.k8s:
     name: issuer
-    namespace: vault
+    namespace: cert-manager
     api_version: v1
     kind: ServiceAccount
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy vault issuer and secret
+- name: Deploy issuer and secret
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - issuer-secret.yaml
-    - vault-issuer.yaml
+    - vault-cluster-issuer.yaml
 
 - name: Unseal vault
   ansible.builtin.shell:
