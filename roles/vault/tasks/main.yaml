@@ -95,7 +95,7 @@
 
 - name: Create pki policy
   ansible.builtin.shell:
-    cmd: kubectl exec vault-0 -n vault -- vault policy write pki {{ dest }}pki-policy.hcl
+    cmd: kubectl exec vault-0 -n vault -- vault policy write pki < {{ dest }}pki-policy.hcl
 
 - name: Configure k8s auth
   ansible.builtin.shell:
