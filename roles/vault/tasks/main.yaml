@@ -57,11 +57,16 @@
     kubeconfig: "{{ kubeconfig }}"
   register: vault_ready
 
-- name: Init and export cluster-keys.json
-  ansible.builtin.shell:
-    cmd: |
-      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
-  when: vault_ready | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool == true
+- block:
+    - name: Pause 10 seconds
+      ansible.builtin.pause:
+        seconds: 10
+
+    - name: Init and export cluster-keys.json
+      ansible.builtin.shell:
+        cmd: |
+          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+  when: vault_ready | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool == true and json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false
 
 - name: Unseal vault
   ansible.builtin.shell:
