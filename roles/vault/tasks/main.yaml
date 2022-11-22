@@ -99,9 +99,7 @@
 - name: Create root Certificate
   ansible.builtin.shell:
     cmd: kubectl exec vault-0 -n vault -- vault write pki/root/generate/internal common_name=local.lan ttl=8760h
-  tags:
-    - never 
-    - create_root_cert
+  when: create_root == "true"
 
 - name: Create pki policy
   ansible.builtin.shell:
