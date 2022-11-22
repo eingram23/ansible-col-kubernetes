@@ -62,7 +62,7 @@
   ansible.builtin.shell:
     cmd: |
       kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
-  when: vault_ready | json_query('resources[0].status.conditions[?type=='ContainersReady'].status') | first == False
+  when: vault_ready | json_query('resources[0].status.conditions[?type=='ContainersReady'].status') | first | bool == False
 
 - name: Unseal vault
   ansible.builtin.shell:
