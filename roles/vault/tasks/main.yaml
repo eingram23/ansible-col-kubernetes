@@ -47,8 +47,8 @@
   register: vault_ready
 
 - ansible.builtin.debug:
-    var: vault_ready | json_query('resources[0].metadata.name')
-    
+    var: vault_ready
+
 - block:
     - name: Wait until vault pod is scheduled
       kubernetes.core.k8s_info:
