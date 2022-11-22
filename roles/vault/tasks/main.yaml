@@ -96,11 +96,7 @@
 - name: Create pki policy
   ansible.builtin.shell:
     cmd: |
-      kubectl exec vault-0 -n vault -- vault policy write pki - <<EOF
-      path "pki*"                        { capabilities = ["read", "list"] }
-      path "pki/sign/local-dot-lan"    { capabilities = ["create", "update"] }
-      path "pki/issue/local-dot-lan"   { capabilities = ["create"] }
-      EOF
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat pki-policy.sh`"
 
 - name: Configure k8s auth
   ansible.builtin.shell:
