@@ -36,20 +36,7 @@
   loop:
     - vault-ingress.yaml
 
-- name: Wait till the Object is created
-  kubernetes.core.k8s_info:
-    kind: Pod
-    wait: yes
-    wait_condition:
-      type: PodScheduled
-      status: True
-    name: vault-0
-    namespace: vault
-    wait_sleep: 10
-    wait_timeout: 360
-    kubeconfig: "{{ kubeconfig }}"
-
-- name: Search for all running pods
+- name: Check to see if vault is already deployed
   kubernetes.core.k8s_info:
     kind: Pod
     name: vault-0
@@ -57,30 +44,46 @@
     field_selectors:
       - status.phase=Running
     kubeconfig: "{{ kubeconfig }}"
-  register: vault_running
-  until: vault_running | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool
-  retries: 10
-  delay: 5
+  register: vault_ready
 
-- name: Init and export cluster-keys.json
-  ansible.builtin.shell:
-    cmd: |
-      kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+- block:
+    - name: Wait until vault pod is scheduled
+      kubernetes.core.k8s_info:
+        kind: Pod
+        wait: yes
+        wait_condition:
+          type: PodScheduled
+          status: true
+        name: vault-0
+        namespace: vault
+        wait_sleep: 10
+        wait_timeout: 360
+        kubeconfig: "{{ kubeconfig }}"
+
+    - name: Wait until vault container is ready to be unsealed
+      kubernetes.core.k8s_info:
+        kind: Pod
+        name: vault-0
+        namespace: vault
+        field_selectors:
+          - status.phase=Running
+        kubeconfig: "{{ kubeconfig }}"
+      register: vault_running
+      until: vault_running | json_query('resources[0].status.containerStatuses[?name==`vault`].started') | first | bool
+      retries: 10
+      delay: 5
+
+    - name: Init and export cluster-keys.json
+      ansible.builtin.shell:
+        cmd: |
+          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+  when: vault_ready | json_query('resources[0].metadata.name') | first != "vault-0"
 
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-
-- name: Unseal vault
-  ansible.builtin.shell:
-    cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
-      kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags: 
-    - never
-    - unseal
 
 - ansible.builtin.shell:
     cmd: |
@@ -102,15 +105,18 @@
       kubectl exec vault-0 -n vault -- vault secrets enable pki
       kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
 
-# - block:
-#     - name: Extract root token
-#       ansible.builtin.shell:
-#         cmd: jq -r ".root_token" cluster-keys.json
-#       register: root_token
+- name: Unseal vault
+  ansible.builtin.shell:
+    cmd: |
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
+      kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+  tags: 
+    - never
+    - unseal
 
-#     - name: Show root_token
-#       ansible.builtin.debug:
-#         var: root_token.stdout
-#   tags:
-#     - always
-#     - show_token
+- name: Show root_token
+  ansible.builtin.debug:
+    var: root_token
+  tags:
+    - always
+    - show_token
