@@ -36,33 +36,28 @@
   loop:
     - vault-ingress.yaml
 
+- name: Wait until vault pod is scheduled
+  kubernetes.core.k8s_info:
+    kind: Pod
+    wait: yes
+    wait_condition:
+      type: PodScheduled
+      status: true
+    name: vault-0
+    namespace: vault
+    wait_sleep: 10
+    wait_timeout: 360
+    kubeconfig: "{{ kubeconfig }}"
+
 - name: Check to see if vault is already deployed
   kubernetes.core.k8s_info:
     kind: Pod
     name: vault-0
     namespace: vault
-    field_selectors:
-      - status.phase=Running
     kubeconfig: "{{ kubeconfig }}"
   register: vault_ready
 
-- ansible.builtin.debug:
-    var: vault_ready
-
 - block:
-    - name: Wait until vault pod is scheduled
-      kubernetes.core.k8s_info:
-        kind: Pod
-        wait: yes
-        wait_condition:
-          type: PodScheduled
-          status: true
-        name: vault-0
-        namespace: vault
-        wait_sleep: 10
-        wait_timeout: 360
-        kubeconfig: "{{ kubeconfig }}"
-
     - name: Wait until vault container is ready to be unsealed
       kubernetes.core.k8s_info:
         kind: Pod
@@ -80,7 +75,7 @@
       ansible.builtin.shell:
         cmd: |
           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
-  when: vault_ready | json_query('resources[0].metadata.name') != "vault-0"
+  when: vault_ready | json_query('resources[0].status.conditions[?type=='ContainersReady'].status') | first | not bool
 
 - name: Unseal vault
   ansible.builtin.shell:
@@ -185,7 +180,7 @@
     cmd: |
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags: 
+  tags:
     - never
     - unseal
 
