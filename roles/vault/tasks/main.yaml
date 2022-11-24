@@ -40,7 +40,8 @@
   community.crypto.openssl_csr:
     path: "{{ dest }}vault.csr"
     privatekey_path: "{{ dest }}vault.key"
-    subject: '/O=system:nodes/CN=system:node:vault.vault.svc'
+    organization: system:nodes
+    common_name: system:node:vault.vault.svc
 
 - name: Extract vault.csr contents
   ansible.builtin.shell:
