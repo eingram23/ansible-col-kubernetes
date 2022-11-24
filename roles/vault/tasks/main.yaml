@@ -1,10 +1,67 @@
 ---
+- name: Create vault 8s namespace
+  kubernetes.core.k8s:
+    name: vault
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
 - name: Download manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
+  
+- name: Create key for k8s to sign (for TLS Listener)
+  community.crypto.openssl_privatekey:
+    path: "{{ dest }}vault.key"
+    size: 2048
+
+- name: Generate an OpenSSL Certificate Signing Request
+  community.crypto.openssl_csr:
+    path: "{{ dest }}vault.csr"
+    privatekey_path: "{{ dest }}vault.key"
+    subject: '/O=system:nodes/CN=system:node:vault.vault.svc'
+
+- name: Extract vault.csr contents
+  ansible.builtin.shell:
+    cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > vault.csr.contents
+
+- name: get content of remote file
+  slurp:
+    src: "{{ dest }}vault.csr"
+  register: vault_csr_enc
+
+- name: decode remote content
+  set_fact:
+    vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
+
+- name: Create vault-csr.yaml file
+  ansible.builtin.template:
+    src: vault-csr.yaml.j2
+    dest: "{{ dest }}vault-csr.yaml"
+
+- name: Create csr and send to k8s
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vault-csr.yaml
+
+- name: Approve cert Request
+  ansible.builtin.shell:
+    cmd: kubectl certificate approve vault-csr
+
+- name: Retrieve cert, write out to file, retrieve k8s CA, create secret
+  ansible.builtin.shell:
+    cmd: |
+      serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
+      echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
+      kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
+      kubectl create secret generic vault-tls-secret --namespace vault --from-file=vault.key={{ dest }}vault.key --from-file=vault.crt={{ dest }}vault.crt --from-file=vault.ca={{ dest }}vault.ca
 
 - name: Create vault ingress
   ansible.builtin.template:
@@ -21,7 +78,7 @@
   kubernetes.core.helm:
     release_name: vault
     release_namespace: vault
-    create_namespace: true
+    create_namespace: false
     chart_ref: hashicorp/vault
     wait: true
     update_repo_cache: true
