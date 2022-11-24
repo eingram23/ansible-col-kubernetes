@@ -79,7 +79,7 @@
       serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
       echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
       kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
-      kubectl create secret generic vault-tls-secret --namespace vault --from-file=vault.key={{ dest }}vault.key --from-file=vault.crt={{ dest }}vault.crt --from-file=vault.ca={{ dest }}vault.ca
+      kubectl create secret generic vault-server-tls --namespace vault --from-file=vault.key={{ dest }}vault.key --from-file=vault.crt={{ dest }}vault.crt --from-file=vault.ca={{ dest }}vault.ca
 
 - name: Create vault ingress
   ansible.builtin.template:
@@ -133,9 +133,9 @@
   register: vault_ready
 
 - block:
-    - name: Pause 40 seconds
+    - name: Pause 30 seconds
       ansible.builtin.pause:
-        seconds: 40
+        seconds: 30
 
     - name: Init and export cluster-keys.json
       ansible.builtin.shell:
