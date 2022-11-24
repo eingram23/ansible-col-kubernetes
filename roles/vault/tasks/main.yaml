@@ -87,6 +87,12 @@
     dest: "{{ dest }}vault-ingress.yaml"
     mode: '0644'
 
+- name: Create vault-values.yaml file
+  ansible.builtin.template:
+    src: vault-values.yaml.j2
+    dest: "{{ dest }}vault-values.yaml"
+    mode: '0644'
+    
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: hashicorp
