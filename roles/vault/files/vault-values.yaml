@@ -1,5 +1,4 @@
 global:
-  enabled: true
   tlsDisable: false
 server:
   extraEnvironmentVars:
