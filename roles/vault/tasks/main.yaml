@@ -1,4 +1,8 @@
 ---
+- name: Install cryptography python module
+  ansible.builtin.pip:
+    name: cryptography
+    
 - name: Create vault 8s namespace
   kubernetes.core.k8s:
     name: vault
