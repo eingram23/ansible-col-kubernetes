@@ -7,6 +7,8 @@
     - cryptography
   loop_control:
     loop_var: pip_item
+  become: true
+  become_method: sudo
 
 - name: Create vault 8s namespace
   kubernetes.core.k8s:
