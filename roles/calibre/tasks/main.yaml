@@ -23,6 +23,11 @@
     src: calibre-ingress.yaml.j2
     dest: "{{ dest }}calibre-ingress.yaml"
 
+- name: Create calibre ssl certificate 
+  ansible.builtin.template:
+    src: calibre-cert.yaml.j2
+    dest: "{{ dest }}calibre-cert.yaml"
+
 - name: Deploy calibre
   kubernetes.core.k8s:
     state: present
@@ -34,3 +39,4 @@
     - calibre-deployment.yaml
     - calibre-middleware.yaml
     - calibre-ingress.yaml
+    - calibre-cert.yaml
