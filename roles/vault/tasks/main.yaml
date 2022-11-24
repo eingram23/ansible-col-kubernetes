@@ -45,11 +45,11 @@
 
 - name: Extract vault.csr contents
   ansible.builtin.shell:
-    cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > vault.csr.contents
+    cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
 
 - name: get content of remote file
   slurp:
-    src: "{{ dest }}vault.csr"
+    src: "{{ dest }}vault.csr.contents"
   register: vault_csr_enc
 
 - name: decode remote content
