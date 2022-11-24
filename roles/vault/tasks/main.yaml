@@ -3,7 +3,7 @@
   ansible.builtin.pip:
     name: pip
     state: latest
-    
+
 - name: Install cryptography python module
   ansible.builtin.pip:
     name: "{{ pip_item }}"
@@ -13,8 +13,8 @@
     - cryptography
   loop_control:
     loop_var: pip_item
-  become: true
-  become_method: sudo
+  # become: true
+  # become_method: sudo
 
 - name: Create vault 8s namespace
   kubernetes.core.k8s:
