@@ -40,7 +40,7 @@
   community.crypto.openssl_csr:
     path: "{{ dest }}vault.csr"
     privatekey_path: "{{ dest }}vault.key"
-    organizationName: "system:nodes"
+    organizationName: system:nodes
     common_name: system:node:vault.vault.svc
 
 - name: Extract vault.csr contents
