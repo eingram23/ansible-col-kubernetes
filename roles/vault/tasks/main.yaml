@@ -69,17 +69,17 @@
     src: vault-csr.yaml.j2
     dest: "{{ dest }}vault-csr.yaml"
 
-# - name: Create csr and send to k8s
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-#     - vault-csr.yaml
+- name: Create csr and send to k8s
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vault-csr.yaml
 
-# - name: Approve cert Request
-#   ansible.builtin.shell:
-#     cmd: kubectl certificate approve vault-csr
+- name: Approve cert Request
+  ansible.builtin.shell:
+    cmd: kubectl certificate approve vault-csr
 
 - name: Retrieve cert, write out to file, retrieve k8s CA, create secret
   ansible.builtin.shell:
