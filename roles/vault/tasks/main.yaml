@@ -46,11 +46,10 @@
 - name: Generate an OpenSSL csr
   ansible.builtin.shell:
     cmd: >
-      openssl req -new -key ${TMPDIR}/vault.key
-      -subj "/O=system:nodes/CN=system:node:${SERVICE}.${NAMESPACE}.svc"
-      -out ${TMPDIR}/server.csr
-      -config ${TMPDIR}/csr.conf
-
+      openssl req -new -key {{ dest }}vault.key
+      -subj "/O=system:nodes/CN=system:node:vault.vault.svc"
+      -out {{ dest }}vault.csr
+      -config {{ dest }}vault-csr.conf
 
 - name: Extract vault.csr contents
   ansible.builtin.shell: |
