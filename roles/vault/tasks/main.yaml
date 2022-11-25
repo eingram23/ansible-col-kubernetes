@@ -31,10 +31,13 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create key for k8s to sign (for TLS Listener)
-  community.crypto.openssl_privatekey:
-    path: "{{ dest }}vault.key"
-    size: 2048
+# - name: Create key for k8s to sign (for TLS Listener)
+#   community.crypto.openssl_privatekey:
+#     path: "{{ dest }}vault.key"
+#     size: 2048
+
+- name: Create key for k8s to sign (for TLS listener)
+  ansible.builtin.shell: openssl genrsa -out {{ dest }}vault.key 2048
 
 # - name: Generate an OpenSSL Certificate Signing Request
 #   community.crypto.openssl_csr:
