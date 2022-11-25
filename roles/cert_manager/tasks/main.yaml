@@ -49,14 +49,14 @@
 
 - name: Set fact from cabundle data
   ansible.builtin.set_fact:
-    cabundle: cabundle_data.stdout
+    cabundle: "{{ cabundle_data.stdout }}"
 
 - name: Create vault-cluster-issuer.yaml file
   ansible.builtin.template:
     src: vault-cluster-issuer.yaml.j2
     dest: "{{ dest }}vault-cluster-issuer.yaml"
     mode: '0644'
-    
+
 - name: Deploy issuer and secret
   kubernetes.core.k8s:
     state: present
