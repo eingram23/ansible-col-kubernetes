@@ -44,7 +44,7 @@
 
 - name: Get caBundle data
   ansible.builtin.shell: >
-    kubectl config  view --minify --raw | grep certificate-authority-data
+    kubectl config view --minify --raw | grep certificate-authority-data: | sed 's/^.*: //'
   register: cabundle_data
 
 - name: Set fact from cabundle data
