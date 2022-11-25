@@ -30,21 +30,30 @@
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
-  
+
 - name: Create key for k8s to sign (for TLS Listener)
   community.crypto.openssl_privatekey:
     path: "{{ dest }}vault.key"
     size: 2048
 
-- name: Generate an OpenSSL Certificate Signing Request
-  community.crypto.openssl_csr:
-    path: "{{ dest }}vault.csr"
-    privatekey_path: "{{ dest }}vault.key"
-    organizationName: system:nodes
-    common_name: system:node:vault.vault.svc
+# - name: Generate an OpenSSL Certificate Signing Request
+#   community.crypto.openssl_csr:
+#     path: "{{ dest }}vault.csr"
+#     privatekey_path: "{{ dest }}vault.key"
+#     organizationName: system:nodes
+#     common_name: system:node:vault.vault.svc
+
+- name: Generate an OpenSSL csr
+  ansible.builtin.shell:
+    cmd: >
+      openssl req -new -key ${TMPDIR}/vault.key
+      -subj "/O=system:nodes/CN=system:node:${SERVICE}.${NAMESPACE}.svc"
+      -out ${TMPDIR}/server.csr
+      -config ${TMPDIR}/csr.conf
+
 
 - name: Extract vault.csr contents
-  ansible.builtin.shell:
+  ansible.builtin.shell: |
     cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
 
 - name: get content of remote file
