@@ -26,10 +26,10 @@
     dest: "{{ dest }}vmware-exporter-deployment.yaml"
     mode: '0644'
 
-- name: Create grafana ingress manifests on host
+- name: Create grafana ingressroute manifests on host
   ansible.builtin.template:
-    src: grafana-ingress.yaml.j2
-    dest: "{{ dest }}grafana-ingress.yaml"
+    src: grafana-ingressroute.yaml.j2
+    dest: "{{ dest }}grafana-ingressroute.yaml"
     mode: '0644'
 
 - name: Create grafana admin password secret
@@ -38,16 +38,16 @@
     dest: "{{ dest }}grafana-admin-pass.yaml"
     mode: '0644'
 
-- name: Create vmware-exporter ingress manifests on host
+- name: Create vmware-exporter ingressroute manifests on host
   ansible.builtin.template:
-    src: vmware-exporter-ingress.yaml.j2
-    dest: "{{ dest }}vmware-exporter-ingress.yaml"
+    src: vmware-exporter-ingressroute.yaml.j2
+    dest: "{{ dest }}vmware-exporter-ingressroute.yaml"
     mode: '0644'
 
-- name: Create prometheus ingress manifests on host
+- name: Create prometheus ingressroute manifests on host
   ansible.builtin.template:
-    src: prometheus-ingress.yaml.j2
-    dest: "{{ dest }}prometheus-ingress.yaml"
+    src: prometheus-ingressroute.yaml.j2
+    dest: "{{ dest }}prometheus-ingressroute.yaml"
     mode: '0644'
 
 - name: Create monitoring namespace
@@ -145,7 +145,7 @@
     - prometheus-service-ext.yaml
     - prometheus-service-local.yaml
     - prometheus-role.yaml
-    - prometheus-ingress.yaml
+    - prometheus-ingressroute.yaml
 
 - name: Deploy vmware-exporter
   kubernetes.core.k8s:
@@ -155,12 +155,12 @@
   loop:
     - vmware-exporter-deployment.yaml
     - vmware-exporter-service.yaml
-    - vmware-exporter-ingress.yaml
+    - vmware-exporter-ingressroute.yaml
 
-- name: Create alertmanager ingress
+- name: Create alertmanager ingressroute
   ansible.builtin.template:
-    src: alertmanager-ingress.yaml.j2
-    dest: "{{ dest }}alertmanager-ingress.yaml"
+    src: alertmanager-ingressroute.yaml.j2
+    dest: "{{ dest }}alertmanager-ingressroute.yaml"
     mode: '0644'
 
 - name: Deploy alertmanager and rules
@@ -173,18 +173,18 @@
     - alertmanager-service.yaml
     - alertmanager-main-rules.yaml
     - node-exporter-rules.yaml
-    - alertmanager-ingress.yaml
+    - alertmanager-ingressroute.yaml
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
 
-- name: Deploy grafana secret and ingress
+- name: Deploy grafana secret and ingressroute
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - grafana-ingress.yaml
+    - grafana-ingressroute.yaml
     - grafana-admin-pass.yaml
 
 - name: Add hashicorp/vault chart repo

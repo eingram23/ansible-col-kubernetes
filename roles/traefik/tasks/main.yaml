@@ -4,8 +4,16 @@
     dest: "{{ dest }}traefik-ingressroute.yaml"
     mode: '0644'
 
-- name: Deploy traefik dashboard ingressroute
+- name: Create traefik ssl certificate 
+  ansible.builtin.template:
+    src: traefik-cert.yaml.j2
+    dest: "{{ dest }}traefik-cert.yaml"
+
+- name: Deploy traefik manifests
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}traefik-ingressroute.yaml"
+    src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - traefik-ingressroute.yaml
+    - traefik-cert.yaml

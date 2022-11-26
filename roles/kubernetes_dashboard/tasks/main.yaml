@@ -18,10 +18,10 @@
     dest: "{{ dest }}kubernetes-dashboard-role.yaml"
     mode: '0644'
 
-- name: Create kubernetes-dashboard-ingress manifest on host
+- name: Create kubernetes-dashboard-ingressroute manifest on host
   ansible.builtin.template:
-    src: kubernetes-dashboard-ingress.yaml.j2
-    dest: "{{ dest }}kubernetes-dashboard-ingress.yaml"
+    src: kubernetes-dashboard-ingressroute.yaml.j2
+    dest: "{{ dest }}kubernetes-dashboard-ingressroute.yaml"
     mode: '0644'
 
 - name: Apply kubernetes dashboard role manifest
@@ -32,4 +32,4 @@
   loop:
     - kubernetes-dashboard.yaml
     - kubernetes-dashboard-role.yaml
-    - kubernetes-dashboard-ingress.yaml
+    - kubernetes-dashboard-ingressroute.yaml

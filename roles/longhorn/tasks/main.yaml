@@ -55,20 +55,20 @@
     - longhorn-ui.yaml
     - longhorn-storageclass.yaml
 
-- name: Create longhorn ingress manifest on host
+- name: Create longhorn ingressroute manifest on host
   ansible.builtin.template:
-    src: longhorn-ingress.yaml.j2
-    dest: "{{ dest }}longhorn-ingress.yaml"
+    src: longhorn-ingressroute.yaml.j2
+    dest: "{{ dest }}longhorn-ingressroute.yaml"
     mode: '0644'
 
-- name: Deploy longhorn UI, ingress and storageclass
+- name: Deploy longhorn UI, ingressroute and storageclass
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - longhorn-ui.yaml
-    - longhorn-ingress.yaml
+    - longhorn-ingressroute.yaml
     - longhorn-storageclass.yaml
 
 - name: Make longhorn the default storage class

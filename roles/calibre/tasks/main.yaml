@@ -18,10 +18,10 @@
     src: calibre-deployment.yaml.j2
     dest: "{{ dest }}calibre-deployment.yaml"
 
-- name: Create calibre-ingress.yaml manifest on host
+- name: Create calibre-ingressroute.yaml manifest on host
   ansible.builtin.template:
-    src: calibre-ingress.yaml.j2
-    dest: "{{ dest }}calibre-ingress.yaml"
+    src: calibre-ingressroute.yaml.j2
+    dest: "{{ dest }}calibre-ingressroute.yaml"
 
 - name: Create calibre ssl certificate 
   ansible.builtin.template:
@@ -38,5 +38,5 @@
     - calibre-service.yaml
     - calibre-deployment.yaml
     - calibre-middleware.yaml
-    - calibre-ingress.yaml
+    - calibre-ingressroute.yaml
     - calibre-cert.yaml

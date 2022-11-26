@@ -7,6 +7,7 @@ metadata:
 spec:
   entryPoints: 
     - web
+    - websecure
   routes:
   - match: Host(`calibre{{ suffix }}.local.lan`) 
     kind: Rule
@@ -25,3 +26,5 @@ spec:
     services:
     - name: calibre
       port: 8083
+tls:
+  secretName: calibre-tls

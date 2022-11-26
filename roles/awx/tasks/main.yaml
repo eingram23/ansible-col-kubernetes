@@ -93,8 +93,8 @@
 
 - name: Create awx-ingress manifest
   ansible.builtin.template:
-    src: awx-ingress.yaml.j2
-    dest: "{{ dest }}awx-ingress.yaml"
+    src: awx-ingressroute.yaml.j2
+    dest: "{{ dest }}awx-ingressroute.yaml"
     mode: '0644'
 
 - name: Deploy awx-ingress

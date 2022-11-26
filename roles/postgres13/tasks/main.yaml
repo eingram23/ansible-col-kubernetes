@@ -50,5 +50,5 @@
     - pgadmin4-service.yaml
     - postgres13-deployment.yaml
     - pgadmin4-deployment.yaml
-    - postgres13-ingress.yaml
-    - pgadmin4-ingress.yaml
+    - postgres13-ingressroute.yaml
+    - pgadmin4-ingressroute.yaml

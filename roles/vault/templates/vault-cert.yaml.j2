@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: traefik{{ suffix }}-tls
+  name: vault{{ suffix }}-tls
   namespace: kube-system
 spec:
-  secretName: traefik-tls
+  secretName: vault-tls
   issuerRef:
     kind: ClusterIssuer
     name: vault-cluster-issuer
-  commonName: traefik{{ suffix }}.local.lan
+  commonName: vault{{ suffix }}.local.lan
   dnsNames:
-  - traefik{{ suffix }}.local.lan
+  - vault{{ suffix }}.local.lan
