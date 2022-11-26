@@ -5,12 +5,12 @@ metadata:
   namespace: vault
   annotations:
     kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.tls: "true"
     ingress.kubernetes.io/rewrite-target: /ui
 spec:
   tls:
-    - hosts:
-        - vault{{ suffix }}.local.lan
-      secretName: vault-tls
+  - host: vault{{ suffix }}.local.lan
+    secretName: vault-server-tls
   rules:
   - host: vault{{ suffix }}.local.lan
     http:

@@ -1,11 +1,21 @@
 global:
   tlsDisable: false
+  serverTelemetry:
+    prometheusOperator: true
 server:
   image:
     repository: "hashicorp/vault"
     tag: "{{ vault_ver }}"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
+  resources: {}
+  # resources:
+  #   requests:
+  #     memory: 256Mi
+  #     cpu: 250m
+  #   limits:
+  #     memory: 256Mi
+  #     cpu: 250m
   extraEnvironmentVars:
     VAULT_CACERT: /vault/userconfig/vault-server-tls/vault.ca
   dataStorage:
@@ -29,12 +39,15 @@ server:
   standalone:
     enabled: true
     config: |
+      ui = true
       listener "tcp" {
         tls_disable_client_certs = "true"
         address = "[::]:8200"
         cluster_address = "[::]:8201"
         telemetry {
-          unauthenticated_metrics_access = "true"
+          unauthenticated_metrics_access = "true",
+          prometheus_retention_time = "30s",
+          disable_hostname = true
         }
         tls_cert_file = "/vault/userconfig/vault-server-tls/vault.crt"
         tls_key_file  = "/vault/userconfig/vault-server-tls/vault.key"
@@ -49,6 +62,34 @@ server:
         prometheus_retention_time = "30s",
         disable_hostname = true
       } 
-
+ui:
+  enabled: true
+serverTelemetry:
+  serviceMonitor:
+    enabled: true
+    # Selector labels to add to the ServiceMonitor.
+    # When empty, defaults to:
+    #  release: prometheus
+    selectors: {}
+    interval: 1m
+    scarpeTimeout: 30s
+  prometheusRules:
+    enabled: true
+    # Some example rules.
+    rules: {}
+    #  - alert: vault-HighResponseTime
+    #    annotations:
+    #      message: The response time of Vault is over 500ms on average over the last 5 minutes.
+    #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 500
+    #    for: 5m
+    #    labels:
+    #      severity: warning
+    #  - alert: vault-HighResponseTime
+    #    annotations:
+    #      message: The response time of Vault is over 1s on average over the last 5 minutes.
+    #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 1000
+    #    for: 5m
+    #    labels:
+    #      severity: critical
 injector:
   enabled: false
