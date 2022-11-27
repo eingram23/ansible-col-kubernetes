@@ -23,19 +23,15 @@ server:
     size: 10Gi
     storageClass: longhorn
     mountPath: "/vault/data"
-  # auditStorage:
-  #   enabled: true
-  #   size: 10Gi
-  #   storageClass: longhorn
-  volumes:
-    - name: userconfig-vault-server-tls
-      secret:
-        defaultMode: 420
-        secretName: vault-server-tls
-  volumeMounts:
-    - mountPath: /vault/userconfig/vault-server-tls
-      name: userconfig-vault-server-tls
-      readOnly: true
+  # volumes:
+  #   - name: userconfig-vault-server-tls
+  #     secret:
+  #       defaultMode: 420
+  #       secretName: vault-server-tls
+  # volumeMounts:
+  #   - mountPath: /vault/userconfig/vault-server-tls
+  #     name: userconfig-vault-server-tls
+  #     readOnly: true
   standalone:
     enabled: true
     config: |
