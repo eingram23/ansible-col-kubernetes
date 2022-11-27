@@ -31,67 +31,57 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create key for k8s to sign (for TLS Listener)
-  community.crypto.openssl_privatekey:
-    path: "{{ dest }}vault.key"
-    type: RSA
-    size: 2048
+# - name: Create key for k8s to sign (for TLS Listener)
+#   community.crypto.openssl_privatekey:
+#     path: "{{ dest }}vault.key"
+#     type: RSA
+#     size: 2048
 
-# - name: Create key for k8s to sign (for TLS listener)
-#   ansible.builtin.shell: openssl genrsa -out {{ dest }}vault.key 2048
+# - name: Generate an OpenSSL csr
+#   ansible.builtin.shell:
+#     cmd: >
+#       openssl req -new -key {{ dest }}vault.key
+#       -subj "/O=system:nodes/CN=system:node:vault.vault.svc"
+#       -out {{ dest }}vault.csr
+#       -config {{ dest }}vault-csr.conf
 
-# - name: Generate an OpenSSL Certificate Signing Request
-#   community.crypto.openssl_csr:
-#     path: "{{ dest }}vault.csr"
-#     privatekey_path: "{{ dest }}vault.key"
-#     organizationName: system:nodes
-#     common_name: system:node:vault.vault.svc
+# - name: Extract vault.csr contents
+#   ansible.builtin.shell: |
+#     cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
 
-- name: Generate an OpenSSL csr
-  ansible.builtin.shell:
-    cmd: >
-      openssl req -new -key {{ dest }}vault.key
-      -subj "/O=system:nodes/CN=system:node:vault.vault.svc"
-      -out {{ dest }}vault.csr
-      -config {{ dest }}vault-csr.conf
+# - name: get content of remote file
+#   slurp:
+#     src: "{{ dest }}vault.csr.contents"
+#   register: vault_csr_enc
 
-- name: Extract vault.csr contents
-  ansible.builtin.shell: |
-    cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
+# - name: decode remote content
+#   set_fact:
+#     vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
 
-- name: get content of remote file
-  slurp:
-    src: "{{ dest }}vault.csr.contents"
-  register: vault_csr_enc
+# - name: Create vault-csr.yaml file
+#   ansible.builtin.template:
+#     src: vault-csr.yaml.j2
+#     dest: "{{ dest }}vault-csr.yaml"
 
-- name: decode remote content
-  set_fact:
-    vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
+# - name: Create csr and send to k8s
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - vault-csr.yaml
 
-- name: Create vault-csr.yaml file
-  ansible.builtin.template:
-    src: vault-csr.yaml.j2
-    dest: "{{ dest }}vault-csr.yaml"
+# - name: Approve cert Request
+#   ansible.builtin.shell:
+#     cmd: kubectl certificate approve vault-csr
 
-- name: Create csr and send to k8s
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - vault-csr.yaml
-
-- name: Approve cert Request
-  ansible.builtin.shell:
-    cmd: kubectl certificate approve vault-csr
-
-- name: Retrieve cert, write out to file, retrieve k8s CA, create secret
-  ansible.builtin.shell:
-    cmd: |
-      serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
-      echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
-      kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
-      kubectl create secret generic vault-server-tls --namespace vault --from-file=tls.key={{ dest }}vault.key --from-file=tls.crt={{ dest }}vault.crt --from-file=ca.crt={{ dest }}vault.ca
+# - name: Retrieve cert, write out to file, retrieve k8s CA, create secret
+#   ansible.builtin.shell:
+#     cmd: |
+#       serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
+#       echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
+#       kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
+#       kubectl create secret generic vault-server-tls --namespace vault --from-file=tls.key={{ dest }}vault.key --from-file=tls.crt={{ dest }}vault.crt --from-file=ca.crt={{ dest }}vault.ca
 
 - name: Create vault ingress
   ansible.builtin.template:
@@ -190,7 +180,7 @@
       kubectl exec vault-0 -n vault -- vault login {{ root_token }}
       kubectl exec vault-0 -n vault -- vault secrets enable pki
       kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
-      kubectl exec vault-0 -n vault -- vault write pki/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki/crl"
+      kubectl exec vault-0 -n vault -- vault write pki/config/urls issuing_certificates="http://vault.vault.svc.cluster.local:8200/v1/pki/ca" crl_distribution_points="http://vault.vault.svc.cluster.local:8200/v1/pki/crl"
       kubectl exec vault-0 -n vault -- vault write pki/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=72h
 
 - name: Create root Certificate
