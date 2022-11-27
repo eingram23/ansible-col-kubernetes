@@ -71,6 +71,9 @@
   loop:
     - vault-csr.yaml
 
+- ansible.builtin.pause:
+    seconds: 60
+
 - name: Approve cert Request
   ansible.builtin.shell:
     cmd: kubectl certificate approve vault-csr
