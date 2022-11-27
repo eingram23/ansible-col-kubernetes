@@ -75,9 +75,6 @@
   ansible.builtin.shell:
     cmd: kubectl certificate approve vault-csr
 
-- ansible.builtin.pause:
-    seconds: 60
-    
 - name: Retrieve cert, write out to file, retrieve k8s CA, create secret
   ansible.builtin.shell:
     cmd: |
