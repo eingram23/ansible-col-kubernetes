@@ -111,7 +111,7 @@
     values_files: "{{ dest }}vault-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy vault ingressroute
+- name: Deploy vault ingressroutetcp
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
