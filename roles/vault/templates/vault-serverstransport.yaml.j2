@@ -1,8 +1,0 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: ServersTransport
-metadata:
-  name: vault
-  namespace: vault
-spec:
-  insecureSkipVerify: true
-  serverName: https://vault{{ suffix }}.local.lan
