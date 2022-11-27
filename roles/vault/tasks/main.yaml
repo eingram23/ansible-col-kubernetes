@@ -111,13 +111,14 @@
     values_files: "{{ dest }}vault-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy vault ingressroute
+- name: Deploy vault ingressroute and serversTransport
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingressroute.yaml
+    - vault-serverstransport.yaml
 
 - name: Wait until vault pod is scheduled
   kubernetes.core.k8s_info:
