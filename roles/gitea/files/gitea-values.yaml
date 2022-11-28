@@ -21,7 +21,7 @@ gitea:
     - name: GITEA__database__PASSWD
       valueFrom:
         secretKeyRef:
-          name: gitea_postgres-secret
+          name: gitea-postgres-secret
           key: password
   config:
     database:
