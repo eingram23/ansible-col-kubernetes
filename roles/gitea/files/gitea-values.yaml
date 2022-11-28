@@ -19,7 +19,13 @@ postgresql:
 gitea:
   config:
     database:
-      existingSecret: gitea-postgres-secret
+      # existingSecret: gitea-postgres-secret
+      DB_TYPE: postgresql
+      HOST: postgres13.postgres.svc.cluster.local:5432
+      NAME: gitea
+      USER: gitea
+      PASSWD: gitea
+      SCHEMA: gitea
   admin:
     existingSecret: gitea-admin-secret
   metrics:
