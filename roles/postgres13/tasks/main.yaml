@@ -32,10 +32,20 @@
     src: postgres13-deployment.yaml.j2
     dest: "{{ dest }}postgres13-deployment.yaml"
 
+- name: Create pgadmin4-ingressroute.yaml manifest on host
+  ansible.builtin.template:
+    src: pgadmin4-ingressroute.yaml.j2
+    dest: "{{ dest }}pgadmin4-ingressroute.yaml"
+
 - name: Create pgadmin4-deployment.yaml manifest on host
   ansible.builtin.template:
     src: pgadmin4-deployment.yaml.j2
     dest: "{{ dest }}pgadmin4-deployment.yaml"
+
+- name: Create pgadmin4-ingressroute.yaml manifest on host
+  ansible.builtin.template:
+    src: pgadmin4-ingressroute.yaml.j2
+    dest: "{{ dest }}pgadmin4-ingressroute.yaml"
 
 - name: Deploy postgres13 + pgadmin4
   kubernetes.core.k8s:

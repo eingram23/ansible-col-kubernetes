@@ -7,7 +7,7 @@ spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`pgadmin4.local.lan`) 
+  - match: Host(`pgadmin4{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: pgadmin4

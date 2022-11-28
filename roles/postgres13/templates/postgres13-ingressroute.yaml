@@ -7,7 +7,7 @@ spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`postgres13.local.lan`) 
+  - match: Host(`postgres13{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: postgres13
