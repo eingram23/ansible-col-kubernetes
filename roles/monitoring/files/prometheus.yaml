@@ -16,16 +16,18 @@ spec:
     runAsNonRoot: true
     runAsUser: 1000
   serviceAccountName: prometheus
-  serviceMonitorSelector:
-    matchExpressions:
-    - key: name
-      operator: In
-      values:
-      - longhorn-prometheus-servicemonitor
-      - kube-state-metrics
-      - node-exporter
-      - kubelet
-      - traefik
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector: {}
+    # matchExpressions:
+    # - key: name
+    #   operator: In
+    #   values:
+    #   - longhorn-prometheus-servicemonitor
+    #   - kube-state-metrics
+    #   - node-exporter
+    #   - kubelet
+    #   - traefik
+  podMonitorSelector: {}
   additionalScrapeConfigs:
     name: scrape-configs
     key: prometheus.yml
@@ -34,6 +36,7 @@ spec:
     - namespace: monitoring
       name: alertmanager-operated
       port: web
+  ruleNamespaceSelector: {}
   ruleSelector:
     matchLabels:
       role: alert-rules

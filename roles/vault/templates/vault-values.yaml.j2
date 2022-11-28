@@ -49,6 +49,11 @@ server:
         tls_disable_client_certs = true
       }
       
+      telemetry {
+        prometheus_retention_time = "24h"
+        disable_hostname = true
+      }
+
       storage "file" {
         path = "/vault/data"
       }
@@ -62,7 +67,7 @@ serverTelemetry:
     #  release: prometheus
     selectors: {}
     interval: 1m
-    scarpeTimeout: 30s
+    scrapeTimeout: 30s
   prometheusRules:
     enabled: true
     # Some example rules.
