@@ -1,5 +1,5 @@
 image:
-  pullPolicy: ifNotPresent
+  pullPolicy: IfNotPresent
 
 service:
   ssh:
@@ -19,13 +19,7 @@ postgresql:
 gitea:
   config:
     database:
-      # existingSecret: gitea-postgres-secret
-      DB_TYPE: postgresql
-      HOST: postgres13.postgres.svc.cluster.local:5432
-      NAME: gitea
-      USER: gitea
-      PASSWD: gitea
-      SCHEMA: gitea
+      existingSecret: gitea-postgres-secret
   admin:
     existingSecret: gitea-admin-secret
   metrics:
