@@ -17,9 +17,18 @@ postgresql:
   enabled: false
 
 gitea:
+  additionalConfigFromEnvs:
+    - name: GITEA__database__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: gitea_postgres-secret
+          key: password
   config:
     database:
-      existingSecret: gitea-postgres-secret
+      DB_TYPE: postgresql
+      HOST: postgres13.postgres.svc.cluster.local:5432
+      NAME: gitea
+      USER: gitea
   admin:
     existingSecret: gitea-admin-secret
   metrics:
