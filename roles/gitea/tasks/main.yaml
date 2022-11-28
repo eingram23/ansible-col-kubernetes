@@ -38,6 +38,14 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
 
+- name: Download files to host
+  ansible.builtin.file:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    with_fileglob: "*"
+    
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
     release_name: gitea
