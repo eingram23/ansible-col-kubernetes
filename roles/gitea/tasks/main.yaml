@@ -1,3 +1,11 @@
+- name: Create gitea k8s namespace
+  kubernetes.core.k8s:
+    name: gitea
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+    
 - name: Add gitea-charts/gitea chart repo
   kubernetes.core.helm_repository:
     name: gitea-charts
