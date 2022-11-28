@@ -3,16 +3,9 @@ image:
   pullPolicy: ifNotPresent
 
 service:
-  http:
-    type: LoadBalancerIP
-    port: 3000
-    annotations:
-        metallb.universe.tf/allow-shared-ip: gitea
   ssh:
     type: LoadBalancerIP
     port: 22
-      annotations:
-        metallb.universe.tf/allow-shared-ip: gitea
 
 memcached:
   enabled: true
