@@ -1,11 +1,11 @@
 global:
-  tlsDisable: true
+  tlsDisable: false
   serverTelemetry:
     prometheusOperator: true
 server:
   image:
     repository: "hashicorp/vault"
-    tag: "{{ vault_ver }}"
+    tag: ""
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
   resources: {}
@@ -17,34 +17,43 @@ server:
   #     memory: 256Mi
   #     cpu: 250m
   extraEnvironmentVars:
-    # VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
   dataStorage:
     enabled: true
     size: 10Gi
     storageClass: longhorn
     mountPath: "/vault/data"
-  # volumes:
-  #   - name: userconfig-vault-server-tls
-  #     secret:
-  #       defaultMode: 420
-  #       secretName: vault-server-tls
-  # volumeMounts:
-  #   - mountPath: /vault/userconfig/vault-server-tls
-  #     name: userconfig-vault-server-tls
-  #     readOnly: true
+  volumes:
+    - name: userconfig-vault-server-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-server-tls
+  volumeMounts:
+    - mountPath: /vault/userconfig/vault-server-tls
+      name: userconfig-vault-server-tls
+      readOnly: true
   standalone:
     enabled: true
     config: |
       ui = true
       listener "tcp" {
-        tls_disable = 1
+        telemetry {
+          unauthenticated_metrics_access = true
+        }
+        tls_disable = false
         address = "[::]:8200"
         cluster_address = "[::]:8201"
-        # tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
-        # tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
-        # tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+        tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+        tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
+        tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+        tls_disable_client_certs = true
       }
       
+      telemetry {
+        prometheus_retention_time = "24h"
+        disable_hostname = true
+      }
+
       storage "file" {
         path = "/vault/data"
       }
@@ -58,7 +67,7 @@ serverTelemetry:
     #  release: prometheus
     selectors: {}
     interval: 1m
-    scarpeTimeout: 30s
+    scrapeTimeout: 30s
   prometheusRules:
     enabled: true
     # Some example rules.

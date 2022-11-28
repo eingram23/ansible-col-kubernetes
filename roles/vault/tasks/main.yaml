@@ -24,7 +24,7 @@
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Download manifests to host
+- name: Download files to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
@@ -89,12 +89,6 @@
     dest: "{{ dest }}vault-ingressroutetcp.yaml"
     mode: '0644'
 
-- name: Create vault-values.yaml file
-  ansible.builtin.template:
-    src: vault-values.yaml.j2
-    dest: "{{ dest }}vault-values.yaml"
-    mode: '0644'
-
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: hashicorp
@@ -106,6 +100,7 @@
     release_namespace: vault
     create_namespace: false
     chart_ref: hashicorp/vault
+    chart_version: "{{ vault_helm_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}vault-values.yaml"

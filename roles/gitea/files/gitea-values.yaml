@@ -1,5 +1,4 @@
 image:
-  tag: {{ gitea_ver }}
   pullPolicy: ifNotPresent
 
 service:

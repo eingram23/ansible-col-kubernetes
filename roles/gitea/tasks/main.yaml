@@ -38,18 +38,13 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
 
-- name: Create gitea-values
-  ansible.builtin.template:
-    src: gitea-values.yaml.j2
-    dest: "{{ dest }}gitea-values.yaml"
-    mode: '0644'
-
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
     release_name: gitea
     release_namespace: gitea
     create_namespace: true
     chart_ref: gitea-charts/gitea
+    chart_version: "{{ gitea_helm_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}gitea-values.yaml"

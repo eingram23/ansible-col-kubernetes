@@ -89,12 +89,6 @@
     dest: "{{ dest }}vault-ingressroute.yaml"
     mode: '0644'
 
-- name: Create vault-values.yaml file
-  ansible.builtin.template:
-    src: vault-values.yaml.j2
-    dest: "{{ dest }}vault-values.yaml"
-    mode: '0644'
-
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: hashicorp
@@ -106,9 +100,10 @@
     release_namespace: vault
     create_namespace: false
     chart_ref: hashicorp/vault
+    chart_version: "{{ vault_helm_ver }}"
     wait: true
     update_repo_cache: true
-    values_files: "{{ dest }}vault-values.yaml"
+    values_files: "{{ dest }}vault-values-notls.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy vault ingressroute

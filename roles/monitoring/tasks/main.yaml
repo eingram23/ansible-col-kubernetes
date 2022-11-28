@@ -198,6 +198,7 @@
     release_namespace: monitoring
     create_namespace: false
     chart_ref: grafana/grafana
+    chart_version: "{{ grafana_helm_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}grafana-values.yaml"
@@ -216,6 +217,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-k3s.yaml
     - graf-dash-cm-longhorn.yaml
+    - graf-dash-cm-vault.yaml
   tags:
     - always
     - update
