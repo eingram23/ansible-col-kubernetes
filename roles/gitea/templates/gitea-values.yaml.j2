@@ -1,0 +1,55 @@
+image:
+  tag: {{ gitea_ver }}
+  pullPolicy: ifNotPresent
+
+service:
+  http:
+    type: LoadBalancerIP
+    port: 3000
+    annotations:
+        metallb.universe.tf/allow-shared-ip: gitea
+  ssh:
+    type: LoadBalancerIP
+    port: 22
+      annotations:
+        metallb.universe.tf/allow-shared-ip: gitea
+
+memcached:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: longhorn-homelab
+
+postgresql:
+  enabled: false
+
+gitea:
+  config:
+    database:
+      existingSecret: gitea-postgres-secret
+  admin:
+    existingSecret: gitea-admin-secret
+  metrics:
+    enabled: true
+    serviceMonitor:
+    enabled: true
+
+livenessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 200
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 10
+readinessProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 5
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
