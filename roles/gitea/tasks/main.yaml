@@ -27,8 +27,8 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - gitea-admin-secrets.yaml
-    - gitea-postgres-secrets.yaml
+    - gitea-admin-secret.yaml
+    - gitea-postgres-secret.yaml
 
 - name: Create gitea-values
   ansible.builtin.template:
