@@ -18,7 +18,7 @@ postgresql:
 
 gitea:
   additionalConfigFromEnvs:
-    - name: ENV_TO_INI__DATABASE__PASSWD
+    - name: GITEA__DATABASE__PASSWD
       valueFrom:
         secretKeyRef:
           name: gitea-postgres-secret
