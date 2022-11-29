@@ -4,7 +4,7 @@ metadata:
   name: unifi-tcp
   namespace: unifi
   annotations:
-    metallb.universe.tf/allow-shared-ip: "unifi-shared-svc"
+    metallb.universe.tf/allow-shared-ip: "unifi"
 spec:
   selector:
     app: unifi-controller
@@ -30,7 +30,6 @@ spec:
       targetPort: 6789
       name: speedtest
   type: LoadBalancer 
-  LoadBalancerIP: {{ unifi_ip }}
 
 ---
 
@@ -40,7 +39,7 @@ metadata:
   name: unifi-udp
   namespace: unifi
   annotations:
-    metallb.universe.tf/allow-shared-ip: "unifi-shared-svc"
+    metallb.universe.tf/allow-shared-ip: "unifi"
 spec:
   selector:
     app: unifi-controller
@@ -50,4 +49,4 @@ spec:
       targetPort: 3478
       name: stun
   type: LoadBalancer 
-  LoadBalancerIP: {{ unifi_ip }}
+
