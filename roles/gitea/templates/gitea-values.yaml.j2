@@ -30,8 +30,8 @@ gitea:
           name: gitea-postgres-secret
           key: password
   config:
-    ROOT_URL: http://gitea{{ suffix }}.local.lan
-    SSH_DOMAIN: gitea{{ suffix }}.local.lan
+    ROOT_URL: "http://gitea{{ suffix }}.local.lan"
+    SSH_DOMAIN: "gitea{{ suffix }}.local.lan"
     database:
       DB_TYPE: postgres
       HOST: postgres13.postgres.svc.cluster.local:5432
