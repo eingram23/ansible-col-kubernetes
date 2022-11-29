@@ -23,11 +23,11 @@
     dest: "{{ dest }}gitea-postgres-secret.yaml"
     mode: '0644'
 
-- name: Create gitea ingressroute
-  ansible.builtin.template:
-    src: gitea-ingressroute.yaml.j2
-    dest: "{{ dest }}gitea-ingressroute.yaml"
-    mode: '0644'
+# - name: Create gitea ingressroute
+#   ansible.builtin.template:
+#     src: gitea-ingressroute.yaml.j2
+#     dest: "{{ dest }}gitea-ingressroute.yaml"
+#     mode: '0644'
 
 - name: Deploy gitea secrets
   kubernetes.core.k8s:
@@ -57,10 +57,10 @@
     values_files: "{{ dest }}gitea-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy gitea ingressroute
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - gitea-ingressroute.yaml
+# - name: Deploy gitea ingressroute
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - gitea-ingressroute.yaml
