@@ -30,7 +30,8 @@ gitea:
           name: gitea-postgres-secret
           key: password
   config:
-    DOMAIN: gitea{{ suffix }}.local.lan
+    server:
+      DOMAIN: gitea{{ suffix }}.local.lan
     database:
       DB_TYPE: postgres
       HOST: postgres13.postgres.svc.cluster.local:5432
