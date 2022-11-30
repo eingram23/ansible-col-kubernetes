@@ -212,18 +212,18 @@
           kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab Org" country="US" locality="Homelab" province="CA" > vault_int_csr
           cat vault_int_csr | jq -r '.data.csr' > vault_int.csr
 
-    - name: Get content of remote file
-      ansible.builtin.slurp:
-        src: "vault_int.csr"
-      register: vault_int_csr_enc
+    # - name: Get content of remote file
+    #   ansible.builtin.slurp:
+    #     src: "vault_int.csr"
+    #   register: vault_int_csr_enc
 
-    - name: Decode remote content
-      ansible.builtin.set_fact:
-        vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
+    # - name: Decode remote content
+    #   ansible.builtin.set_fact:
+    #     vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
 
-    - name: Show vault int csr
-      ansible.builtin.debug:
-        var: vault_int_csr
+    # - name: Show vault int csr
+    #   ansible.builtin.debug:
+    #     var: vault_int_csr
   when: create_csr == "true"
 
 - name: Show root_token
