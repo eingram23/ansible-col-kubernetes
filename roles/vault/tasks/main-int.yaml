@@ -173,15 +173,21 @@
   ansible.builtin.shell:
     cmd: |
       kubectl exec vault-0 -n vault -- vault login {{ root_token }}
-      kubectl exec vault-0 -n vault -- vault secrets enable pki
-      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=8760h pki
-      kubectl exec vault-0 -n vault -- vault write pki/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki/crl"
-      kubectl exec vault-0 -n vault -- vault write pki/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=72h
-
-- name: Create root Certificate
+      # mount backend
+      kubectl exec vault-0 -n vault -- vault secrets enable -path=pki_int pki
+      # Configure Int CA
+      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=43800h pki_int
+      
+- name: Generate Int CSR
   ansible.builtin.shell:
-    cmd: kubectl exec vault-0 -n vault -- vault write pki/root/generate/internal common_name=local.lan ttl=8760h
-  when: create_root == "true"
+    cmd: kubectl exec vault-0 -n vault -- vault write pki_int/intermediate/generate/internal common_name="Homelab local.lan Intermediate Authority" ttl=43800h
+  when: create_csr == "true"
+
+- name: Set URL config and configure a role
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write pki/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl"
+      kubectl exec vault-0 -n vault -- vault write pki/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=72h
 
 - name: Create pki policy
   ansible.builtin.shell:
