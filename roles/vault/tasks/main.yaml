@@ -225,7 +225,7 @@
     - show_token
 
 - name: Closing comments
-  ansible.builtin.debconf:
+  ansible.builtin.debug:
     msg: |
       - "Log into {{ hostvar }} as ansible user"
       - "Run following scripts in order:"

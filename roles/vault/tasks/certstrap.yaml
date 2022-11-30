@@ -21,6 +21,8 @@
     cmd: |
       cd certstrap
       go build
+      # Copy vault.ca to out folder for client vault access
+      cp {{ dest }}vault.ca $HOME/certstrap/out
 
 - name: Create certstrap subfolders
   ansible.builtin.file:
