@@ -3,6 +3,8 @@
   ansible.builtin.pip:
     name: pip
     state: latest
+  become: true
+  become_method: sudo
 
 - name: Install cryptography python module
   ansible.builtin.pip:
