@@ -211,8 +211,8 @@
 - name: Generate Int CSR
   ansible.builtin.shell:
     cmd: |
-      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab Org" country="US" locality="Homelab" province="CA" > vault_int_csr
-      cat vault_int_csr | jq -r '.data.csr' > vault_int.csr
+      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab{{ suffix }} local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab{{ suffix }} Org" country="US" locality="Homelab" province="California" > vault_int{{ suffix }}_csr
+      cat vault_int{{ suffix }}_csr | jq -r '.data.csr' > vault_int{{ suffix }}.csr
 
 - name: Run certstrap tasks
   ansible.builtin.include_tasks: certstrap.yaml
@@ -240,4 +240,4 @@
       - ""
       - "Log into Vault UI using {{ root_token }}"
       - "  Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate"
-      - "  Paste in contents of Homelab_local.lan_Root_Int_CA.crt and Save"
+      - "  Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save"

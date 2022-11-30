@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd $HOME/certstrap
+certstrap sign \
+    --expires "5 years" \
+    --csr csr/vault_int{{ suffix }}.csr \
+    --cert out/Homelab_Int{{ suffix }}_CA.crt \
+    --intermediate \
+    --CA "Homelab local.lan Root CA" \
+    "Homelab{{ suffix }} local.lan Intermediate Authority"

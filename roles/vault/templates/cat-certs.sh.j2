@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd $HOME/certstrap
+cat out/Homelab_Int{{ suffix }}_CA.crt \
+    out/Homelab_local.lan_Root_CA.crt \
+    > out/Homelab_local.lan_Root_Int{{ suffix }}_CA.crt
+
+# cat certstrap/cacerts/Homelab_local.lan_Root_Int{{ suffix }}_CA.crt \
+#     HomeLab_local.lan_Root_CA.key \
+#     > certstrap/cacerts/Homelab_local.lan_Root_Int{{ suffix }}_CA.pem

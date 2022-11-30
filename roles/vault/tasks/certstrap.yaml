@@ -49,7 +49,7 @@
 
 - name: Copy csr to certstrap folder
   ansible.builtin.copy:
-    src: vault_int.csr
+    src: vault_int{{ suffix }}.csr
     dest: ./certstrap/csr
     mode: '0644'
     remote_src: true
