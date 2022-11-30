@@ -21,7 +21,15 @@
     cmd: |
       cd certstrap
       go build
-      mkdir csr cacerts
+
+- name: Create certstrap subfolders
+  ansible.builtin.file:
+    path: ./certstrap/{{ item }}
+    state: directory
+    mode: '0755'
+  loop:
+    - csr
+    - cacerts
 
 - name: Copy certstrap binary to bin folder
   ansible.builtin.copy:
