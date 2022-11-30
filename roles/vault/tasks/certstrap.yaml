@@ -23,11 +23,23 @@
       go build
       mkdir csr cacerts
 
+- name: Copy certstrap binary to bin folder
+  ansible.builtin.copy:
+    src: ./certstrap/certstrap
+    dest: /usr/local/bin/
+    remote_src: true
+  become: true
+  become_method: sudo
+
 - name: Copy scripts to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: ./
-  with_fileglob: "*.sh"
+    mode: 'u+x'
+  loop:
+    - certstrap-init.sh
+    - certstrap-sign-int.sh
+
 
 - name: Copy csr to certstrap folder
   ansible.builtin.copy:

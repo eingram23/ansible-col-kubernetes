@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cd $HOME/certstrap
 certstrap sign \
     --expires "5 years" \
     --csr csr/vault_int.csr \
