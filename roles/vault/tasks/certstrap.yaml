@@ -38,6 +38,15 @@
   become: true
   become_method: sudo
 
+- name: Create certstrap-sign-int.sh and cat-certs.sh on host
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: ./{{ item }}
+    mode: 'u+x'
+  loop:
+    - cat-certs.sh
+    - certstrap-sign-int.sh
+
 - name: Copy scripts to host
   ansible.builtin.copy:
     src: "{{ item }}"
@@ -45,7 +54,6 @@
     mode: 'u+x'
   loop:
     - certstrap-init.sh
-    - certstrap-sign-int.sh
 
 - name: Copy csr to certstrap folder
   ansible.builtin.copy:
