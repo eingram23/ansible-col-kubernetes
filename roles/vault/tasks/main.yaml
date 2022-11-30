@@ -230,9 +230,8 @@
   when: create_csr == "true"
 
 - name: Run certstrap tasks
-  ansible.builtin.include_tasks:
-    name: certstrap
-    
+  ansible.builtin.include_tasks: certstrap.yaml
+
 - name: Show root_token
   ansible.builtin.debug:
     var: root_token
