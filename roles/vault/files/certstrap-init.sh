@@ -8,5 +8,5 @@ certstrap init \
     --province "California" \
     --locality "Homelab" \
     --common-name "Homelab local.lan Root CA" \
-    --expires "10 years"
+    --expires "10 years" \
     --path-length 1
