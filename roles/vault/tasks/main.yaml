@@ -29,7 +29,10 @@
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
+  loop:
+    - pki-policy.sh
+    - vault-csr.conf
+    - vault-values.yaml
 
 - name: Create key for k8s to sign (for TLS Listener)
   community.crypto.openssl_privatekey:
@@ -226,6 +229,10 @@
     #     var: vault_int_csr
   when: create_csr == "true"
 
+- name: Run certstrap tasks
+  ansible.builtin.include_tasks:
+    name: certstrap
+    
 - name: Show root_token
   ansible.builtin.debug:
     var: root_token

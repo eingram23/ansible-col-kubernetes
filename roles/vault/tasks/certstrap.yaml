@@ -1,0 +1,37 @@
+- name: Install go
+  ansible.builtin.package:
+    name: go
+    state: present
+  become: true
+  become_method: sudo
+
+- name: Create certstrap folder
+  ansible.builtin.file:
+    path: certstrap
+    state: directory
+    mode: '0755'
+
+- name: Clone certstrap git
+  ansible.builtin.git:
+    repo: https://github.com/square/certstrap
+    dest: certstrap
+
+- name: Build certstrap
+  ansible.builtin.shell: 
+    cmd: |
+      cd certstrap
+      go build
+      mkdir csr cacerts
+
+- name: Copy scripts to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ./
+  with_fileglob: "*.sh"
+
+- name: Copy csr to certstrap folder
+  ansible.builtin.copy:
+    src: vault_int.csr
+    dest: ./certstrap/csr
+    mode: '0644'
+    remote_src: true
