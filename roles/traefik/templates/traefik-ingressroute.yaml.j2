@@ -6,6 +6,7 @@ metadata:
 spec:
   entryPoints:
     - web
+    - websecure
   routes:
     - match: Host(`traefik{{ suffix }}.local.lan`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
       kind: Rule
