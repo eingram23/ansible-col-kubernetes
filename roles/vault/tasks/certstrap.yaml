@@ -21,8 +21,6 @@
     cmd: |
       cd certstrap
       go build
-      # Copy vault.ca to out folder for client vault access
-      cp {{ dest }}vault.ca $HOME/certstrap/out
 
 - name: Create certstrap subfolders
   ansible.builtin.file:
@@ -31,12 +29,20 @@
     mode: '0755'
   loop:
     - csr
+    - out
+
+- name: Copy vault.ca to certstrap out folder
+  ansible.builtin.copy:
+    src: "{{ dest }}vault.ca"
+    dest: ./certstrap/out/vault{{ suffix }}.ca
+    mode: '0644'
 
 - name: Copy certstrap binary to bin folder
   ansible.builtin.copy:
     src: ./certstrap/certstrap
     dest: /usr/local/bin/
     remote_src: true
+    mode: 'u+x,g+x,o+x'
   become: true
   become_method: sudo
 

@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gitea-tls
+  namespace: kube-system
+spec:
+  secretName: gitea-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: vault-cluster-issuer
+  commonName: gitea{{ suffix }}.local.lan
+  dnsNames:
+  - gitea{{ suffix }}.local.lan
+  duration: 8760h

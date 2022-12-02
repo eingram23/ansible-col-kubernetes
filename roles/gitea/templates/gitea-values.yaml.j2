@@ -2,8 +2,8 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  http:
-    port: 80
+  https:
+    port: 443
     annotations:
       metallb.universe.tf/allow-shared-ip: gitea
     type: LoadBalancer
@@ -21,7 +21,7 @@ persistence:
   storageClass: longhorn-homelab
 
 postgresql:
-  enabled: false
+  enabled: true
 
 gitea:
   additionalConfigFromEnvs:
@@ -33,11 +33,14 @@ gitea:
   config:
     server:
       DOMAIN: gitea{{ suffix }}.local.lan
-    database:
-      DB_TYPE: postgres
-      HOST: postgres13.postgres.svc.cluster.local:5432
-      NAME: gitea
-      USER: gitea
+      PROTOCOL: https
+      CERT_FILE: /certs/tls.crt
+      KEY_FILE: /certs/tls.key
+    # database:
+    #   DB_TYPE: postgres
+    #   HOST: postgres13.postgres.svc.cluster.local:5432
+    #   NAME: gitea
+    #   USER: gitea
   admin:
     existingSecret: gitea-admin-secret
   metrics:
@@ -60,4 +63,11 @@ gitea:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 3
-
+extraVolumes:
+- name: gitea-tls
+  secret:
+    secretName: gitea-tls
+extraVolumeMounts:
+- name: gitea-tls
+  readOnly: true
+  mountPath: /certs
