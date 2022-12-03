@@ -13,20 +13,16 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create calibre-deployment.yaml manifest on host
+- name: Create calibre manifests on host
   ansible.builtin.template:
-    src: calibre-deployment.yaml.j2
-    dest: "{{ dest }}calibre-deployment.yaml"
-
-- name: Create calibre-ingressroute.yaml manifest on host
-  ansible.builtin.template:
-    src: calibre-ingressroute.yaml.j2
-    dest: "{{ dest }}calibre-ingressroute.yaml"
-
-- name: Create calibre ssl certificate 
-  ansible.builtin.template:
-    src: calibre-cert.yaml.j2
-    dest: "{{ dest }}calibre-cert.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - calibre-deployment.yaml
+    - calibre-ingressroute.yaml
+    - calibre-cert.yaml
+    - calibre-web-cert.yaml
 
 - name: Deploy calibre
   kubernetes.core.k8s:
@@ -40,3 +36,4 @@
     - calibre-middleware.yaml
     - calibre-ingressroute.yaml
     - calibre-cert.yaml
+    - calibre-web-cert.yaml
