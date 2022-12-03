@@ -16,7 +16,7 @@
 - name: Create calibre manifests on host
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ dest }}"
+    dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
     - calibre-deployment.yaml
