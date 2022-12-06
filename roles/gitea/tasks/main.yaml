@@ -57,7 +57,7 @@
     release_namespace: gitea
     create_namespace: true
     chart_ref: gitea-charts/gitea
-    chart_version: "{{ gitea_helm_ver }}"
+    chart_version: "{{ gitea_chart_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}gitea-values.yaml"

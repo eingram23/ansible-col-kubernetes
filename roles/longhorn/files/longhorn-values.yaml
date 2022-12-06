@@ -1,0 +1,3 @@
+defaultSettings:
+  backupTarget: s3://b2bucketname@us-west-001/
+  backupTargetCredentialSecret: longhorn-s3-secret

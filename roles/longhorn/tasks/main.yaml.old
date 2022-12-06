@@ -15,17 +15,17 @@
   ansible.builtin.pause:
     seconds: 20
 
-# - name: Download longhorn manifest
-#   ansible.builtin.get_url:
-#     url: "https://raw.githubusercontent.com/longhorn/longhorn/{{ longhorn_ver }}/deploy/longhorn.yaml"
-#     dest: "{{ dest }}{{ longhorn_manifest }}"
-#     mode: '0644'
+- name: Download longhorn manifest
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/longhorn/longhorn/{{ longhorn_ver }}/deploy/longhorn.yaml"
+    dest: "{{ dest }}{{ longhorn_manifest }}"
+    mode: '0644'
 
-# - name: Deploy longhorn deployment
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ longhorn_manifest }}"
-#     kubeconfig: "{{ kubeconfig }}"
+- name: Deploy longhorn deployment
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ longhorn_manifest }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Wait for metallb pods become ready
   shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
@@ -38,29 +38,12 @@
     name: longhorn-iscsi-installation
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Add longhorn chart repo
-  kubernetes.core.helm_repository:
-    name: longhorn
-    repo_url: "https://charts.longhorn.io"
-
-# - name: Delete default longhorn-frontend service so we can install new service with IngressRoute
-#   kubernetes.core.k8s:
-#     state: absent
-#     name: longhorn-frontend
-#     kind: service
-#     namespace: longhorn-system
-#     kubeconfig: "{{ kubeconfig }}"
-
-- name: Install longhorn chart from repo
-  kubernetes.core.helm:
-    release_name: longhorn
-    release_namespace: longhorn-system
-    create_namespace: true
-    chart_ref: longhorn/chart
-    chart_version: "{{ longhorn_chart_ver }}"
-    wait: true
-    update_repo_cache: true
-    values_files: "{{ dest }}longhorn-values.yaml"
+- name: Delete default longhorn-frontend service so we can install new service with IngressRoute
+  kubernetes.core.k8s:
+    state: absent
+    name: longhorn-frontend
+    kind: service
+    namespace: longhorn-system
     kubeconfig: "{{ kubeconfig }}"
 
 - name: Copy longhorn manifests to host
@@ -68,16 +51,15 @@
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
-
-- name: Create templated manifests on host
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "{{ dest }}{{ item }}"
-    mode: '0644'
   loop:
-    - longhorn-ingressroute.yaml
-    - longhorn-s3-secret.yaml
+    - longhorn-ui.yaml
+    - longhorn-storageclass.yaml
+
+- name: Create longhorn ingressroute manifest on host
+  ansible.builtin.template:
+    src: longhorn-ingressroute.yaml.j2
+    dest: "{{ dest }}longhorn-ingressroute.yaml"
+    mode: '0644'
 
 - name: Deploy longhorn UI, ingressroute and storageclass
   kubernetes.core.k8s:
@@ -85,8 +67,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    # - longhorn-ui.yaml
-    - longhorn-s3-secret.yaml
+    - longhorn-ui.yaml
     - longhorn-ingressroute.yaml
     - longhorn-storageclass.yaml
 
