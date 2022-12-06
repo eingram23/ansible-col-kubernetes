@@ -57,7 +57,7 @@
     release_namespace: longhorn-system
     create_namespace: true
     chart_ref: longhorn/chart
-    chart_version: "{{ longhorn_chart_ver }}"
+    chart_version: "{{ longhorn_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}longhorn-values.yaml"
