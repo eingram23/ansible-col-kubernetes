@@ -38,6 +38,22 @@
     name: longhorn-iscsi-installation
     kubeconfig: "{{ kubeconfig }}"
 
+- name: Copy longhorn manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create templated manifests on host
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - longhorn-ingressroute.yaml
+    # - longhorn-s3-secret.yaml
+    
 - name: Add longhorn chart repo
   kubernetes.core.helm_repository:
     name: longhorn
@@ -62,22 +78,6 @@
     update_repo_cache: true
     values_files: "{{ dest }}longhorn-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
-
-- name: Copy longhorn manifests to host
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ dest }}"
-    mode: '0644'
-  with_fileglob: "*"
-
-- name: Create templated manifests on host
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "{{ dest }}{{ item }}"
-    mode: '0644'
-  loop:
-    - longhorn-ingressroute.yaml
-    # - longhorn-s3-secret.yaml
 
 - name: Deploy longhorn UI, ingressroute and storageclass
   kubernetes.core.k8s:
