@@ -27,8 +27,8 @@
 #     src: "{{ dest }}{{ longhorn_manifest }}"
 #     kubeconfig: "{{ kubeconfig }}"
 
-- name: Wait for metallb pods become ready
-  shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
+# - name: Wait for metallb pods become ready
+#   shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
 
 - name: Remove longhorn-iscsi-install DaemonSet
   kubernetes.core.k8s:
@@ -77,7 +77,7 @@
     mode: '0644'
   loop:
     - longhorn-ingressroute.yaml
-    - longhorn-s3-secret.yaml
+    # - longhorn-s3-secret.yaml
 
 - name: Deploy longhorn UI, ingressroute and storageclass
   kubernetes.core.k8s:
@@ -86,7 +86,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     # - longhorn-ui.yaml
-    - longhorn-s3-secret.yaml
+    # - longhorn-s3-secret.yaml
     - longhorn-ingressroute.yaml
     - longhorn-storageclass.yaml
 
