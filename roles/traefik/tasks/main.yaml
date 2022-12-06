@@ -1,13 +1,11 @@
-- name: Copy traefik dashbard ingressroute manifest to host
-  ansible.builtin.copy:
-    src: traefik-ingressroute.yaml
-    dest: "{{ dest }}traefik-ingressroute.yaml"
-    mode: '0644'
-
-- name: Create traefik ssl certificate 
+- name: Create traefik manifests
   ansible.builtin.template:
-    src: traefik-cert.yaml.j2
-    dest: "{{ dest }}traefik-cert.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - traefik-ingressroute.yaml
+    - traefik-cert.yaml
 
 - name: Deploy traefik manifests
   kubernetes.core.k8s:
