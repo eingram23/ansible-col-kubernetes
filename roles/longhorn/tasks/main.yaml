@@ -53,7 +53,7 @@
   loop:
     - longhorn-ingressroute.yaml
     # - longhorn-s3-secret.yaml
-    
+
 - name: Add longhorn chart repo
   kubernetes.core.helm_repository:
     name: longhorn
@@ -73,7 +73,8 @@
     release_namespace: longhorn-system
     create_namespace: true
     chart_ref: longhorn/longhorn
-    chart_version: "{{ longhorn_ver }}"
+    # chart_version: "{{ longhorn_ver }}"
+    chart_version: master
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}longhorn-values.yaml"
