@@ -35,6 +35,7 @@
   ansible.builtin.copy:
     src: "{{ dest }}vault.ca"
     dest: ./certstrap/out/vault{{ suffix }}.ca
+    remote_src: true
     mode: '0644'
 
 - name: Copy certstrap binary to bin folder
