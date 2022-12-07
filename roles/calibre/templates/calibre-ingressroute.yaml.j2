@@ -21,10 +21,5 @@ spec:
       port: 8081
     middlewares:
     - name: calibre-stripprefix  
-  - match: Host(`calibre-web{{ suffix }}.local.lan`) 
-    kind: Rule
-    services:
-    - name: calibre
-      port: 8083
   tls:
     secretName: calibre-tls
