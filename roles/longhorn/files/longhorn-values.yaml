@@ -1,4 +1,4 @@
 defaultSettings:
   # backupTarget: s3://b2bucketname@us-west-001/
-  backupTarget: nfs://homenas.local.lan:/mnt/pool0/longhorn_backups
+  backupTarget: nfs://homenas.local.lan:/longhorn_backups
   # backupTargetCredentialSecret: longhorn-s3-secret

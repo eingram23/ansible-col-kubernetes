@@ -231,11 +231,12 @@
     msg: |
       Log into {{ hostvar }} as ansible user
       Run following scripts in order:
-        ./certstrap-init.sh ### Only if need to create root CA
+        ./certstrap-init.sh ### Only if need to create root CA,
+          otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
         ./certstrap-sign-int.sh
         ./cat-certs.sh
 
-      From workstation:
+      To create pfx:
         cd ~/certs
         scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
         openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
