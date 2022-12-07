@@ -6,6 +6,16 @@ provisioner: driver.longhorn.io
 allowVolumeExpansion: true
 parameters:
   numberOfReplicas: "2"
-  staleReplicaTimeout: "60" # minutes
-  fromBackup: ""
+  staleReplicaTimeout: "30" # minutes
+  fromBackup: 
+  recurringJobSelector: '[
+    {
+      "name":"snap",
+      "isGroup":true,
+    },
+    {
+      "name":"backup",
+      "isGroup":true,
+    }
+  ]'
   fsType: "xfs"
