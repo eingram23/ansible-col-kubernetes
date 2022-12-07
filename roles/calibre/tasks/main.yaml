@@ -21,6 +21,7 @@
   loop:
     - calibre-deployment.yaml
     - calibre-ingressroute.yaml
+    - calibre-web-ingressroute.yaml
     - calibre-cert.yaml
     - calibre-web-cert.yaml
 
@@ -35,5 +36,6 @@
     - calibre-deployment.yaml
     - calibre-middleware.yaml
     - calibre-ingressroute.yaml
+    - calibre-web-ingressroute.yaml
     - calibre-cert.yaml
     - calibre-web-cert.yaml
