@@ -43,6 +43,7 @@ spec:
               mountPath: /unifi/data
             - name: unifi-cert
               mountPath: /unifi/cert
+              readOnly: false
       securityContext:
         fsGroup: 999
         runAsNonRoot: true
