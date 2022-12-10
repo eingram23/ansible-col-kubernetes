@@ -11,7 +11,7 @@ parameters:
   recurringJobSelector: '[
     {
       "name":"backup",
-      "isGroup":true,
+      "isGroup":true
     }
   ]'
   fsType: "xfs"
