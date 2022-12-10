@@ -10,3 +10,18 @@ spec:
   resources:
     requests:
       storage: 10Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: unifi-cert-pvc
+  namespace: unifi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-homelab-backup
+  resources:
+    requests:
+      storage: 10Gi

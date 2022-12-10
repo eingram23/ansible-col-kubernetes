@@ -43,7 +43,15 @@ spec:
               mountPath: /unifi/data
             - name: unifi-cert
               mountPath: /unifi/cert
-              readOnly: false
+      initContainers:
+        - name: cert-install
+          image: busybox
+          command: ["cp", "/tls/*", /cert]
+          volumeMounts:
+          - name: unifi-cert
+            mountPath: /cert
+          - name: unifi-tls
+            mountPath: /tls
       securityContext:
         fsGroup: 999
         runAsNonRoot: true
@@ -54,6 +62,9 @@ spec:
           persistentVolumeClaim:
             claimName: unifi-data-pvc
         - name: unifi-cert
+          persistentVolumeClaim:
+            claimName: unifi-cert-pvc
+        - name: unifi-tls
           secret:
             secretName: unifi-tls
             optional: false
