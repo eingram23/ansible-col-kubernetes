@@ -46,7 +46,7 @@ spec:
       initContainers:
         - name: cert-install
           image: busybox
-          command: ["cp", "/tls/*", /cert]
+          command: ["cp", "/tls/*", "/cert"]
           volumeMounts:
           - name: unifi-cert
             mountPath: /cert
