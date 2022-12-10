@@ -46,8 +46,10 @@ spec:
       initContainers:
         - name: cert-install
           image: busybox
-          command: ['sh', '-c', 'cp /tls/* /cert']
+          command: ['sh', '-c', 'chown -R 999:999 /data && chown -R 999:999 /cert && cp /tls/* /cert']
           volumeMounts:
+          - name: unifi-data
+            mountPath: /data
           - name: unifi-cert
             mountPath: /cert
           - name: unifi-tls
