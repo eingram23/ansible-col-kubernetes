@@ -21,6 +21,10 @@ spec:
           env:
             - name: TZ
               value: "America/Los_Angeles"
+            - name: CERTNAME
+              value: "tls.crt"
+            - name: CERT_PRIVATE_NAME
+              value: "tls.key"
           ports:
             - containerPort: 3478
               protocol: UDP
@@ -36,8 +40,15 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: unifi-data
-              mountPath: /unifi
+              mountPath: /unifi/data
+            - name: unifi-cert
+              mountPath: /unifi/cert
+              readOnly: true
       volumes:
         - name: unifi-data
           persistentVolumeClaim:
             claimName: unifi-data-pvc
+        - name: unifi-cert
+          secret:
+            secretName: unifi-tls
+            optional: false

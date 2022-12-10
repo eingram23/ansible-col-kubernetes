@@ -13,20 +13,14 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create unifi-deployment.yaml manifest on host
+- name: Create template manifests on host
   ansible.builtin.template:
-    src: unifi-deployment.yaml.j2
-    dest: "{{ dest }}unifi-deployment.yaml"
-
-- name: Create unifi-service.yaml manifest on host
-  ansible.builtin.template:
-    src: unifi-service.yaml.j2
-    dest: "{{ dest }}unifi-service.yaml"
-
-# - name: Create unifi-ingressroute.yaml manifest on host
-#   ansible.builtin.template:
-#     src: unifi-ingressroute.yaml.j2
-#     dest: "{{ dest }}unifi-ingressroute.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - unifi-cert.yaml
+    - unifi-deployment.yaml
 
 - name: Deploy unifi
   kubernetes.core.k8s:
@@ -34,7 +28,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - unifi-cert.yaml
     - unifi-pvc.yaml
     - unifi-service.yaml
     - unifi-deployment.yaml
-
