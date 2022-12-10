@@ -47,6 +47,8 @@ spec:
         - name: vol-data-perm-fix
           image: busybox
           command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert']
+          securityContext:
+            runAsUser: 0
           volumeMounts:
           - name: unifi-data
             mountPath: /data
