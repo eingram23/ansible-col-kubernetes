@@ -49,6 +49,7 @@ spec:
           command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert']
           securityContext:
             runAsUser: 0
+            runAsNonRoot: false
           volumeMounts:
           - name: unifi-data
             mountPath: /data
