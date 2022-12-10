@@ -43,7 +43,6 @@ spec:
               mountPath: /unifi/data
             - name: unifi-cert
               mountPath: /unifi/cert
-              readOnly: true
       volumes:
         - name: unifi-data
           persistentVolumeClaim:
