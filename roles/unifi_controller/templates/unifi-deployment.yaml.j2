@@ -43,6 +43,11 @@ spec:
               mountPath: /unifi/data
             - name: unifi-cert
               mountPath: /unifi/cert
+      securityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
       volumes:
         - name: unifi-data
           persistentVolumeClaim:
