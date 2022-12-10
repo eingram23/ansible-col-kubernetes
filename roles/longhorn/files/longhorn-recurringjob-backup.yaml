@@ -4,11 +4,11 @@ metadata:
   name: backup-1
   namespace: longhorn-system
 spec:
-  cron: "* * * * *"
+  cron: "0 0 * * *"
   task: "backup"
   groups:
   - backup
-  retain: 1
+  retain: 5
   concurrency: 2
   # labels:
   #   label/1: a

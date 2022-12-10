@@ -21,7 +21,7 @@ server:
   dataStorage:
     enabled: true
     size: 10Gi
-    storageClass: longhorn-homelab
+    storageClass: longhorn-homelab-backup
     mountPath: "/vault/data"
   volumes:
     - name: userconfig-vault-server-tls
