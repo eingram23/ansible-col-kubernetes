@@ -57,7 +57,7 @@
     dest: "{{ dest }}vault-cluster-issuer.yaml"
     mode: '0644'
 
-- name: Deploy issuer and secret
+- name: Deploy vault issuer and secret
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
@@ -65,3 +65,25 @@
   loop:
     - issuer-secret.yaml
     - vault-cluster-issuer.yaml
+
+- name: Create gcp certmanager secret json file
+  ansible.builtin.template:
+    src: gcp-certmanager-creds.json.j2
+    dest: gcp-certmanager-creds.json
+    mode: '0644'
+
+- name: Create secret from json file
+  ansible.builtin.shell: kubectl create secret generic gcp_certmanager --from-file=gcp-certmanager-creds.json
+
+- name: Delete secret json file
+  ansible.builtin.file:
+    src: gcp-certmanager-creds.json
+    state: absent
+
+- name: Deploy acme issuer
+  kubernetes.core.k8s:
+    src: "{{ dest }}acme-cluster-issuer.yaml"
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+    

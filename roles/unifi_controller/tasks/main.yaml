@@ -28,7 +28,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - unifi-cert.yaml
+    - unifi-cert-acme.yaml
     - unifi-pvc.yaml
     - unifi-service.yaml
     - unifi-deployment.yaml
