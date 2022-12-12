@@ -19,5 +19,5 @@ spec:
           project: yc-proj-srv1
           # This is the secret used to access the service account
           serviceAccountSecretRef:
-            name: gcp_certmanager
-            key: gcp_certmanager.json
+            name: gcp-certmanager
+            key: gcp-certmanager.json
