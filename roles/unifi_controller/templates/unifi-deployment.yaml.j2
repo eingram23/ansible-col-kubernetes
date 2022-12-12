@@ -25,6 +25,8 @@ spec:
               value: "tls.crt"
             - name: CERT_PRIVATE_NAME
               value: "tls.key"
+            - name: CERT_IS_CHAIN
+              value: "true"
           ports:
             - containerPort: 3478
               protocol: UDP
