@@ -84,7 +84,7 @@
     --from-file=/var/tmp/configs/prometheus/prometheus.yml
     --dry-run=client
     --namespace=monitoring
-    -oyaml >
+    -o yaml >
     {{ dest }}prom-scrape-servers.yaml
   tags:
     - always
