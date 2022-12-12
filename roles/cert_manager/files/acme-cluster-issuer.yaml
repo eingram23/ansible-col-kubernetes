@@ -20,4 +20,4 @@ spec:
           # This is the secret used to access the service account
           serviceAccountSecretRef:
             name: gcp-certmanager
-            key: gcp-certmanager.json
+            key: gcp-certmanager-creds.json
