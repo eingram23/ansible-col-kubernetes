@@ -13,7 +13,7 @@ spec:
     - selector:
         dnsZones:
           - "ycdisp.net"
-    - dns01:
+      dns01:
         cloudDNS:
           # The ID of the GCP project
           project: yc-proj-srv1
