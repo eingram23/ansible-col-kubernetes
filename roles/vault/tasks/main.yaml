@@ -98,7 +98,7 @@
       --from-file=tls.crt={{ dest }}vault.crt
       --from-file=ca.crt={{ dest }}vault.ca
       -o yaml | kubectl apply -f -
-      
+
 - name: Create vault ingressroutetcp
   ansible.builtin.template:
     src: vault-ingressroutetcp.yaml.j2

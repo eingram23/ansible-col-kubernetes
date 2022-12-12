@@ -80,7 +80,7 @@
       --save-config
       --dry-run=client
       --from-file=gcp-certmanager-creds.json
-      --o yaml | kubectl apply -f -
+      -o yaml | kubectl apply -f -
 
 - name: Delete secret json file
   ansible.builtin.file:
