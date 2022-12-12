@@ -46,7 +46,8 @@ spec:
       initContainers:
         - name: vol-data-perm-fix
           image: busybox
-          command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert && cat /cert/tls.crt /cert/ca.crt > /cert/chain.pem']
+          # command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert && cat /cert/tls.crt /cert/ca.crt > /cert/chain.pem']
+          command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert']
           securityContext:
             runAsUser: 0
             runAsNonRoot: false
