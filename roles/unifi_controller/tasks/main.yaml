@@ -19,7 +19,7 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - unifi-cert.yaml
+    - unifi-cert-acme.yaml
     - unifi-deployment.yaml
 
 - name: Deploy unifi
