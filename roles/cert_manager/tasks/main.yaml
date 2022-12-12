@@ -73,7 +73,7 @@
     mode: '0644'
 
 - name: Create secret from json file
-  ansible.builtin.shell: kubectl create secret generic gcp_certmanager --namespace=cert-manager --from-file=gcp-certmanager-creds.json
+  ansible.builtin.shell: kubectl create secret generic gcp-certmanager --namespace=cert-manager --from-file=gcp-certmanager-creds.json
 
 - name: Delete secret json file
   ansible.builtin.file:
