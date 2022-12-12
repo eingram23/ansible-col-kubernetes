@@ -77,7 +77,7 @@
 
 - name: Delete secret json file
   ansible.builtin.file:
-    src: gcp-certmanager-creds.json
+    path: gcp-certmanager-creds.json
     state: absent
 
 - name: Deploy acme issuer
