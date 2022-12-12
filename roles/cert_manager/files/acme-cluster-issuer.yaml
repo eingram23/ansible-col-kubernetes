@@ -16,7 +16,7 @@ spec:
       dns01:
         cloudDNS:
           # The ID of the GCP project
-          project: yc-proj-srv1
+          project: proj-yc-srv1
           # This is the secret used to access the service account
           serviceAccountSecretRef:
             name: gcp-certmanager
