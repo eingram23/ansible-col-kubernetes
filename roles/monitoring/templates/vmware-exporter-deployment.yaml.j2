@@ -24,7 +24,7 @@ spec:
             - name: VSPHERE_PASSWORD
               value: "{{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }}"
             - name: VSPHERE_HOST
-              value: "vcsa.local.lan"
+              value: "vcsa-1.local.lan"
             - name: VSPHERE_IGNORE_SSL
               value: "True"
             - name: VSPHERE_SPECS_SIZE
