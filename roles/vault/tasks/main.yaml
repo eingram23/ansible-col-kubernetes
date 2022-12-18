@@ -236,6 +236,7 @@
   tags:
     - never
     - show_token
+    - unseal
 
 - name: Closing comments
   ansible.builtin.debug:
