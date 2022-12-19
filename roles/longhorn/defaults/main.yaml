@@ -1,5 +1,5 @@
 dest: "/opt/kubernetes/defs/"
 kubeconfig: "/etc/rancher/k3s/k3s.yaml"
-suffix: "{{ env | default([]) }}"
+suffix: "{{ env | default() }}"
 access_key_id: "{{ lookup('hashi_vault', 'secret=secret/b2/ycdisp-s3-k8s:access_key_id') }}"
 secret_access_key: "{{ lookup('hashi_vault', 'secret=secret/b2/ycdisp-s3-k8s:secret_access_key') }}"

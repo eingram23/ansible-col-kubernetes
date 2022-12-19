@@ -79,7 +79,7 @@
     values_files: "{{ dest }}longhorn-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Deploy longhorn UI, ingressroute and storageclass
+- name: Deploy ingressroute and storageclass
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
@@ -89,8 +89,10 @@
     # - longhorn-s3-secret.yaml
     - longhorn-ingressroute.yaml
     - longhorn-storageclass.yaml
+    - longhorn-storageclass-backup.yaml
+    - longhorn-recurringjob-backup.yaml
 
 - name: Make longhorn the default storage class
   ansible.builtin.shell: |
     kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-    kubectl patch storageclass longhorn -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+    kubectl patch storageclass longhorn-homelab -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
