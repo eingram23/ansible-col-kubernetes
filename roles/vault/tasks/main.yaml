@@ -248,7 +248,7 @@
         ./certstrap-sign-int.sh
         ./cat-certs.sh
 
-      To create pfx:
+      To create pfx (if needed):
         cd ~/certs
         scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
         openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
