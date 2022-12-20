@@ -8,43 +8,6 @@ metadata:
 data:
   climate.json: |-
     {
-      "__inputs": [
-        {
-          "name": "DS_INFLUXDB",
-          "label": "InfluxDB",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "influxdb",
-          "pluginName": "InfluxDB"
-        }
-      ],
-      "__elements": {},
-      "__requires": [
-        {
-          "type": "grafana",
-          "id": "grafana",
-          "name": "Grafana",
-          "version": "9.1.6"
-        },
-        {
-          "type": "datasource",
-          "id": "influxdb",
-          "name": "InfluxDB",
-          "version": "1.0.0"
-        },
-        {
-          "type": "panel",
-          "id": "state-timeline",
-          "name": "State timeline",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "timeseries",
-          "name": "Time series",
-          "version": ""
-        }
-      ],
       "annotations": {
         "list": [
           {
@@ -70,14 +33,14 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": null,
+      "id": 1,
       "links": [],
       "liveNow": false,
       "panels": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "QqbC1PMMk"
           },
           "fieldConfig": {
             "defaults": {
@@ -155,7 +118,7 @@ data:
             {
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "query": "SELECT distinct(\"value\") FROM \"state\" WHERE (\"entity_id\" = 'main_floor_hvac_cooling') AND $timeFilter GROUP BY time($__interval) fill(previous)",
               "rawQuery": true,
@@ -165,7 +128,7 @@ data:
             {
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "hide": false,
               "query": "SELECT distinct(\"value\") FROM \"state\" WHERE (\"entity_id\" = 'main_floor_hvac_heating') AND $timeFilter GROUP BY time($__interval) fill(previous)",
@@ -180,7 +143,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "QqbC1PMMk"
           },
           "fieldConfig": {
             "defaults": {
@@ -258,7 +221,7 @@ data:
               "alias": "",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -306,7 +269,7 @@ data:
               "alias": "",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -358,7 +321,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "QqbC1PMMk"
           },
           "fieldConfig": {
             "defaults": {
@@ -438,7 +401,7 @@ data:
               "alias": "Main Floor",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -485,7 +448,7 @@ data:
               "alias": "Upstairs",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -536,7 +499,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "QqbC1PMMk"
           },
           "fieldConfig": {
             "defaults": {
@@ -653,7 +616,7 @@ data:
               "alias": "Suite",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -700,7 +663,7 @@ data:
               "alias": "Kitchen",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -747,7 +710,7 @@ data:
               "alias": "HVAC Heating",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -794,7 +757,7 @@ data:
               "alias": "Family Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -842,7 +805,7 @@ data:
               "alias": "Living Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -893,7 +856,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
+            "uid": "QqbC1PMMk"
           },
           "fieldConfig": {
             "defaults": {
@@ -1010,7 +973,7 @@ data:
               "alias": "Bo's Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -1057,7 +1020,7 @@ data:
               "alias": "Charlize's Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -1104,7 +1067,7 @@ data:
               "alias": "Office",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -1151,7 +1114,7 @@ data:
               "alias": "Master Bedroom",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
@@ -1198,7 +1161,7 @@ data:
               "alias": "HVAC Heating",
               "datasource": {
                 "type": "influxdb",
-                "uid": "${DS_INFLUXDB}"
+                "uid": "QqbC1PMMk"
               },
               "groupBy": [
                 {
