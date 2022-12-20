@@ -193,12 +193,12 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - graf-dash-cm-climate.yaml
-    # - graf-dash-cm-energy.yaml
-    # - graf-dash-cm-windows.yaml
-    # - graf-dash-cm-node-exporter.yaml
-    # - graf-dash-cm-vmware.yaml
-    # - graf-dash-cm-kube-state.yaml
-    # - graf-dash-cm-longhorn.yaml
+    - graf-dash-cm-energy.yaml
+    - graf-dash-cm-windows.yaml
+    - graf-dash-cm-node-exporter.yaml
+    - graf-dash-cm-vmware.yaml
+    - graf-dash-cm-kube-state.yaml
+    - graf-dash-cm-longhorn.yaml
   tags: grafana
 
 - name: Closing comments
