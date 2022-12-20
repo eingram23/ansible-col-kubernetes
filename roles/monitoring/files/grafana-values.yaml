@@ -512,6 +512,7 @@ datasources:
       access: proxy
       isDefault: true
       editable: true
+      uid: prom
     - name: InfluxDB
       type: influxdb
       url: http://homeassistant.local.lan:8086
@@ -519,6 +520,7 @@ datasources:
       user: grafana
       database: grafana
       editable: true
+      uid: influx
 
 
 ## Configure grafana alerting (can be templated)

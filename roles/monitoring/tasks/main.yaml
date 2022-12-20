@@ -192,7 +192,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - graf-dash-cm-climate.yaml
+    # - graf-dash-cm-climate.yaml
     # - graf-dash-cm-energy.yaml
     # - graf-dash-cm-windows.yaml
     # - graf-dash-cm-node-exporter.yaml
