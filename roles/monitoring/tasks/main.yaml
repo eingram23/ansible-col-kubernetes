@@ -197,7 +197,7 @@
     # - graf-dash-cm-windows.yaml
     # - graf-dash-cm-node-exporter.yaml
     # - graf-dash-cm-vmware.yaml
-    # - graf-dash-cm-k3s.yaml
+    # - graf-dash-cm-kube-state.yaml
     # - graf-dash-cm-longhorn.yaml
   tags: grafana
 

@@ -8,55 +8,6 @@ metadata:
 data:
   vmware.json: |-
     {
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "prometheus",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
-      "__elements": {},
-      "__requires": [
-        {
-          "type": "panel",
-          "id": "bargauge",
-          "name": "Bar gauge",
-          "version": ""
-        },
-        {
-          "type": "grafana",
-          "id": "grafana",
-          "name": "Grafana",
-          "version": "9.2.5"
-        },
-        {
-          "type": "panel",
-          "id": "graph",
-          "name": "Graph (old)",
-          "version": ""
-        },
-        {
-          "type": "datasource",
-          "id": "prometheus",
-          "name": "Prometheus",
-          "version": "1.0.0"
-        },
-        {
-          "type": "panel",
-          "id": "stat",
-          "name": "Stat",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "table-old",
-          "name": "Table (old)",
-          "version": ""
-        }
-      ],
       "annotations": {
         "list": [
           {
@@ -86,7 +37,7 @@ data:
       "fiscalYearStartMonth": 0,
       "gnetId": 11243,
       "graphTooltip": 0,
-      "id": null,
+      "id": 10,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -94,7 +45,7 @@ data:
           "collapsed": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "prom"
           },
           "gridPos": {
             "h": 1,
@@ -108,7 +59,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "prom"
               },
               "refId": "A"
             }
@@ -119,7 +70,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Count of virtual machines that are currently powered on.",
           "fieldConfig": {
@@ -183,7 +134,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "count(vmware_vm_power_state > 0)",
               "instant": true,
@@ -198,7 +149,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Average virtual machine uptime (time powered on).",
           "fieldConfig": {
@@ -262,7 +213,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "avg(avg without (instance)(vmware_vm_boot_timestamp_seconds))",
               "instant": true,
@@ -276,7 +227,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Average number of virtual CPUs assigned to each VM.",
           "fieldConfig": {
@@ -340,7 +291,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "sum(sum_over_time(vmware_vm_num_cpu[1m])) / sum(count_over_time(vmware_vm_num_cpu[1m]))",
               "refId": "A"
@@ -353,7 +304,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Total number of snapshots across all virtual machines.",
           "fieldConfig": {
@@ -417,7 +368,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "sum(vmware_vm_snapshots)",
               "instant": true,
@@ -431,7 +382,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Average uptime of all hosts.",
           "fieldConfig": {
@@ -495,7 +446,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "avg(vmware_host_boot_timestamp_seconds)",
               "instant": true,
@@ -511,7 +462,7 @@ data:
           "columns": [],
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Virtual machines per datastore when the datastore has at least 1 VM in it.",
           "fontSize": "100%",
@@ -589,7 +540,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "sum without(job,instance)(vmware_datastore_vms > 0)",
               "format": "table",
@@ -607,7 +558,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Count of virtual machines that are powered off currently.",
           "fieldConfig": {
@@ -671,7 +622,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "count(vmware_vm_power_state == 0)",
               "refId": "A"
@@ -684,7 +635,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Total count of virtual machines, regardless of power state.",
           "fieldConfig": {
@@ -748,7 +699,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "count(vmware_vm_power_state)",
               "refId": "A"
@@ -761,7 +712,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Amount of RAM assigned to each VM, on average.",
           "fieldConfig": {
@@ -825,7 +776,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "sum(sum_over_time(vmware_vm_memory_max[1m])) / sum(count_over_time(vmware_vm_memory_max[1m]))",
               "refId": "A"
@@ -838,7 +789,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Average age of all snapshots.",
           "fieldConfig": {
@@ -902,7 +853,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "avg(vmware_vm_snapshot_timestamp_seconds)",
               "instant": true,
@@ -916,7 +867,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Average number of CPU cores per host.",
           "fieldConfig": {
@@ -980,7 +931,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "avg(vmware_host_num_cpu)",
               "instant": true,
@@ -995,7 +946,7 @@ data:
           "collapsed": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "prom"
           },
           "gridPos": {
             "h": 1,
@@ -1009,7 +960,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "prom"
               },
               "refId": "A"
             }
@@ -1024,7 +975,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Percentage of host CPU consumed over time.",
           "fieldConfig": {
@@ -1077,7 +1028,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "(vmware_host_cpu_usage{host_name=~\"$host\"} / vmware_host_cpu_max) * 100",
               "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}",
@@ -1137,7 +1088,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Percentage of datastore usage.",
           "fieldConfig": {
@@ -1192,7 +1143,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "((vmware_datastore_capacity_size{ds_name=~\"$ds\"} - vmware_datastore_freespace_size) / vmware_datastore_capacity_size) * 100",
               "instant": false,
@@ -1211,7 +1162,7 @@ data:
           "dashes": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Percentage of memory consumed on each host currently.",
           "fieldConfig": {
@@ -1263,7 +1214,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "(vmware_host_memory_usage{host_name=~\"$host\"} / vmware_host_memory_max) * 100",
               "instant": false,
@@ -1324,7 +1275,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prom"
           },
           "description": "Percentage of space provisioned, but not used, within each datastore.",
           "fieldConfig": {
@@ -1379,7 +1330,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "expr": "(vmware_datastore_provisoned_size{ds_name=~\"$ds\"} / vmware_datastore_capacity_size) * 100",
               "legendFormat": "{{ dc_name }}/{{ ds_name }}",
@@ -1394,7 +1345,7 @@ data:
           "collapsed": true,
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "prom"
           },
           "gridPos": {
             "h": 1,
@@ -1411,7 +1362,7 @@ data:
               "dashes": false,
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "description": "CPU usage per virtual machine.",
               "fill": 0,
@@ -1462,7 +1413,7 @@ data:
                 {
                   "datasource": {
                     "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
+                    "uid": "prom"
                   },
                   "expr": "vmware_vm_cpu_demand_average{vm_name=~\"$vm\"} * 1000000",
                   "instant": false,
@@ -1510,7 +1461,7 @@ data:
               "dashes": false,
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "description": "Memory usage of each virtual machine.",
               "fill": 1,
@@ -1553,7 +1504,7 @@ data:
                 {
                   "datasource": {
                     "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
+                    "uid": "prom"
                   },
                   "expr": "vmware_vm_mem_consumed_average{vm_name=~\"$vm\"}",
                   "hide": false,
@@ -1564,7 +1515,7 @@ data:
                 {
                   "datasource": {
                     "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
+                    "uid": "prom"
                   },
                   "expr": "vmware_vm_mem_active_average{vm_name=~\"$vm\"}",
                   "format": "time_series",
@@ -1616,7 +1567,7 @@ data:
               "dashes": false,
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "description": "Maximum latency experienced by at least one virtual disk of each virtual machine.",
               "fill": 0,
@@ -1659,7 +1610,7 @@ data:
                 {
                   "datasource": {
                     "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
+                    "uid": "prom"
                   },
                   "expr": "vmware_vm_disk_maxTotalLatency_latest{vm_name=~\"$vm\"}",
                   "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
@@ -1722,7 +1673,7 @@ data:
               "dashes": false,
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "prom"
               },
               "description": "Amount of swap each virtual machine is using.",
               "fill": 0,
@@ -1767,7 +1718,7 @@ data:
                 {
                   "datasource": {
                     "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
+                    "uid": "prom"
                   },
                   "expr": "vmware_vm_mem_swapped_average{vm_name=~\"$vm\"}",
                   "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
@@ -1829,7 +1780,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "prom"
               },
               "refId": "A"
             }
@@ -1845,10 +1796,14 @@ data:
       "templating": {
         "list": [
           {
-            "current": {},
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "prom"
             },
             "definition": "label_values(vmware_host_connection_state, dc_name)",
             "hide": 0,
@@ -1871,10 +1826,18 @@ data:
             "useTags": false
           },
           {
-            "current": {},
+            "current": {
+              "selected": true,
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "prom"
             },
             "definition": "label_values(vmware_host_connection_state, host_name)",
             "hide": 0,
@@ -1898,10 +1861,14 @@ data:
           },
           {
             "allValue": "",
-            "current": {},
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "prom"
             },
             "definition": "label_values(vmware_vm_power_state, vm_name)",
             "hide": 0,
@@ -1924,10 +1891,14 @@ data:
             "useTags": false
           },
           {
-            "current": {},
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "prom"
             },
             "definition": "label_values(vmware_datastore_capacity_size, ds_name)",
             "hide": 0,
