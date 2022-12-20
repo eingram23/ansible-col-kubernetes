@@ -33,14 +33,14 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 1,
+      "id": 2,
       "links": [],
       "liveNow": false,
       "panels": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "QqbC1PMMk"
+            "uid": "influx"
           },
           "fieldConfig": {
             "defaults": {
@@ -118,7 +118,7 @@ data:
             {
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "query": "SELECT distinct(\"value\") FROM \"state\" WHERE (\"entity_id\" = 'main_floor_hvac_cooling') AND $timeFilter GROUP BY time($__interval) fill(previous)",
               "rawQuery": true,
@@ -128,7 +128,7 @@ data:
             {
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "hide": false,
               "query": "SELECT distinct(\"value\") FROM \"state\" WHERE (\"entity_id\" = 'main_floor_hvac_heating') AND $timeFilter GROUP BY time($__interval) fill(previous)",
@@ -143,7 +143,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "QqbC1PMMk"
+            "uid": "influx"
           },
           "fieldConfig": {
             "defaults": {
@@ -221,7 +221,7 @@ data:
               "alias": "",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -269,7 +269,7 @@ data:
               "alias": "",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -321,7 +321,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "QqbC1PMMk"
+            "uid": "influx"
           },
           "fieldConfig": {
             "defaults": {
@@ -401,7 +401,7 @@ data:
               "alias": "Main Floor",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -448,7 +448,7 @@ data:
               "alias": "Upstairs",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -499,7 +499,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "QqbC1PMMk"
+            "uid": "influx"
           },
           "fieldConfig": {
             "defaults": {
@@ -616,7 +616,7 @@ data:
               "alias": "Suite",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -663,7 +663,7 @@ data:
               "alias": "Kitchen",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -710,7 +710,7 @@ data:
               "alias": "HVAC Heating",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -757,7 +757,7 @@ data:
               "alias": "Family Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -805,7 +805,7 @@ data:
               "alias": "Living Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -856,7 +856,7 @@ data:
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "QqbC1PMMk"
+            "uid": "influx"
           },
           "fieldConfig": {
             "defaults": {
@@ -973,7 +973,7 @@ data:
               "alias": "Bo's Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -1020,7 +1020,7 @@ data:
               "alias": "Charlize's Room",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -1067,7 +1067,7 @@ data:
               "alias": "Office",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -1114,7 +1114,7 @@ data:
               "alias": "Master Bedroom",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -1161,7 +1161,7 @@ data:
               "alias": "HVAC Heating",
               "datasource": {
                 "type": "influxdb",
-                "uid": "QqbC1PMMk"
+                "uid": "influx"
               },
               "groupBy": [
                 {
@@ -1228,6 +1228,6 @@ data:
       "timezone": "",
       "title": "Climate",
       "uid": "rgb5fPGMz",
-      "version": 61,
+      "version": 1,
       "weekStart": ""
     }
