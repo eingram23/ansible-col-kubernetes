@@ -512,7 +512,7 @@ datasources:
       access: proxy
       isDefault: true
       editable: true
-    - name: HA-InfluxDB
+    - name: InfluxDB
       type: influxdb
       url: http://homeassistant.local.lan:8086
       access: proxy
