@@ -5,6 +5,7 @@
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
+  tags: always
 
 # - name: Download dashboard manifests to host
 #   ansible.builtin.copy:
@@ -31,12 +32,14 @@
     src: grafana-ingressroute.yaml.j2
     dest: "{{ dest }}grafana-ingressroute.yaml"
     mode: '0644'
+  tags: grafana
 
 - name: Create grafana admin password secret
   ansible.builtin.template:
     src: grafana-admin-pass.yaml.j2
     dest: "{{ dest }}grafana-admin-pass.yaml"
     mode: '0644'
+  tags: grafana
 
 - name: Create vmware-exporter ingressroute manifests on host
   ansible.builtin.template:
@@ -186,11 +189,13 @@
   loop:
     - grafana-ingressroute.yaml
     - grafana-admin-pass.yaml
+  tags: grafana
 
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
     name: grafana
     repo_url: "https://grafana.github.io/helm-charts"
+  tags: grafana
 
 - name: Install grafana/grafana chart from repo
   kubernetes.core.helm:
@@ -203,6 +208,7 @@
     update_repo_cache: true
     values_files: "{{ dest }}grafana-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
+  tags: grafana
 
 - name: Deploy grafana dashboard configmaps
   kubernetes.core.k8s:
@@ -218,10 +224,8 @@
     - graf-dash-cm-k3s.yaml
     - graf-dash-cm-longhorn.yaml
     - graf-dash-cm-vault.yaml
-  tags:
-    - always
-    - update
+  tags: grafana
 
 - name: Closing comments
   ansible.builtin.debug:
-    msg: "Set password for HA-InfluxDB"
+    msg: "Set password for InfluxDB"
