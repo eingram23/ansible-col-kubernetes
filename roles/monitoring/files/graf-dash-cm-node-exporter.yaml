@@ -18,7 +18,7 @@ data:
           "pluginName": "Prometheus"
         }
       ],
-      "__elements": [],
+      "__elements": {},
       "__requires": [
         {
           "type": "panel",
@@ -30,7 +30,7 @@ data:
           "type": "grafana",
           "id": "grafana",
           "name": "Grafana",
-          "version": "8.5.15"
+          "version": "9.2.5"
         },
         {
           "type": "datasource",
@@ -79,7 +79,6 @@ data:
       "gnetId": 1860,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1668815974991,
       "links": [
         {
           "icon": "external link",
@@ -191,7 +190,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -276,7 +275,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -359,7 +358,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -433,7 +432,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -528,7 +527,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -609,7 +608,7 @@ data:
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -688,7 +687,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -770,7 +769,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -853,7 +852,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -934,7 +933,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -1013,7 +1012,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
@@ -1067,6 +1066,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1345,6 +1346,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1861,6 +1864,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -2327,6 +2332,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -23047,7 +23054,7 @@ data:
         }
       ],
       "refresh": false,
-      "schemaVersion": 36,
+      "schemaVersion": 37,
       "style": "dark",
       "tags": [
         "linux"
@@ -23067,6 +23074,7 @@ data:
             "name": "DS_PROMETHEUS",
             "options": [],
             "query": "prometheus",
+            "queryValue": "",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,

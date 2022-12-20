@@ -18,7 +18,7 @@ data:
           "pluginName": "Prometheus"
         }
       ],
-      "__elements": [],
+      "__elements": {},
       "__requires": [
         {
           "type": "panel",
@@ -30,7 +30,7 @@ data:
           "type": "grafana",
           "id": "grafana",
           "name": "Grafana",
-          "version": "8.5.15"
+          "version": "9.2.5"
         },
         {
           "type": "datasource",
@@ -79,15 +79,14 @@ data:
       "gnetId": 15282,
       "graphTooltip": 1,
       "id": null,
-      "iteration": 1668816942575,
       "links": [],
       "liveNow": false,
       "panels": [
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -97,6 +96,15 @@ data:
           },
           "id": 34,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Total usage",
           "type": "row"
         },
@@ -166,9 +174,13 @@ data:
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (container_memory_working_set_bytes{id=\"/\",node=~\"^$Node$\"}) / sum (machine_memory_bytes{node=~\"^$Node$\"}) * 100",
               "format": "time_series",
@@ -176,11 +188,7 @@ data:
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Cluster memory usage",
@@ -253,9 +261,13 @@ data:
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (rate (container_cpu_usage_seconds_total{node=~\"^$Node$\"}[5m])) / sum (machine_cpu_cores{node=~\"^$Node$\"}) * 100",
               "format": "time_series",
@@ -263,11 +275,7 @@ data:
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Cluster CPU usage (5m avg)",
@@ -340,9 +348,13 @@ data:
             "showThresholdMarkers": true,
             "text": {}
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (container_fs_usage_bytes{id=\"/\",node=~\"^$Node$\"}) / sum (container_fs_limit_bytes{id=\"/\",node=~\"^$Node$\"}) * 100",
               "format": "time_series",
@@ -351,11 +363,7 @@ data:
               "legendFormat": "",
               "metric": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Cluster filesystem usage",
@@ -424,9 +432,13 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "container_memory_usage_bytes",
               "format": "table",
@@ -434,11 +446,7 @@ data:
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Used",
@@ -507,9 +515,13 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "(machine_memory_bytes{})",
               "format": "table",
@@ -518,11 +530,7 @@ data:
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Total",
@@ -591,19 +599,19 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (rate (container_cpu_usage_seconds_total{id=\"/\",node=~\"^$Node$\"}[5m]))",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Used",
@@ -672,9 +680,13 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "machine_cpu_physical_cores",
               "format": "table",
@@ -682,11 +694,7 @@ data:
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Total",
@@ -755,20 +763,20 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (container_fs_usage_bytes{id=\"/\",node=~\"^$Node$\"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Used",
@@ -837,20 +845,20 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (container_fs_limit_bytes{id=\"/\",node=~\"^$Node$\"})",
               "format": "time_series",
               "interval": "10s",
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Total",
@@ -859,8 +867,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -870,6 +878,15 @@ data:
           },
           "id": 33,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Usage total",
           "type": "row"
         },
@@ -884,6 +901,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -943,8 +962,9 @@ data:
                 "mean",
                 "lastNotNull"
               ],
-              "displayMode": "hidden",
-              "placement": "bottom"
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
             },
             "tooltip": {
               "mode": "single",
@@ -954,6 +974,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (rate (container_network_receive_bytes_total{node=~\"^$Node$\"}[5m]))",
               "format": "time_series",
               "interval": "10s",
@@ -961,13 +985,13 @@ data:
               "legendFormat": "Received",
               "metric": "network",
               "refId": "A",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "- sum (rate (container_network_transmit_bytes_total{node=~\"^$Node$\"}[5m]))",
               "format": "time_series",
               "interval": "10s",
@@ -975,11 +999,7 @@ data:
               "legendFormat": "Sent",
               "metric": "network",
               "refId": "B",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Network I/O pressure",
@@ -996,6 +1016,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1055,8 +1077,9 @@ data:
                 "mean",
                 "lastNotNull"
               ],
-              "displayMode": "hidden",
-              "placement": "bottom"
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
             },
             "tooltip": {
               "mode": "single",
@@ -1066,6 +1089,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (namespace)",
               "format": "time_series",
@@ -1074,11 +1101,7 @@ data:
               "legendFormat": "{{ namespace}}",
               "metric": "network",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "CPU use by namespace",
@@ -1095,6 +1118,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1154,8 +1179,9 @@ data:
                 "mean",
                 "lastNotNull"
               ],
-              "displayMode": "hidden",
-              "placement": "bottom"
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
             },
             "tooltip": {
               "mode": "single",
@@ -1165,6 +1191,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (container_memory_working_set_bytes{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (namespace)",
               "format": "time_series",
@@ -1173,11 +1203,7 @@ data:
               "legendFormat": "{{ namespace}}",
               "metric": "network",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Memory use by namespace",
@@ -1186,8 +1212,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1197,6 +1223,15 @@ data:
           },
           "id": 35,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Pods CPU usage",
           "type": "row"
         },
@@ -1211,6 +1246,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "cores",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1272,7 +1309,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single",
@@ -1282,6 +1320,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (pod)",
               "format": "time_series",
@@ -1290,11 +1332,7 @@ data:
               "legendFormat": "{{ pod }}",
               "metric": "container_cpu",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Pods CPU usage (5m avg)",
@@ -1303,8 +1341,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1314,6 +1352,15 @@ data:
           },
           "id": 37,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Containers CPU usage",
           "type": "row"
         },
@@ -1328,6 +1375,8 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
                 "axisLabel": "cores",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -1361,7 +1410,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1388,15 +1438,21 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
-              "mode": "single"
+              "mode": "single",
+              "sort": "none"
             }
           },
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",container_name!=\"POD\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (container_name, pod)",
               "format": "time_series",
               "hide": false,
@@ -1405,13 +1461,13 @@ data:
               "legendFormat": "pod: {{ pod }} | {{ container_name }}",
               "metric": "container_cpu",
               "refId": "A",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name!~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, name, image)",
               "format": "time_series",
               "hide": false,
@@ -1420,13 +1476,13 @@ data:
               "legendFormat": "docker: {{ node }} | {{ image }} ({{ name }})",
               "metric": "container_cpu",
               "refId": "B",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (rate (container_cpu_usage_seconds_total{rkt_container_name!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, rkt_container_name)",
               "format": "time_series",
               "interval": "10s",
@@ -1434,11 +1490,7 @@ data:
               "legendFormat": "rkt: {{ node }} | {{ rkt_container_name }}",
               "metric": "container_cpu",
               "refId": "C",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Containers CPU usage (5m avg)",
@@ -1447,8 +1499,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1458,6 +1510,15 @@ data:
           },
           "id": 38,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "All processes CPU usage",
           "type": "row"
         },
@@ -1532,7 +1593,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -1541,6 +1603,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (rate (container_cpu_usage_seconds_total{id!=\"/\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (id)",
               "format": "time_series",
               "hide": false,
@@ -1549,11 +1615,7 @@ data:
               "legendFormat": "{{ id }}",
               "metric": "container_cpu",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "All processes CPU usage (5m avg)",
@@ -1562,8 +1624,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1573,6 +1635,15 @@ data:
           },
           "id": 39,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Pods memory usage",
           "type": "row"
         },
@@ -1646,7 +1717,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -1655,6 +1727,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (container_memory_working_set_bytes{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (pod)",
               "format": "time_series",
@@ -1663,11 +1739,7 @@ data:
               "legendFormat": "{{ pod }}",
               "metric": "container_memory_usage:sort_desc",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Pods memory usage",
@@ -1676,8 +1748,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1687,6 +1759,15 @@ data:
           },
           "id": 41,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Containers memory usage",
           "type": "row"
         },
@@ -1760,7 +1841,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -1769,6 +1851,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\",container_name!=\"POD\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (container_name, pod)",
               "format": "time_series",
               "interval": "10s",
@@ -1776,13 +1862,13 @@ data:
               "legendFormat": "pod: {{ pod }} | {{ container_name }}",
               "metric": "container_memory_usage:sort_desc",
               "refId": "A",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (container_memory_working_set_bytes{image!=\"\",name!~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (node, name, image)",
               "format": "time_series",
               "interval": "10s",
@@ -1790,13 +1876,13 @@ data:
               "legendFormat": "docker: {{ node }} | {{ image }} ({{ name }})",
               "metric": "container_memory_usage:sort_desc",
               "refId": "B",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (container_memory_working_set_bytes{rkt_container_name!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (node, rkt_container_name)",
               "format": "time_series",
               "interval": "10s",
@@ -1804,11 +1890,7 @@ data:
               "legendFormat": "rkt: {{ node }} | {{ rkt_container_name }}",
               "metric": "container_memory_usage:sort_desc",
               "refId": "C",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Containers memory usage",
@@ -1817,8 +1899,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1828,6 +1910,15 @@ data:
           },
           "id": 42,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "All processes memory usage",
           "type": "row"
         },
@@ -1901,7 +1992,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "bottom"
+              "placement": "bottom",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -1910,6 +2002,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (container_memory_working_set_bytes{id!=\"/\",node=~\"^$Node$\",namespace=~\"$Namespace\"}) by (id)",
               "format": "time_series",
               "interval": "10s",
@@ -1917,11 +2013,7 @@ data:
               "legendFormat": "{{ id }}",
               "metric": "container_memory_usage:sort_desc",
               "refId": "A",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "All processes memory usage",
@@ -1930,8 +2022,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -1941,6 +2033,15 @@ data:
           },
           "id": 43,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Pods network I/O",
           "type": "row"
         },
@@ -2014,7 +2115,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -2023,6 +2125,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "exemplar": true,
               "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (pod)",
               "format": "time_series",
@@ -2031,13 +2137,13 @@ data:
               "legendFormat": "-> {{ pod }}",
               "metric": "network",
               "refId": "A",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "exemplar": true,
               "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (pod)",
               "format": "time_series",
@@ -2046,11 +2152,7 @@ data:
               "legendFormat": "<- {{ pod }}",
               "metric": "network",
               "refId": "B",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Pods network I/O (5m avg)",
@@ -2059,8 +2161,8 @@ data:
         {
           "collapsed": false,
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
           },
           "gridPos": {
             "h": 1,
@@ -2070,6 +2172,15 @@ data:
           },
           "id": 44,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Containers network I/O",
           "type": "row"
         },
@@ -2143,7 +2254,8 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right"
+              "placement": "right",
+              "showLegend": true
             },
             "tooltip": {
               "mode": "single"
@@ -2152,6 +2264,10 @@ data:
           "pluginVersion": "8.0.6",
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",name=~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (container_name, pod)",
               "format": "time_series",
               "hide": false,
@@ -2160,13 +2276,13 @@ data:
               "legendFormat": "-> pod: {{ pod }} | {{ container_name }}",
               "metric": "network",
               "refId": "B",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",name=~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (container_name, pod)",
               "format": "time_series",
               "hide": false,
@@ -2175,13 +2291,13 @@ data:
               "legendFormat": "<- pod: {{ pod }} | {{ container_name }}",
               "metric": "network",
               "refId": "D",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",name!~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, name, image)",
               "format": "time_series",
               "hide": false,
@@ -2190,13 +2306,13 @@ data:
               "legendFormat": "-> docker: {{ node }} | {{ image }} ({{ name }})",
               "metric": "network",
               "refId": "A",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",name!~\"^k8s_.*\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, name, image)",
               "format": "time_series",
               "hide": false,
@@ -2205,13 +2321,13 @@ data:
               "legendFormat": "<- docker: {{ node }} | {{ image }} ({{ name }})",
               "metric": "network",
               "refId": "C",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "sum (rate (container_network_transmit_bytes_total{rkt_container_name!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, rkt_container_name)",
               "format": "time_series",
               "hide": false,
@@ -2220,13 +2336,13 @@ data:
               "legendFormat": "-> rkt: {{ node }} | {{ rkt_container_name }}",
               "metric": "network",
               "refId": "E",
-              "step": 10,
+              "step": 10
+            },
+            {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
-            },
-            {
+              },
               "expr": "- sum (rate (container_network_transmit_bytes_total{rkt_container_name!=\"\",node=~\"^$Node$\",namespace=~\"$Namespace\"}[5m])) by (node, rkt_container_name)",
               "format": "time_series",
               "hide": false,
@@ -2235,11 +2351,7 @@ data:
               "legendFormat": "<- rkt: {{ node }} | {{ rkt_container_name }}",
               "metric": "network",
               "refId": "F",
-              "step": 10,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "step": 10
             }
           ],
           "title": "Containers network I/O (5m avg)",
@@ -2247,7 +2359,7 @@ data:
         }
       ],
       "refresh": "1m",
-      "schemaVersion": 36,
+      "schemaVersion": 37,
       "style": "dark",
       "tags": [
         "kubernetes",

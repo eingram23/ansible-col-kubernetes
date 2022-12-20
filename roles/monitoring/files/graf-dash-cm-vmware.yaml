@@ -18,7 +18,7 @@ data:
           "pluginName": "Prometheus"
         }
       ],
-      "__elements": [],
+      "__elements": {},
       "__requires": [
         {
           "type": "panel",
@@ -30,7 +30,7 @@ data:
           "type": "grafana",
           "id": "grafana",
           "name": "Grafana",
-          "version": "8.5.15"
+          "version": "9.2.5"
         },
         {
           "type": "panel",
@@ -54,12 +54,6 @@ data:
           "type": "panel",
           "id": "table-old",
           "name": "Table (old)",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "timeseries",
-          "name": "Time series",
           "version": ""
         }
       ],
@@ -88,12 +82,11 @@ data:
         ]
       },
       "description": "Uses prometheus queries via pryorda/vmware_exporter",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 11243,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1668817091952,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -111,6 +104,15 @@ data:
           },
           "id": 24,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "High level stats",
           "type": "row"
         },
@@ -176,17 +178,17 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "count(vmware_vm_power_state > 0)",
-              "instant": true,
-              "legendFormat": "",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "count(vmware_vm_power_state > 0)",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "A"
             }
           ],
           "title": "Powered on VMs",
@@ -255,16 +257,16 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "avg(avg without (instance)(vmware_vm_boot_timestamp_seconds))",
-              "instant": true,
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "avg(avg without (instance)(vmware_vm_boot_timestamp_seconds))",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Average VM uptime",
@@ -333,15 +335,15 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "sum(sum_over_time(vmware_vm_num_cpu[1m])) / sum(count_over_time(vmware_vm_num_cpu[1m]))",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "sum(sum_over_time(vmware_vm_num_cpu[1m])) / sum(count_over_time(vmware_vm_num_cpu[1m]))",
+              "refId": "A"
             }
           ],
           "title": "Average vCPUs per VM",
@@ -410,16 +412,16 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "sum(vmware_vm_snapshots)",
-              "instant": true,
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "sum(vmware_vm_snapshots)",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Total snapshots",
@@ -468,7 +470,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 11,
+            "x": 10,
             "y": 1
           },
           "id": 26,
@@ -488,17 +490,17 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "avg(vmware_host_boot_timestamp_seconds)",
-              "instant": true,
-              "legendFormat": "",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "avg(vmware_host_boot_timestamp_seconds)",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "A"
             }
           ],
           "title": "Average host uptime",
@@ -585,16 +587,16 @@ data:
           ],
           "targets": [
             {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
               "expr": "sum without(job,instance)(vmware_datastore_vms > 0)",
               "format": "table",
               "instant": true,
               "intervalFactor": 1,
               "legendFormat": "{{ dc_name }}/{{ ds_name }}",
-              "refId": "A",
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              }
+              "refId": "A"
             }
           ],
           "title": "VMs per datastore",
@@ -664,15 +666,15 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "count(vmware_vm_power_state == 0)",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "count(vmware_vm_power_state == 0)",
+              "refId": "A"
             }
           ],
           "title": "Powered off VMs",
@@ -741,15 +743,15 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "count(vmware_vm_power_state)",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "count(vmware_vm_power_state)",
+              "refId": "A"
             }
           ],
           "title": "Total VMs",
@@ -818,15 +820,15 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "sum(sum_over_time(vmware_vm_memory_max[1m])) / sum(count_over_time(vmware_vm_memory_max[1m]))",
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "sum(sum_over_time(vmware_vm_memory_max[1m])) / sum(count_over_time(vmware_vm_memory_max[1m]))",
+              "refId": "A"
             }
           ],
           "title": "Average memory per VM",
@@ -895,16 +897,16 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "avg(vmware_vm_snapshot_timestamp_seconds)",
-              "instant": true,
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "avg(vmware_vm_snapshot_timestamp_seconds)",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Average snapshot age",
@@ -953,7 +955,7 @@ data:
           "gridPos": {
             "h": 3,
             "w": 2,
-            "x": 11,
+            "x": 10,
             "y": 4
           },
           "id": 30,
@@ -973,16 +975,16 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
-              "expr": "avg(vmware_host_num_cpu)",
-              "instant": true,
-              "refId": "A",
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
-              }
+              },
+              "expr": "avg(vmware_host_num_cpu)",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Average host core count",
@@ -1003,10 +1005,23 @@ data:
           },
           "id": 6,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Host stats",
           "type": "row"
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
@@ -1014,126 +1029,110 @@ data:
           "description": "Percentage of host CPU consumed over time.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "area"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "max": 100,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "transparent",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 70
-                  },
-                  {
-                    "color": "red",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
+              "links": []
             },
-            "overrides": [
-              {
-                "__systemRef": "hideSeriesFrom",
-                "matcher": {
-                  "id": "byNames",
-                  "options": {
-                    "mode": "exclude",
-                    "names": [
-                      "HomeLab Datacenter/Intel NUC10 Cluster/esxinuc1.local.lan"
-                    ],
-                    "prefix": "All except:",
-                    "readOnly": true
-                  }
-                },
-                "properties": [
-                  {
-                    "id": "custom.hideFrom",
-                    "value": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": true
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
+          "fill": 0,
+          "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
             "y": 8
           },
+          "hiddenSeries": false,
           "id": 28,
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "right"
-            },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "desc"
-            }
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": true,
+            "min": true,
+            "rightSide": true,
+            "show": true,
+            "sort": "max",
+            "sortDesc": true,
+            "total": false,
+            "values": true
           },
-          "pluginVersion": "8.5.15",
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "9.2.5",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
               },
-              "editorMode": "code",
               "expr": "(vmware_host_cpu_usage{host_name=~\"$host\"} / vmware_host_cpu_max) * 100",
-              "legendFormat": "{{ host_name }}",
-              "range": true,
+              "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}",
               "refId": "A"
             }
           ],
+          "thresholds": [
+            {
+              "colorMode": "warning",
+              "fill": true,
+              "line": false,
+              "op": "gt",
+              "value": 70,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": false,
+              "op": "gt",
+              "value": 90,
+              "yaxis": "left"
+            }
+          ],
+          "timeRegions": [],
           "title": "Host CPU usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
           "transparent": true,
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "label": "",
+              "logBase": 1,
+              "max": "100",
+              "show": true
+            },
+            {
+              "format": "percent",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
         },
         {
           "datasource": {
@@ -1188,17 +1187,16 @@ data:
             },
             "showUnfilled": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
               },
-              "editorMode": "code",
               "expr": "((vmware_datastore_capacity_size{ds_name=~\"$ds\"} - vmware_datastore_freespace_size) / vmware_datastore_capacity_size) * 100",
               "instant": false,
-              "legendFormat": "{{ ds_name }}",
+              "legendFormat": "{{ dc_name }}/{{ ds_name }}",
               "refId": "A"
             }
           ],
@@ -1207,6 +1205,10 @@ data:
           "type": "bargauge"
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
@@ -1214,103 +1216,110 @@ data:
           "description": "Percentage of memory consumed on each host currently.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "area"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "max": 100,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "transparent",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 75
-                  },
-                  {
-                    "color": "red",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
+              "links": []
             },
             "overrides": []
           },
+          "fill": 0,
+          "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
             "y": 16
           },
+          "hiddenSeries": false,
           "id": 2,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "right"
-            },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "desc"
-            }
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "rightSide": true,
+            "show": true,
+            "sort": "max",
+            "sortDesc": true,
+            "total": false,
+            "values": true
           },
-          "pluginVersion": "8.5.15",
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "9.2.5",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
               },
-              "editorMode": "code",
               "expr": "(vmware_host_memory_usage{host_name=~\"$host\"} / vmware_host_memory_max) * 100",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{ host_name }}",
+              "legendFormat": "{{ dc_name }}/{{ cluster_name}}/{{ host_name }}",
               "refId": "A"
             }
           ],
+          "thresholds": [
+            {
+              "colorMode": "warning",
+              "fill": true,
+              "line": false,
+              "op": "gt",
+              "value": 75,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": false,
+              "op": "gt",
+              "value": 90,
+              "yaxis": "left"
+            }
+          ],
+          "timeRegions": [],
           "title": "Host memory usage %",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
           "transparent": true,
-          "type": "timeseries"
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "logBase": 1,
+              "max": "100",
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
         },
         {
           "datasource": {
@@ -1365,17 +1374,15 @@ data:
             },
             "showUnfilled": true
           },
-          "pluginVersion": "8.5.15",
+          "pluginVersion": "9.2.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${DS_PROMETHEUS}"
               },
-              "editorMode": "code",
               "expr": "(vmware_datastore_provisoned_size{ds_name=~\"$ds\"} / vmware_datastore_capacity_size) * 100",
-              "legendFormat": "{{ ds_name }}",
-              "range": true,
+              "legendFormat": "{{ dc_name }}/{{ ds_name }}",
               "refId": "A"
             }
           ],
@@ -1453,14 +1460,14 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "vmware_vm_cpu_demand_average{vm_name=~\"$vm\"} * 1000000",
-                  "instant": false,
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A",
                   "datasource": {
                     "type": "prometheus",
                     "uid": "${DS_PROMETHEUS}"
-                  }
+                  },
+                  "expr": "vmware_vm_cpu_demand_average{vm_name=~\"$vm\"} * 1000000",
+                  "instant": false,
+                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
+                  "refId": "A"
                 }
               ],
               "thresholds": [],
@@ -1544,17 +1551,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "${DS_PROMETHEUS}"
+                  },
                   "expr": "vmware_vm_mem_consumed_average{vm_name=~\"$vm\"}",
                   "hide": false,
                   "instant": false,
                   "legendFormat": "consumed: {{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A",
+                  "refId": "A"
+                },
+                {
                   "datasource": {
                     "type": "prometheus",
                     "uid": "${DS_PROMETHEUS}"
-                  }
-                },
-                {
+                  },
                   "expr": "vmware_vm_mem_active_average{vm_name=~\"$vm\"}",
                   "format": "time_series",
                   "hide": false,
@@ -1562,11 +1573,7 @@ data:
                   "interval": "",
                   "intervalFactor": 1,
                   "legendFormat": "active: {{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "B",
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "${DS_PROMETHEUS}"
-                  }
+                  "refId": "B"
                 }
               ],
               "thresholds": [],
@@ -1650,13 +1657,13 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "vmware_vm_disk_maxTotalLatency_latest{vm_name=~\"$vm\"}",
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A",
                   "datasource": {
                     "type": "prometheus",
                     "uid": "${DS_PROMETHEUS}"
-                  }
+                  },
+                  "expr": "vmware_vm_disk_maxTotalLatency_latest{vm_name=~\"$vm\"}",
+                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
+                  "refId": "A"
                 }
               ],
               "thresholds": [
@@ -1758,13 +1765,13 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "vmware_vm_mem_swapped_average{vm_name=~\"$vm\"}",
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A",
                   "datasource": {
                     "type": "prometheus",
                     "uid": "${DS_PROMETHEUS}"
-                  }
+                  },
+                  "expr": "vmware_vm_mem_swapped_average{vm_name=~\"$vm\"}",
+                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
+                  "refId": "A"
                 }
               ],
               "thresholds": [
@@ -1818,12 +1825,21 @@ data:
               }
             }
           ],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "P1809F7CD0C75ACF3"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "VM stats",
           "type": "row"
         }
       ],
       "refresh": false,
-      "schemaVersion": 36,
+      "schemaVersion": 37,
       "style": "dark",
       "tags": [],
       "templating": {
@@ -1956,6 +1972,6 @@ data:
       "timezone": "browser",
       "title": "VMware stats",
       "uid": "q1yCDNbWz",
-      "version": 7,
+      "version": 1,
       "weekStart": ""
     }

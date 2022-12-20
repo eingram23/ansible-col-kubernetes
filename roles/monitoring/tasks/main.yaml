@@ -225,7 +225,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-k3s.yaml
     - graf-dash-cm-longhorn.yaml
-    - graf-dash-cm-vault.yaml
+    # - graf-dash-cm-vault.yaml
   tags: grafana
 
 - name: Closing comments
