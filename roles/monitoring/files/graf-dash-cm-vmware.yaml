@@ -33,11 +33,11 @@ data:
         ]
       },
       "description": "Uses prometheus queries via pryorda/vmware_exporter",
-      "editable": false,
+      "editable": true,
       "fiscalYearStartMonth": 0,
       "gnetId": 11243,
       "graphTooltip": 0,
-      "id": 10,
+      "id": 18,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -265,7 +265,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 4,
             "y": 1
           },
@@ -342,7 +342,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 7,
             "y": 1
           },
@@ -420,7 +420,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 10,
             "y": 1
           },
@@ -468,8 +468,8 @@ data:
           "fontSize": "100%",
           "gridPos": {
             "h": 6,
-            "w": 6,
-            "x": 18,
+            "w": 11,
+            "x": 13,
             "y": 1
           },
           "hideTimeOverride": true,
@@ -750,7 +750,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 4,
             "y": 4
           },
@@ -827,7 +827,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 7,
             "y": 4
           },
@@ -905,7 +905,7 @@ data:
           },
           "gridPos": {
             "h": 3,
-            "w": 2,
+            "w": 3,
             "x": 10,
             "y": 4
           },
@@ -969,10 +969,6 @@ data:
           "type": "row"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "prometheus",
             "uid": "prom"
@@ -980,110 +976,104 @@ data:
           "description": "Percentage of host CPU consumed over time.",
           "fieldConfig": {
             "defaults": {
-              "links": []
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "area"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "transparent",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 70
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
             },
             "overrides": []
           },
-          "fill": 0,
-          "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
             "y": 8
           },
-          "hiddenSeries": false,
           "id": 28,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": false,
-            "hideZero": false,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
           },
-          "percentage": false,
           "pluginVersion": "9.2.5",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "prom"
               },
+              "editorMode": "code",
               "expr": "(vmware_host_cpu_usage{host_name=~\"$host\"} / vmware_host_cpu_max) * 100",
-              "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}",
+              "legendFormat": "{{ host_name }}",
+              "range": true,
               "refId": "A"
             }
           ],
-          "thresholds": [
-            {
-              "colorMode": "warning",
-              "fill": true,
-              "line": false,
-              "op": "gt",
-              "value": 70,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": false,
-              "op": "gt",
-              "value": 90,
-              "yaxis": "left"
-            }
-          ],
-          "timeRegions": [],
           "title": "Host CPU usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
           "transparent": true,
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": "",
-              "logBase": 1,
-              "max": "100",
-              "show": true
-            },
-            {
-              "format": "percent",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
           "datasource": {
@@ -1145,9 +1135,10 @@ data:
                 "type": "prometheus",
                 "uid": "prom"
               },
+              "editorMode": "code",
               "expr": "((vmware_datastore_capacity_size{ds_name=~\"$ds\"} - vmware_datastore_freespace_size) / vmware_datastore_capacity_size) * 100",
               "instant": false,
-              "legendFormat": "{{ dc_name }}/{{ ds_name }}",
+              "legendFormat": "{{ ds_name }}",
               "refId": "A"
             }
           ],
@@ -1156,10 +1147,6 @@ data:
           "type": "bargauge"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "prometheus",
             "uid": "prom"
@@ -1167,110 +1154,106 @@ data:
           "description": "Percentage of memory consumed on each host currently.",
           "fieldConfig": {
             "defaults": {
-              "links": []
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "area"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "transparent",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 75
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
             },
             "overrides": []
           },
-          "fill": 0,
-          "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
             "x": 0,
             "y": 16
           },
-          "hiddenSeries": false,
           "id": 2,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
           "links": [],
-          "nullPointMode": "null",
           "options": {
-            "alertThreshold": true
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
           },
-          "percentage": false,
           "pluginVersion": "9.2.5",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "prom"
               },
+              "editorMode": "code",
               "expr": "(vmware_host_memory_usage{host_name=~\"$host\"} / vmware_host_memory_max) * 100",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{ dc_name }}/{{ cluster_name}}/{{ host_name }}",
+              "legendFormat": "{{ host_name }}",
               "refId": "A"
             }
           ],
-          "thresholds": [
-            {
-              "colorMode": "warning",
-              "fill": true,
-              "line": false,
-              "op": "gt",
-              "value": 75,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": false,
-              "op": "gt",
-              "value": 90,
-              "yaxis": "left"
-            }
-          ],
-          "timeRegions": [],
           "title": "Host memory usage %",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
           "transparent": true,
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "logBase": 1,
-              "max": "100",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
           "datasource": {
@@ -1332,8 +1315,10 @@ data:
                 "type": "prometheus",
                 "uid": "prom"
               },
+              "editorMode": "code",
               "expr": "(vmware_datastore_provisoned_size{ds_name=~\"$ds\"} / vmware_datastore_capacity_size) * 100",
-              "legendFormat": "{{ dc_name }}/{{ ds_name }}",
+              "legendFormat": "{{ ds_name }}",
+              "range": true,
               "refId": "A"
             }
           ],
@@ -1342,7 +1327,7 @@ data:
           "type": "bargauge"
         },
         {
-          "collapsed": true,
+          "collapsed": false,
           "datasource": {
             "type": "prometheus",
             "uid": "prom"
@@ -1354,428 +1339,7 @@ data:
             "y": 24
           },
           "id": 38,
-          "panels": [
-            {
-              "aliasColors": {},
-              "bars": false,
-              "dashLength": 10,
-              "dashes": false,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prom"
-              },
-              "description": "CPU usage per virtual machine.",
-              "fill": 0,
-              "fillGradient": 0,
-              "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 25
-              },
-              "id": 36,
-              "interval": "",
-              "legend": {
-                "alignAsTable": true,
-                "avg": true,
-                "current": true,
-                "hideEmpty": false,
-                "hideZero": false,
-                "max": true,
-                "min": true,
-                "rightSide": true,
-                "show": true,
-                "sort": "max",
-                "sortDesc": true,
-                "total": false,
-                "values": true
-              },
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "null",
-              "options": {
-                "dataLinks": []
-              },
-              "percentage": false,
-              "pointradius": 2,
-              "points": false,
-              "renderer": "flot",
-              "seriesOverrides": [
-                {
-                  "alias": "Home/Haswell/esxi0.lan.ir/ir.s.swarm0",
-                  "yaxis": 1
-                }
-              ],
-              "spaceLength": 10,
-              "stack": false,
-              "steppedLine": false,
-              "targets": [
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "prom"
-                  },
-                  "expr": "vmware_vm_cpu_demand_average{vm_name=~\"$vm\"} * 1000000",
-                  "instant": false,
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A"
-                }
-              ],
-              "thresholds": [],
-              "timeRegions": [],
-              "title": "VM CPU usage",
-              "tooltip": {
-                "shared": true,
-                "sort": 0,
-                "value_type": "individual"
-              },
-              "transparent": true,
-              "type": "graph",
-              "xaxis": {
-                "mode": "time",
-                "show": true,
-                "values": []
-              },
-              "yaxes": [
-                {
-                  "format": "hertz",
-                  "label": "",
-                  "logBase": 1,
-                  "min": "0",
-                  "show": true
-                },
-                {
-                  "format": "short",
-                  "logBase": 1,
-                  "show": false
-                }
-              ],
-              "yaxis": {
-                "align": false
-              }
-            },
-            {
-              "aliasColors": {},
-              "bars": false,
-              "dashLength": 10,
-              "dashes": false,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prom"
-              },
-              "description": "Memory usage of each virtual machine.",
-              "fill": 1,
-              "fillGradient": 0,
-              "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 25
-              },
-              "id": 47,
-              "legend": {
-                "alignAsTable": true,
-                "avg": true,
-                "current": true,
-                "max": true,
-                "min": true,
-                "rightSide": true,
-                "show": true,
-                "sort": "max",
-                "sortDesc": true,
-                "total": false,
-                "values": true
-              },
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "null",
-              "options": {
-                "dataLinks": []
-              },
-              "percentage": false,
-              "pointradius": 2,
-              "points": false,
-              "renderer": "flot",
-              "seriesOverrides": [],
-              "spaceLength": 10,
-              "stack": false,
-              "steppedLine": false,
-              "targets": [
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "prom"
-                  },
-                  "expr": "vmware_vm_mem_consumed_average{vm_name=~\"$vm\"}",
-                  "hide": false,
-                  "instant": false,
-                  "legendFormat": "consumed: {{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A"
-                },
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "prom"
-                  },
-                  "expr": "vmware_vm_mem_active_average{vm_name=~\"$vm\"}",
-                  "format": "time_series",
-                  "hide": false,
-                  "instant": false,
-                  "interval": "",
-                  "intervalFactor": 1,
-                  "legendFormat": "active: {{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "B"
-                }
-              ],
-              "thresholds": [],
-              "timeRegions": [],
-              "title": "VM memory usage",
-              "tooltip": {
-                "shared": true,
-                "sort": 0,
-                "value_type": "individual"
-              },
-              "transparent": true,
-              "type": "graph",
-              "xaxis": {
-                "mode": "time",
-                "show": true,
-                "values": []
-              },
-              "yaxes": [
-                {
-                  "format": "kbytes",
-                  "label": "",
-                  "logBase": 1,
-                  "min": "0",
-                  "show": true
-                },
-                {
-                  "format": "short",
-                  "logBase": 1,
-                  "show": false
-                }
-              ],
-              "yaxis": {
-                "align": false
-              }
-            },
-            {
-              "aliasColors": {},
-              "bars": false,
-              "dashLength": 10,
-              "dashes": false,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prom"
-              },
-              "description": "Maximum latency experienced by at least one virtual disk of each virtual machine.",
-              "fill": 0,
-              "fillGradient": 0,
-              "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 33
-              },
-              "id": 46,
-              "legend": {
-                "alignAsTable": true,
-                "avg": true,
-                "current": true,
-                "max": true,
-                "min": true,
-                "rightSide": true,
-                "show": true,
-                "sort": "max",
-                "sortDesc": true,
-                "total": false,
-                "values": true
-              },
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "null",
-              "options": {
-                "dataLinks": []
-              },
-              "percentage": false,
-              "pointradius": 2,
-              "points": false,
-              "renderer": "flot",
-              "seriesOverrides": [],
-              "spaceLength": 10,
-              "stack": false,
-              "steppedLine": false,
-              "targets": [
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "prom"
-                  },
-                  "expr": "vmware_vm_disk_maxTotalLatency_latest{vm_name=~\"$vm\"}",
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A"
-                }
-              ],
-              "thresholds": [
-                {
-                  "colorMode": "warning",
-                  "fill": true,
-                  "line": false,
-                  "op": "gt",
-                  "value": 200,
-                  "yaxis": "left"
-                },
-                {
-                  "colorMode": "critical",
-                  "fill": true,
-                  "line": false,
-                  "op": "gt",
-                  "value": 300,
-                  "yaxis": "left"
-                }
-              ],
-              "timeRegions": [],
-              "title": "Maximum VM disk latency",
-              "tooltip": {
-                "shared": true,
-                "sort": 0,
-                "value_type": "individual"
-              },
-              "transparent": true,
-              "type": "graph",
-              "xaxis": {
-                "mode": "time",
-                "show": true,
-                "values": []
-              },
-              "yaxes": [
-                {
-                  "format": "ms",
-                  "logBase": 1,
-                  "min": "0",
-                  "show": true
-                },
-                {
-                  "format": "short",
-                  "logBase": 1,
-                  "show": false
-                }
-              ],
-              "yaxis": {
-                "align": false
-              }
-            },
-            {
-              "aliasColors": {},
-              "bars": false,
-              "dashLength": 10,
-              "dashes": false,
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prom"
-              },
-              "description": "Amount of swap each virtual machine is using.",
-              "fill": 0,
-              "fillGradient": 0,
-              "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 33
-              },
-              "id": 44,
-              "legend": {
-                "alignAsTable": true,
-                "avg": true,
-                "current": true,
-                "hideEmpty": false,
-                "hideZero": false,
-                "max": true,
-                "min": true,
-                "rightSide": true,
-                "show": true,
-                "sort": "max",
-                "sortDesc": true,
-                "total": false,
-                "values": true
-              },
-              "lines": true,
-              "linewidth": 2,
-              "nullPointMode": "null",
-              "options": {
-                "dataLinks": []
-              },
-              "percentage": false,
-              "pointradius": 2,
-              "points": false,
-              "renderer": "flot",
-              "seriesOverrides": [],
-              "spaceLength": 10,
-              "stack": false,
-              "steppedLine": false,
-              "targets": [
-                {
-                  "datasource": {
-                    "type": "prometheus",
-                    "uid": "prom"
-                  },
-                  "expr": "vmware_vm_mem_swapped_average{vm_name=~\"$vm\"}",
-                  "legendFormat": "{{ dc_name }}/{{ cluster_name }}/{{ host_name }}/{{ vm_name }}",
-                  "refId": "A"
-                }
-              ],
-              "thresholds": [
-                {
-                  "colorMode": "warning",
-                  "fill": true,
-                  "line": false,
-                  "op": "gt",
-                  "value": 2097152,
-                  "yaxis": "left"
-                },
-                {
-                  "colorMode": "critical",
-                  "fill": true,
-                  "line": false,
-                  "op": "gt",
-                  "value": 4194304,
-                  "yaxis": "left"
-                }
-              ],
-              "timeRegions": [],
-              "title": "VM swap usage",
-              "tooltip": {
-                "shared": true,
-                "sort": 0,
-                "value_type": "individual"
-              },
-              "transparent": true,
-              "type": "graph",
-              "xaxis": {
-                "mode": "time",
-                "show": true,
-                "values": []
-              },
-              "yaxes": [
-                {
-                  "format": "kbytes",
-                  "label": "",
-                  "logBase": 1,
-                  "min": "0",
-                  "show": true
-                },
-                {
-                  "format": "short",
-                  "logBase": 1,
-                  "show": false
-                }
-              ],
-              "yaxis": {
-                "align": false
-              }
-            }
-          ],
+          "panels": [],
           "targets": [
             {
               "datasource": {
@@ -1787,6 +1351,443 @@ data:
           ],
           "title": "VM stats",
           "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prom"
+          },
+          "description": "CPU usage per virtual machine.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "hertz"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 25
+          },
+          "id": 36,
+          "interval": "",
+          "options": {
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "9.2.5",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prom"
+              },
+              "editorMode": "code",
+              "expr": "vmware_vm_cpu_demand_average{vm_name=~\"$vm\"} * 1000000",
+              "instant": false,
+              "legendFormat": "{{ host_name }}/{{ vm_name }}",
+              "refId": "A"
+            }
+          ],
+          "title": "VM CPU usage",
+          "transparent": true,
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prom"
+          },
+          "description": "Memory usage of each virtual machine.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "kbytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 25
+          },
+          "id": 47,
+          "options": {
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "9.2.5",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prom"
+              },
+              "editorMode": "code",
+              "expr": "vmware_vm_mem_consumed_average{vm_name=~\"$vm\"}",
+              "hide": false,
+              "instant": false,
+              "legendFormat": "consumed: {{ host_name }}/{{ vm_name }}",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prom"
+              },
+              "editorMode": "code",
+              "expr": "vmware_vm_mem_active_average{vm_name=~\"$vm\"}",
+              "format": "time_series",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "active: {{ host_name }}/{{ vm_name }}",
+              "refId": "B"
+            }
+          ],
+          "title": "VM memory usage",
+          "transparent": true,
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prom"
+          },
+          "description": "Maximum latency experienced by at least one virtual disk of each virtual machine.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "area"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "transparent",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 200
+                  },
+                  {
+                    "color": "red",
+                    "value": 300
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 33
+          },
+          "id": 46,
+          "options": {
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "9.2.5",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prom"
+              },
+              "editorMode": "code",
+              "expr": "vmware_vm_disk_maxTotalLatency_latest{vm_name=~\"$vm\"}",
+              "legendFormat": "{{ host_name }}/{{ vm_name }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Maximum VM disk latency",
+          "transparent": true,
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prom"
+          },
+          "description": "Amount of swap each virtual machine is using.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "area"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "transparent",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 2097152
+                  },
+                  {
+                    "color": "red",
+                    "value": 4194304
+                  }
+                ]
+              },
+              "unit": "kbytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 33
+          },
+          "id": 44,
+          "options": {
+            "legend": {
+              "calcs": [
+                "mean",
+                "lastNotNull",
+                "max",
+                "min"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "9.2.5",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prom"
+              },
+              "editorMode": "code",
+              "expr": "vmware_vm_mem_swapped_average{vm_name=~\"$vm\"}",
+              "legendFormat": "{{ host_name }}/{{ vm_name }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "VM swap usage",
+          "transparent": true,
+          "type": "timeseries"
         }
       ],
       "refresh": false,
@@ -1827,13 +1828,9 @@ data:
           },
           {
             "current": {
-              "selected": true,
-              "text": [
-                "All"
-              ],
-              "value": [
-                "$__all"
-              ]
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
             },
             "datasource": {
               "type": "prometheus",
@@ -1942,7 +1939,7 @@ data:
       },
       "timezone": "browser",
       "title": "VMware stats",
-      "uid": "q1yCDNbWz",
-      "version": 1,
+      "uid": "q1yCDNbWd",
+      "version": 3,
       "weekStart": ""
     }
