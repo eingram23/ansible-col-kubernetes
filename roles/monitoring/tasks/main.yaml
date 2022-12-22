@@ -10,15 +10,15 @@
 
 - name: Download grafana dashboards to host
   ansible.builtin.copy:
-    src: "{{ role_path}}/files/graf-dashboards/{{ item }}"
+    src: "{{ role_path }}/files/graf-dashboards/{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
   tags: grafana
 
-  - name: Download alertmanager rules to host
+- name: Download alertmanager rules to host
   ansible.builtin.copy:
-    src: "{{ role_path}}/files/alertmanager-rules/{{ item }}"
+    src: "{{ role_path }}/files/alertmanager-rules/{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
@@ -174,7 +174,7 @@
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
   tags: alerts
-  
+
 - name: Deploy grafana secret and ingressroute
   kubernetes.core.k8s:
     state: present
