@@ -1,11 +1,28 @@
 ---
+# tags: grafana, alerts
+
 - name: Download manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
-  tags: always
+
+- name: Download grafana dashboards to host
+  ansible.builtin.copy:
+    src: "{{ role_path}}/files/graf-dashboards/{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+  tags: grafana
+
+  - name: Download alertmanager rules to host
+  ansible.builtin.copy:
+    src: "{{ role_path}}/files/alertmanager-rules/{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+  tags: alerts
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
@@ -156,7 +173,8 @@
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
-
+  tags: alerts
+  
 - name: Deploy grafana secret and ingressroute
   kubernetes.core.k8s:
     state: present
