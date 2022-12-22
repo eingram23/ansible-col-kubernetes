@@ -10,18 +10,18 @@
 
 - name: Download grafana dashboards to host
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/graf-dashboards/{{ item }}"
+    src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
+  with_fileglob: "{{ role_path }}/files/graf-dashboards/*"
   tags: grafana
 
 - name: Download alertmanager rules to host
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/alertmanager-rules/{{ item }}"
+    src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
+  with_fileglob: "{{ role_path }}/files/alertmanager-rules/*"
   tags: alerts
 
 - name: Create node-exporter daemonset manifest on host
