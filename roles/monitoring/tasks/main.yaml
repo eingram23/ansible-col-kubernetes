@@ -233,6 +233,3 @@
     - graf-datasource-cm-prom.yaml
   tags: grafana
 
-- name: Closing comments
-  ansible.builtin.debug:
-    msg: "Set password for InfluxDB"
