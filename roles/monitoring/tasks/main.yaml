@@ -8,12 +8,20 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Download grafana dashboards to host
+- name: Download grafana dashboard configmaps to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "{{ role_path }}/files/graf-dashboards/*"
+  tags: grafana
+
+- name: Download grafana datasource configmaps to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/graf-datasources/*"
   tags: grafana
 
 - name: Download alertmanager rules to host
@@ -43,11 +51,14 @@
     mode: '0644'
   tags: grafana
 
-- name: Create grafana admin password secret
+- name: Create grafana password secrets
   ansible.builtin.template:
-    src: grafana-admin-pass.yaml.j2
-    dest: "{{ dest }}grafana-admin-pass.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
     mode: '0644'
+  loop:
+    - grafana-admin-pass.yaml
+    - grafana-influxdb-pass.yaml
   tags: grafana
 
 - name: Create vmware-exporter ingressroute manifests on host
@@ -183,6 +194,7 @@
   loop:
     - grafana-ingressroute.yaml
     - grafana-admin-pass.yaml
+    - grafana-influxdb-pass.yaml
   tags: grafana
 
 - name: Add hashicorp/vault chart repo
@@ -204,7 +216,7 @@
     kubeconfig: "{{ kubeconfig }}"
   tags: grafana
 
-- name: Deploy grafana dashboard configmaps
+- name: Deploy grafana dashboard and datasource configmaps
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
@@ -217,6 +229,8 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-kube-state.yaml
     - graf-dash-cm-longhorn.yaml
+    - graf-datasource-cm-infux.yaml
+    - graf-datasource-cm-prom.yaml
   tags: grafana
 
 - name: Closing comments
