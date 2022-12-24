@@ -229,7 +229,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-kube-state.yaml
     - graf-dash-cm-longhorn.yaml
-    - graf-datasource-cm-infuxdb.yaml
+    - graf-datasource-cm-infux.yaml
     - graf-datasource-cm-prom.yaml
   tags: grafana
 
