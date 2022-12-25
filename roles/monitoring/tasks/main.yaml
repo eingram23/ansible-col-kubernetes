@@ -51,14 +51,14 @@
     mode: '0644'
   tags: grafana
 
-- name: Create grafana password secrets
+- name: Create grafana secrets
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
     - grafana-admin-pass.yaml
-    - grafana-influxdb-pass.yaml
+    - graf-datasource-cm-influx.yaml
   tags: grafana
 
 - name: Create vmware-exporter ingressroute manifests on host
@@ -194,7 +194,7 @@
   loop:
     - grafana-ingressroute.yaml
     - grafana-admin-pass.yaml
-    - grafana-influxdb-pass.yaml
+    - graf-datasource-cm-influx.yaml
   tags: grafana
 
 - name: Add hashicorp/vault chart repo

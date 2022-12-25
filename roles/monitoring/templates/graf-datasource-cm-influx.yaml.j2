@@ -1,12 +1,13 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
-  name: graf-datasource-cm-prom
+  name: graf-datasource-cm-influx
   namespace: monitoring
   labels:
     grafana_datasource: "1"
-data:
-  datasource-prometheus.yaml: |-
+type: Opaque
+stringData:
+  datasource-influx.yaml: |-
     apiVersion: 1
     datasources:
       - name: Influxdb
@@ -14,7 +15,7 @@ data:
         url: http://homeassistant.local.lan:8086
         access: proxy
         user: grafana
-        password: $INFLUXDB_PASSWORD
+        password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
         database: grafana
         editable: true
         uid: influx
