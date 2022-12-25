@@ -8,20 +8,12 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Download grafana dashboard configmaps to host
+- name: Download grafana manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "{{ role_path }}/files/graf-dashboards/*"
-  tags: grafana
-
-- name: Download grafana datasource configmaps to host
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ dest }}"
-    mode: '0644'
-  with_fileglob: "{{ role_path }}/files/graf-datasources/*"
+  with_fileglob: "{{ role_path }}/files/grafana/*"
   tags: grafana
 
 - name: Download alertmanager rules to host
@@ -44,21 +36,15 @@
     dest: "{{ dest }}vmware-exporter-deployment.yaml"
     mode: '0644'
 
-- name: Create grafana ingressroute manifests on host
-  ansible.builtin.template:
-    src: grafana-ingressroute.yaml.j2
-    dest: "{{ dest }}grafana-ingressroute.yaml"
-    mode: '0644'
-  tags: grafana
-
-- name: Create grafana secrets
+- name: Create templated grafana manifests on host
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - grafana-admin-pass.yaml
     - graf-datasource-secret-influx.yaml
+    - grafana-admin-pass.yaml
+    - grafana-ingressroute.yaml
   tags: grafana
 
 - name: Create vmware-exporter ingressroute manifests on host
