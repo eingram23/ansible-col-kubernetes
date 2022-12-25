@@ -58,7 +58,7 @@
     mode: '0644'
   loop:
     - grafana-admin-pass.yaml
-    - graf-datasource-cm-influx.yaml
+    - graf-datasource-secret-influx.yaml
   tags: grafana
 
 - name: Create vmware-exporter ingressroute manifests on host
@@ -194,7 +194,6 @@
   loop:
     - grafana-ingressroute.yaml
     - grafana-admin-pass.yaml
-    - graf-datasource-cm-influx.yaml
   tags: grafana
 
 - name: Add hashicorp/vault chart repo
@@ -229,7 +228,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-kube-state.yaml
     - graf-dash-cm-longhorn.yaml
-    - graf-datasource-cm-influx.yaml
+    - graf-datasource-secret-influx.yaml
     - graf-datasource-cm-prom.yaml
   tags: grafana
 
