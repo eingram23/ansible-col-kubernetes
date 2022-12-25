@@ -15,7 +15,8 @@ stringData:
         url: http://homeassistant.local.lan:8086
         access: proxy
         user: grafana
-        password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
+        secureJsonData:
+          password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
         database: grafana
         editable: true
         uid: influx

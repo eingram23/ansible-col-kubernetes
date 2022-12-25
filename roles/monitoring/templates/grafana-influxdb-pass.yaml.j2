@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: grafana-datasource-influxdb
-  namespace: monitoring
-type: Opaque
-stringData:
-  INFLUXDB_PASSWORD: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
