@@ -50,11 +50,11 @@ gitea:
     email: "edward.ingram23@gmail.com"
   metrics:
     enabled: false
-    serviceMonitor:
-      enabled: true
-  config:
-    server:
-      ENABLE_PPROF: true
+  #   serviceMonitor:
+  #     enabled: true
+  # config:
+  #   server:
+  #     ENABLE_PPROF: true
   livenessProbe:
     tcpSocket:
       port: http
