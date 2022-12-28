@@ -823,6 +823,12 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -852,7 +858,7 @@ data:
                 "alertThreshold": true
               },
               "percentage": false,
-              "pluginVersion": "9.2.5",
+              "pluginVersion": "7.1.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -912,6 +918,12 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -941,7 +953,7 @@ data:
                 "alertThreshold": true
               },
               "percentage": false,
-              "pluginVersion": "9.2.5",
+              "pluginVersion": "7.1.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -1024,6 +1036,12 @@ data:
                 "uid": "prom"
               },
               "decimals": 0,
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {}
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -1046,11 +1064,8 @@ data:
               "lines": true,
               "linewidth": 1,
               "nullPointMode": "null",
-              "options": {
-                "alertThreshold": true
-              },
               "percentage": false,
-              "pluginVersion": "9.2.5",
+              "pluginVersion": "7.1.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -1481,10 +1496,11 @@ data:
                 "h": 5,
                 "w": 6,
                 "x": 0,
-                "y": 13
+                "y": 7
               },
               "id": 75,
               "links": [],
+              "options": {},
               "scroll": true,
               "showHeader": true,
               "sort": {
@@ -1566,14 +1582,12 @@ data:
                 "uid": "$datasource"
               },
               "fill": 1,
-              "fillGradient": 0,
               "gridPos": {
                 "h": 5,
                 "w": 12,
                 "x": 6,
-                "y": 13
+                "y": 7
               },
-              "hiddenSeries": false,
               "id": 73,
               "legend": {
                 "avg": false,
@@ -1588,11 +1602,9 @@ data:
               "linewidth": 1,
               "links": [],
               "nullPointMode": "null",
-              "options": {
-                "alertThreshold": true
-              },
+              "options": {},
               "percentage": false,
-              "pluginVersion": "9.2.5",
+              "pluginVersion": "6.2.5",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3824,7 +3836,7 @@ data:
           {
             "current": {
               "isNone": true,
-              "selected": true,
+              "selected": false,
               "text": "None",
               "value": ""
             },
@@ -3840,7 +3852,7 @@ data:
             "options": [],
             "query": {
               "query": "label_values(kube_node_info, cluster)",
-              "refId": "prometheus-cluster-Variable-Query"
+              "refId": "Prometheus-cluster-Variable-Query"
             },
             "refresh": 1,
             "regex": "",
@@ -3853,7 +3865,7 @@ data:
           },
           {
             "current": {
-              "selected": true,
+              "selected": false,
               "text": "All",
               "value": "$__all"
             },
@@ -3869,7 +3881,7 @@ data:
             "options": [],
             "query": {
               "query": "label_values(kube_node_info{cluster=~\"$cluster\"}, node)",
-              "refId": "prometheus-node-Variable-Query"
+              "refId": "Prometheus-node-Variable-Query"
             },
             "refresh": 1,
             "regex": "",
@@ -3883,7 +3895,7 @@ data:
           {
             "allValue": "",
             "current": {
-              "selected": true,
+              "selected": false,
               "text": "All",
               "value": "$__all"
             },
@@ -3900,7 +3912,7 @@ data:
             "options": [],
             "query": {
               "query": "label_values(kube_namespace_created{cluster=~\"$cluster\"}, namespace)",
-              "refId": "prometheus-namespace-Variable-Query"
+              "refId": "Prometheus-namespace-Variable-Query"
             },
             "refresh": 1,
             "regex": "",
@@ -3914,7 +3926,7 @@ data:
           {
             "hide": 2,
             "name": "datasource",
-            "query": "prometheus",
+            "query": "Prometheus",
             "skipUrlSync": false,
             "type": "constant"
           }
