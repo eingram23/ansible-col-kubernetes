@@ -47,10 +47,14 @@ gitea:
     #   USER: gitea
   admin:
     existingSecret: gitea-admin-secret
+    email: "edward.ingram23@gmail.com"
   metrics:
-    enabled: true
+    enabled: false
     serviceMonitor:
       enabled: true
+  config:
+    server:
+      ENABLE_PPROF: true
   livenessProbe:
     tcpSocket:
       port: http
