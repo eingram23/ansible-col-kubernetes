@@ -6,32 +6,6 @@
     kind: Namespace
     state: present
     kubeconfig: "{{ kubeconfig }}"
-     
-# - name: Create admin password secret
-#   kubernetes.core.k8s:
-#     definition:
-#       apiVersion: v1
-#       kind: Secret
-#       metadata:
-#         name: awx-admin-password
-#         namespace: awx
-#       type: Opaque
-#       stringData:
-#         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
-#     kubeconfig: "{{ kubeconfig }}"
-
-# - name: Create db encryption key secret
-#   kubernetes.core.k8s:
-#     definition:
-#       apiVersion: v1
-#       kind: Secret
-#       metadata:
-#         name: secret-key
-#         namespace: awx
-#       type: Opaque
-#       stringData:
-#         password: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
-#     kubeconfig: "{{ kubeconfig }}"
 
 - name: Create db encryption secret key
   ansible.builtin.template:
@@ -86,22 +60,22 @@
     path: "{{ dest }}awx/kustomization.yaml"
     line: "  - awx.yaml"
     insertafter: "resources:"
-    
+
 - name: Deploy awx instance
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
 
-- name: Create awx-ingress manifest
+- name: Create awx-ingressroute manifest
   ansible.builtin.template:
     src: awx-ingressroute.yaml.j2
     dest: "{{ dest }}awx-ingressroute.yaml"
     mode: '0644'
 
-- name: Deploy awx-ingress
+- name: Deploy awx-ingressroute
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - awx-ingress.yaml
+    - awx-ingressroute.yaml
     
