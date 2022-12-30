@@ -22,18 +22,6 @@
     - gitea-cert.yaml
     - gitea-values.yaml
 
-# - name: Create gitea postgres secret
-#   ansible.builtin.template:
-#     src: gitea-postgres-secret.yaml.j2
-#     dest: "{{ dest }}gitea-postgres-secret.yaml"
-#     mode: '0644'
-
-# - name: Create gitea values
-#   ansible.builtin.template:
-#     src: gitea-values.yaml.j2
-#     dest: "{{ dest }}gitea-values.yaml"
-#     mode: '0644'
-
 - name: Deploy gitea secrets and cert
   kubernetes.core.k8s:
     state: present
@@ -43,13 +31,6 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
     - gitea-cert.yaml
-
-# - name: Download files to host
-#   ansible.builtin.copy:
-#     src: "{{ item }}"
-#     dest: "{{ dest }}"
-#     mode: '0644'
-#   with_fileglob: "*"
 
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
@@ -62,11 +43,3 @@
     update_repo_cache: true
     values_files: "{{ dest }}gitea-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
-
-# - name: Deploy gitea ingressroute
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-#     - gitea-ingressroute.yaml
