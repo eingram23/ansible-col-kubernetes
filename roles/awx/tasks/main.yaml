@@ -88,11 +88,12 @@
 #     dest: "{{ dest }}awx-ingressroute.yaml"
 #     mode: '0644'
 
-- name: Deploy awx-ingressroute
+- name: Deploy awx-cert and awx-ingressroute
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - awx-cert.yaml
     - awx-ingressroute.yaml
     
