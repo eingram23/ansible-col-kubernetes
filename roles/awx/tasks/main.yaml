@@ -20,7 +20,6 @@
     - awx-secret-key.yaml
     - awx.yaml
     - homelab_rootca.crt
-    - kustomization.yaml
 
 # - name: Create awx admin password secret key
 #   ansible.builtin.template:
@@ -58,11 +57,11 @@
     state: directory
     mode: '0755'
 
-# - name: Create kustomization.yaml file
-#   ansible.builtin.template:
-#     src: kustomization.yaml.j2
-#     dest: "{{ dest }}awx/kustomization.yaml"
-#     mode: '0644'
+- name: Create kustomization.yaml file
+  ansible.builtin.template:
+    src: kustomization.yaml.j2
+    dest: "{{ dest }}awx/kustomization.yaml"
+    mode: '0644'
 
 - name: Deploy awx operator
   ansible.builtin.shell: >
