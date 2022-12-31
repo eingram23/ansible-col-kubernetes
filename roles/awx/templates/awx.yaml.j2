@@ -34,7 +34,7 @@ spec:
     - name: awx-ee
       image: quay.io/ansible/awx-ee:latest
     - name: homelab-awx-ee-v1
-      image: gitea.local.lan/eingram23/homelab-awx-ee-v1
+      image: gitea{{ suffix }}.local.lan/eingram23/homelab-awx-ee-v1
   web_resource_requirements:
     requests:
       cpu: 250m
