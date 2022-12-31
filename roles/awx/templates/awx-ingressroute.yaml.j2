@@ -7,9 +7,12 @@ metadata:
 spec:
   entryPoints: 
     - web
+    - websecure
   routes:
   - match: Host(`awx{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: awx-service
       port: 80
+  tls:
+    secretName: awx-tls

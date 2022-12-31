@@ -7,17 +7,36 @@
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Create db encryption secret key
+- name: Create templated manifests/files
   ansible.builtin.template:
-    src: awx-secret-key.yaml.j2
-    dest: "{{ dest }}awx-secret-key.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
     mode: '0644'
+  loop:
+    - awx-secret-key.yaml
+    - awx-admin-password.yaml
+    - awx-cert.yaml
+    - awx-ingressroute.yaml
+    - awx-secret-key.yaml
+    - awx.yaml
+    - homelab_rootca.crt
+    - kustomization.yaml
 
-- name: Create awx admin password secret key
-  ansible.builtin.template:
-    src: awx-admin-password.yaml.j2
-    dest: "{{ dest }}awx-admin-password.yaml"
-    mode: '0644'
+# - name: Create awx admin password secret key
+#   ansible.builtin.template:
+#     src: awx-admin-password.yaml.j2
+#     dest: "{{ dest }}awx-admin-password.yaml"
+#     mode: '0644'
+
+- name: Create homelab_rootca-tls secret
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic homelab_rootca-tls
+      --namespace awx
+      --save-config
+      --dry-run=client
+      --from-file=bundle-ca.crt={{ dest }}homelab_rootca.crt
+      -o yaml | kubectl apply -f -
 
 - name: Deploy awx-secrets
   kubernetes.core.k8s:
@@ -39,21 +58,21 @@
     state: directory
     mode: '0755'
 
-- name: Create kustomization.yaml file
-  ansible.builtin.template:
-    src: kustomization.yaml.j2
-    dest: "{{ dest }}awx/kustomization.yaml"
-    mode: '0644'
+# - name: Create kustomization.yaml file
+#   ansible.builtin.template:
+#     src: kustomization.yaml.j2
+#     dest: "{{ dest }}awx/kustomization.yaml"
+#     mode: '0644'
 
 - name: Deploy awx operator
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
 
-- name: Create awx.yaml file
-  ansible.builtin.template:
-    src: awx.yaml.j2
-    dest: "{{ dest }}awx/awx.yaml"
-    mode: '0644'
+# - name: Create awx.yaml file
+#   ansible.builtin.template:
+#     src: awx.yaml.j2
+#     dest: "{{ dest }}awx/awx.yaml"
+#     mode: '0644'
 
 - name: Add awx resource to kustomization.yaml
   ansible.builtin.lineinfile:
@@ -65,11 +84,11 @@
   ansible.builtin.shell: >
     kustomize build {{ dest }}awx/ | kubectl apply -f -
 
-- name: Create awx-ingressroute manifest
-  ansible.builtin.template:
-    src: awx-ingressroute.yaml.j2
-    dest: "{{ dest }}awx-ingressroute.yaml"
-    mode: '0644'
+# - name: Create awx-ingressroute manifest
+#   ansible.builtin.template:
+#     src: awx-ingressroute.yaml.j2
+#     dest: "{{ dest }}awx-ingressroute.yaml"
+#     mode: '0644'
 
 - name: Deploy awx-ingressroute
   kubernetes.core.k8s:
