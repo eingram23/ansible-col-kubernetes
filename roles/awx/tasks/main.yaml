@@ -31,7 +31,7 @@
 - name: Create homelab_rootca-tls secret
   ansible.builtin.shell:
     cmd: >
-      kubectl create secret generic homelab_rootca-tls
+      kubectl create secret generic homelab-rootca-tls
       --namespace awx
       --save-config
       --dry-run=client
