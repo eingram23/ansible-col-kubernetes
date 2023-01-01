@@ -18,7 +18,8 @@
     - awx-cert.yaml
     - awx-ingressroute.yaml
     - awx-secret-key.yaml
-    - homelab_rootca.crt
+    - homelab_bundleca.crt
+    - homelab_bundleca-dev.crt
 
 # - name: Create awx admin password secret key
 #   ansible.builtin.template:
