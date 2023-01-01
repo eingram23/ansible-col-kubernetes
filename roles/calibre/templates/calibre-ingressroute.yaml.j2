@@ -9,12 +9,12 @@ spec:
     - web
     - websecure
   routes:
-  - match: Host(`calibre{{ suffix }}.local.lan`) 
+  - match: Host(`calibre{{ suffix }}.ycdisp.net`) 
     kind: Rule
     services:
     - name: calibre
       port: 8080
-  - match: Host(`calibre{{ suffix }}.local.lan`) && PathPrefix(`/admin`)
+  - match: Host(`calibre{{ suffix }}.ycdisp.net`) && PathPrefix(`/admin`)
     kind: Rule
     services:
     - name: calibre
