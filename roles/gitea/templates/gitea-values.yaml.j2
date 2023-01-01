@@ -18,14 +18,14 @@ memcached:
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: longhorn-homelab
+  storageClass: longhorn-homelab-backup
 
 postgresql:
   enabled: true
   persistence:
     enabled: true
     size: 10Gi
-    storageClass: longhorn-homelab
+    storageClass: longhorn-homelab-backup
 
 gitea:
   additionalConfigFromEnvs:
@@ -36,7 +36,7 @@ gitea:
           key: password
   config:
     server:
-      DOMAIN: gitea{{ suffix }}.local.lan
+      DOMAIN: gitea{{ suffix }}.ycdisp.net
       PROTOCOL: https
       CERT_FILE: /certs/tls.crt
       KEY_FILE: /certs/tls.key

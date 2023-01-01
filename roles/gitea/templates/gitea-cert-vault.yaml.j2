@@ -1,13 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: gitea-tls-acme
+  name: gitea-tls
   namespace: gitea
 spec:
   secretName: gitea-tls
   issuerRef:
     kind: ClusterIssuer
-    name: acme-cluster-issuer
-  commonName: gitea{{ suffix }}.ycdisp.net
+    name: vault-cluster-issuer
+  commonName: gitea{{ suffix }}.local.lan
   dnsNames:
-  - gitea{{ suffix }}.ycdisp.net
+  - gitea{{ suffix }}.local.lan
+  duration: 8760h
