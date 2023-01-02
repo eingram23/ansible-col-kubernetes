@@ -60,6 +60,7 @@
   vars:
     appname: calibre
     target: ip_address
+  delegate_to: localhost
 
 - name: Add calibre-web GCP DNS record
   ansible.builtin.include_role:
@@ -68,3 +69,4 @@
   vars:
     appname: calibre-web
     target: ip_address
+  delegate_to: localhost
