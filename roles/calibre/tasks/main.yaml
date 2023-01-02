@@ -57,16 +57,19 @@
   ansible.builtin.include_role:
     name: eingram23.gcp.cloud_dns
     tasks_from: add
+    apply:
+      delegate_to: localhost
   vars:
     appname: calibre
     target: ip_address
-  delegate_to: localhost
+  
 
 - name: Add calibre-web GCP DNS record
   ansible.builtin.include_role:
     name: eingram23.gcp.cloud_dns
     tasks_from: add
+    apply:
+      delegate_to: localhost
   vars:
     appname: calibre-web
     target: ip_address
-  delegate_to: localhost
