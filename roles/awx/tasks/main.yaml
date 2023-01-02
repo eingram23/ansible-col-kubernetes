@@ -97,4 +97,26 @@
   loop:
     - awx-cert.yaml
     - awx-ingressroute.yaml
-    
+
+- name: Get svc info
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Service
+    name: traefik
+    namespace: kube-system
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+  register: service
+
+- name: Set ip_address 
+  ansible.builtin.set_fact:
+    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+
+- name: Add awx GCP DNS record
+  ansible.builtin.include_role:
+    name: eingram23.gcp.cloud_dns
+    tasks_from: add
+    apply:
+      delegate_to: localhost
+  vars:
+    appname: awx{{ suffix }}
+    target: "{{ ip_address }}"
