@@ -60,7 +60,7 @@
     apply:
       delegate_to: localhost
   vars:
-    appname: calibre
+    appname: calibre{{ suffix }}
     target: "{{ ip_address }}"
 
 - name: Add calibre-web GCP DNS record
@@ -70,5 +70,5 @@
     apply:
       delegate_to: localhost
   vars:
-    appname: calibre-web
+    appname: calibre-web{{ suffix }}
     target: "{{ ip_address }}"
