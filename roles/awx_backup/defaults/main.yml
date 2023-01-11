@@ -5,7 +5,7 @@ kind: 'AWXBackup'
 api_version: '{{ deployment_type }}.ansible.com/v1beta1'
 
 # Specify a pre-created PVC (name) to backup to
-# backup_pvc: 'awx-backup-pvc'
+backup_pvc: ''
 backup_pvc_namespace: "{{ ansible_operator_meta.namespace }}"
 
 backup_storage_class: 'longhorn-homelab-backup'
