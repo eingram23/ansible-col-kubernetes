@@ -125,15 +125,3 @@
   vars:
     appname: awx{{ suffix }}
     target: "{{ ip_address }}"
-
-- name: Copy backup manifest to host
-  ansible.builtin.copy:
-    src: awx-backup.yaml
-    dest: "{{ dest }}awx-backup.yaml"
-    mode: '0644'
-
-- name: Deploy awx backup manifest
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}awx-backup.yaml"
-    kubeconfig: "{{ kubeconfig }}"
