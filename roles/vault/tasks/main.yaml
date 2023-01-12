@@ -34,7 +34,17 @@
   loop:
     - pki-policy.sh
     - vault-csr.conf
-    - vault-values.yaml
+
+- name: Set vault-pvc storageclass (Dev)
+  ansible.builtin.set_fact:
+    storageclass: longhorn-homelab-dev
+  when: suffix == "-dev"
+
+- name: Create vault-values file
+  ansible.builtin.template:
+    src: vault-values.yaml.j2
+    dest: "{{ dest }}vault-values.yaml"
+    mode: '0644'
 
 - name: Create key for k8s to sign (for TLS Listener)
   community.crypto.openssl_privatekey:
