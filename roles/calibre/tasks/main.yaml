@@ -25,13 +25,20 @@
     - calibre-cert.yaml
     - calibre-web-cert.yaml
 
+- name: Deploy calibre-pvc
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - calibre-pvc{{ suffix }}.yaml
+
 - name: Deploy calibre
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - calibre-pvc.yaml
     - calibre-service.yaml
     - calibre-deployment.yaml
     - calibre-middleware.yaml

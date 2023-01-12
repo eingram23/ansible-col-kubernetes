@@ -1,0 +1,17 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-homelab-dev
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+parameters:
+  numberOfReplicas: "1"
+  staleReplicaTimeout: "30" # minutes
+  fromBackup: ""
+  # recurringJobSelector: '[
+  #   {
+  #     "name":"backup",
+  #     "isGroup":true
+  #   }
+  # ]'
+  fsType: "xfs"

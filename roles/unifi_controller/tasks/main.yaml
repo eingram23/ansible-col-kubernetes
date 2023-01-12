@@ -22,6 +22,12 @@
     - unifi-cert-acme.yaml
     - unifi-deployment.yaml
 
+- name: Deploy unifi-pvc
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}unifi-pvc{{ suffix }}"
+    kubeconfig: "{{ kubeconfig }}"
+
 - name: Deploy unifi
   kubernetes.core.k8s:
     state: present
@@ -29,7 +35,6 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-cert-acme.yaml
-    - unifi-pvc.yaml
     - unifi-service.yaml
     - unifi-deployment.yaml
 

@@ -5,13 +5,13 @@
     kind: Namespace
     state: present
     kubeconfig: "{{ kubeconfig }}"
-    
+
 - name: Add gitea-charts/gitea chart repo
   kubernetes.core.helm_repository:
     name: gitea-charts
     repo_url: "https://dl.gitea.io/charts/"
 
-- name: Create gitea secrets and values
+- name: Create gitea secrets
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
@@ -20,6 +20,18 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
     - gitea-cert.yaml
+
+- name: Set storageclass (Dev)
+  ansible.builtin.set_fact:
+    storageclass: longhorn-homelab-dev
+  when: suffix == "-dev"
+
+- name: Create gitea values
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
     - gitea-values.yaml
 
 - name: Deploy gitea secrets and cert

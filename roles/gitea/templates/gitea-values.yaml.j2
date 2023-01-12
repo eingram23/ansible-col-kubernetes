@@ -18,14 +18,14 @@ memcached:
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: longhorn-homelab-backup
+  storageClass: {{ storageclass }}
 
 postgresql:
   enabled: true
   persistence:
     enabled: true
     size: 10Gi
-    storageClass: longhorn-homelab-backup
+    storageClass: {{ storageclass }}
 
 gitea:
   additionalConfigFromEnvs:

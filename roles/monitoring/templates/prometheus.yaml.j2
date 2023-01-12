@@ -46,7 +46,7 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: longhorn-homelab
+        storageClassName: longhorn-homelab{{ suffix }}
         resources:
           requests:
             storage: 10Gi

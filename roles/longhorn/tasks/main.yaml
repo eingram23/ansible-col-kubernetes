@@ -91,6 +91,7 @@
     - longhorn-storageclass.yaml
     - longhorn-storageclass-backup.yaml
     - longhorn-recurringjob-backup.yaml
+    - longhorn-storageclass-dev.yaml
 
 - name: Make longhorn the default storage class
   ansible.builtin.shell: |

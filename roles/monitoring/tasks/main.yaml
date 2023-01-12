@@ -128,6 +128,12 @@
     - traefik-servicemonitor.yaml
     - prom-scrape-servers.yaml
 
+- name: Create prometheus manifest
+  ansible.builtin.template:
+    src: prometheus.yaml.j2
+    dest: "{{ dest }}prometheus.yaml"
+    mode: '0644'
+
 - name: Deploy prometheus
   kubernetes.core.k8s:
     state: present
