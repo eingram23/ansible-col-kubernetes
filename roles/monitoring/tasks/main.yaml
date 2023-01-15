@@ -80,6 +80,7 @@
   ansible.builtin.git:
     repo: 'https://github.com/eingram23/configs.git'
     dest: /var/tmp/configs
+    clone: true
     # key_file: /var/tmp/ssh-key-git.key
     # accept_hostkey: true
   tags: update_promjobs
