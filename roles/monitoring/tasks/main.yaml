@@ -229,6 +229,7 @@
     - graf-dash-cm-vmware.yaml
     - graf-dash-cm-kube-state.yaml
     - graf-dash-cm-longhorn.yaml
+    - graf-dash-cm-ups.yaml
     - graf-datasource-secret-influx.yaml
     - graf-datasource-cm-prom.yaml
   tags: 
