@@ -1,7 +1,5 @@
 global:
   tlsDisable: false
-  serverTelemetry:
-    prometheusOperator: false
 server:
   image:
     repository: "hashicorp/vault"
@@ -37,9 +35,6 @@ server:
     config: |
       ui = true
       listener "tcp" {
-        # telemetry {
-        #   unauthenticated_metrics_access = true
-        # }
         tls_disable = false
         address = "[::]:8200"
         cluster_address = "[::]:8201"
@@ -48,43 +43,11 @@ server:
         tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
         tls_disable_client_certs = true
       }
-      
-      # telemetry {
-      #   prometheus_retention_time = "24h"
-      #   disable_hostname = true
-      }
 
       storage "file" {
         path = "/vault/data"
       }
 ui:
   enabled: true
-serverTelemetry:
-  serviceMonitor:
-    enabled: false
-    # Selector labels to add to the ServiceMonitor.
-    # When empty, defaults to:
-    #  release: prometheus
-    selectors: {}
-    interval: 1m
-    scrapeTimeout: 30s
-  prometheusRules:
-    enabled: false
-    # Some example rules.
-    rules: {}
-    #  - alert: vault-HighResponseTime
-    #    annotations:
-    #      message: The response time of Vault is over 500ms on average over the last 5 minutes.
-    #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 500
-    #    for: 5m
-    #    labels:
-    #      severity: warning
-    #  - alert: vault-HighResponseTime
-    #    annotations:
-    #      message: The response time of Vault is over 1s on average over the last 5 minutes.
-    #    expr: vault_core_handle_request{quantile="0.5", namespace="mynamespace"} > 1000
-    #    for: 5m
-    #    labels:
-    #      severity: critical
 injector:
   enabled: false
