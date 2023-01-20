@@ -27,7 +27,7 @@
     apply:
       delegate_to: localhost
   vars:
-    appname: calibre{{ suffix }}
+    appname: traefik{{ suffix }}
     target: "{{ ip_address }}"
 
 - name: Deploy traefik manifests
