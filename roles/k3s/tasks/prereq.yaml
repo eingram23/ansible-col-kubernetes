@@ -63,7 +63,7 @@
     state: present
     fs_type: ext4
 
-- name: Create an xfs filesystem on /dev/sdb1
+- name: Create an ext4 filesystem on /dev/sdb1
   community.general.filesystem:
     fstype: ext4
     dev: /dev/sdb1
