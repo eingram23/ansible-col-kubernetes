@@ -8,7 +8,7 @@ spec:
     - web
     - websecure
   routes:
-    - match: Host(`traefik{{ suffix }}.local.lan`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+    - match: Host(`traefik{{ suffix }}.ycdisp.net`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
       kind: Rule
       services:
         - name: api@internal
