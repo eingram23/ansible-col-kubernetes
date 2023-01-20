@@ -61,7 +61,7 @@ ui:
   enabled: true
 serverTelemetry:
   serviceMonitor:
-    enabled: true
+    enabled: false
     # Selector labels to add to the ServiceMonitor.
     # When empty, defaults to:
     #  release: prometheus
@@ -69,7 +69,7 @@ serverTelemetry:
     interval: 1m
     scrapeTimeout: 30s
   prometheusRules:
-    enabled: true
+    enabled: false
     # Some example rules.
     rules: {}
     #  - alert: vault-HighResponseTime
