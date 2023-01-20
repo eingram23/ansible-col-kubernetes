@@ -43,6 +43,14 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
 
+- name: Deploy gitea cert
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - gitea-cert.yaml
+    
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
     release_name: gitea
@@ -78,10 +86,3 @@
     appname: gitea{{ suffix }}
     target: "{{ ip_address }}"
 
-- name: Deploy gitea cert
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - gitea-cert.yaml

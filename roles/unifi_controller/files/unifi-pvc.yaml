@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-homelab-backup
+  storageClassName: longhorn-homelab
   resources:
     requests:
       storage: 10Gi
@@ -21,7 +21,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-homelab-backup
+  storageClassName: longhorn-homelab
   resources:
     requests:
       storage: 10Gi

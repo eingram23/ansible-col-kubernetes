@@ -202,7 +202,7 @@
     - grafana-admin-pass.yaml
   tags: grafana
 
-- name: Add hashicorp/vault chart repo
+- name: Add grafana/grafana chart repo
   kubernetes.core.helm_repository:
     name: grafana
     repo_url: "https://grafana.github.io/helm-charts"
