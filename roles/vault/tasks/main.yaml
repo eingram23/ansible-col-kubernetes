@@ -192,7 +192,6 @@
       ansible.builtin.set_fact:
         root_token: "{{ root_token_enc['content'] | b64decode }}"
   tags:
-    - always
     - show_token
 
 - name: Configure vault pki
@@ -228,7 +227,6 @@
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
   tags:
-    - never
     - unseal
 
 - name: Generate Int CSR
