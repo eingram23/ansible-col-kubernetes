@@ -238,6 +238,11 @@
 - name: Run certstrap tasks
   ansible.builtin.include_tasks: certstrap.yaml
 
+- name: Create cert_manager vault issuer
+  ansible.builtin.include_role:
+    name: eingram23.kubernetes.cert_manager
+    tasks_from: vault_issuer
+    
 - name: Show root_token
   ansible.builtin.debug:
     var: root_token
