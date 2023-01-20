@@ -19,7 +19,7 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - unifi-cert-acme.yaml
+    - unifi-cert.yaml
     - unifi-deployment.yaml
 
 - name: Deploy unifi-pvc
@@ -34,7 +34,6 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - unifi-cert-acme.yaml
     - unifi-service.yaml
     - unifi-deployment.yaml
 
@@ -60,3 +59,11 @@
   vars:
     appname: unifi{{ suffix }}
     target: "{{ ip_address }}"
+
+- name: Deploy unifi cert
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - unifi-cert.yaml

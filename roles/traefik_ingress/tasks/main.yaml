@@ -7,6 +7,29 @@
     - traefik-ingressroute.yaml
     - traefik-cert.yaml
 
+- name: Get svc info
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Service
+    name: traefik
+    namespace: kube-system
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+  register: service
+
+- name: Set ip_address 
+  ansible.builtin.set_fact:
+    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+
+- name: Add calibre GCP DNS record
+  ansible.builtin.include_role:
+    name: eingram23.gcp.cloud_dns
+    tasks_from: add
+    apply:
+      delegate_to: localhost
+  vars:
+    appname: calibre{{ suffix }}
+    target: "{{ ip_address }}"
+
 - name: Deploy traefik manifests
   kubernetes.core.k8s:
     state: present

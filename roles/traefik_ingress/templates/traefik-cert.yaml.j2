@@ -1,14 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: traefik-tls
+  name: traefik-tls-acme
   namespace: kube-system
 spec:
   secretName: traefik-tls
   issuerRef:
     kind: ClusterIssuer
-    name: vault-cluster-issuer
-  commonName: traefik{{ suffix }}.local.lan
+    name: acme-cluster-issuer
+  commonName: traefik{{ suffix }}.ycdisp.net
   dnsNames:
-  - traefik{{ suffix }}.local.lan
-  duration: 8760h
+  - traefik{{ suffix }}.ycdisp.net

@@ -44,8 +44,6 @@
     - calibre-middleware.yaml
     - calibre-ingressroute.yaml
     - calibre-web-ingressroute.yaml
-    - calibre-cert.yaml
-    - calibre-web-cert.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -79,3 +77,12 @@
   vars:
     appname: calibre-web{{ suffix }}
     target: "{{ ip_address }}"
+
+- name: Deploy calibre certs
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - calibre-cert.yaml
+    - calibre-web-cert.yaml
