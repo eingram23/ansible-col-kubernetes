@@ -1,7 +1,7 @@
 global:
   tlsDisable: false
   serverTelemetry:
-    prometheusOperator: true
+    prometheusOperator: false
 server:
   image:
     repository: "hashicorp/vault"
@@ -37,9 +37,9 @@ server:
     config: |
       ui = true
       listener "tcp" {
-        telemetry {
-          unauthenticated_metrics_access = true
-        }
+        # telemetry {
+        #   unauthenticated_metrics_access = true
+        # }
         tls_disable = false
         address = "[::]:8200"
         cluster_address = "[::]:8201"
@@ -49,9 +49,9 @@ server:
         tls_disable_client_certs = true
       }
       
-      telemetry {
-        prometheus_retention_time = "24h"
-        disable_hostname = true
+      # telemetry {
+      #   prometheus_retention_time = "24h"
+      #   disable_hostname = true
       }
 
       storage "file" {
