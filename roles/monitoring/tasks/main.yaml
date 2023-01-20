@@ -230,6 +230,7 @@
     - graf-dash-cm-kube-state.yaml
     - graf-dash-cm-longhorn.yaml
     - graf-dash-cm-ups.yaml
+    - graf-dash-cm-k3s.yaml
     - graf-datasource-secret-influx.yaml
     - graf-datasource-cm-prom.yaml
   tags: 
