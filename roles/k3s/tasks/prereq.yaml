@@ -1,0 +1,75 @@
+---
+- name: Disable swap for current session
+  ansible.builtin.command: swapoff -a
+
+- name: Disable swap permanently, persist reboots
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    line: '#\1\2\3swap\4'
+    backup: yes
+
+- name: Create folder for storing definition files for ansible to execute
+  ansible.builtin.file:
+    path: /opt/kubernetes/defs
+    state: directory
+    owner: ansible
+    group: ansible
+    mode: '0755'
+
+- name: Install kubernetes python module
+  ansible.builtin.pip:
+    name: kubernetes
+
+- name: Disable firewall (RHEL/Rocky)
+  ansible.builtin.systemd:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: Check if helm is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/helm
+  register: helm_bin
+
+- name: Install helm
+  ansible.builtin.shell: |
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  when: not helm_bin.stat.exists
+  register: install_result
+  failed_when: install_result.rc != 1
+
+- name: Check if kustomize is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/kustomize
+  register: kustomize_bin
+
+- name: Install kustomize
+  ansible.builtin.shell: |
+    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+    mv kustomize /usr/bin
+
+- name: Create longhorn mount point
+  ansible.builtin.file:
+    path: /longhorn
+    state: directory
+    mode: '0755'
+
+- name: Partition and format longhorn disks
+  community.general.parted:
+    device: /dev/sdb
+    number: 1
+    state: present
+    fs_type: ext4
+
+- name: Create an xfs filesystem on /dev/sdb1
+  community.general.filesystem:
+    fstype: ext4
+    dev: /dev/sdb1
+
+- name: Mount longhorn disks
+  ansible.posix.mount:
+    path: /var/lib/longhorn
+    src: /dev/sdb1
+    fstype: ext4
+    state: mounted
