@@ -1,6 +1,11 @@
 ---
 # tags: grafana, alerts
-
+- name: Download prometheus-operator bundle to host
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus-operator/prometheus-operator/releases/download/{{ prom_oper_ver }}/bundle.yaml
+    dest: "{{ dest }}prometheus-operator.yaml"
+    mode: '0644'
+    
 - name: Download manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
