@@ -14,4 +14,4 @@ parameters:
       "isGroup":true
     }
   ]'
-  fsType: "ext4"
+  fsType: "xfs"

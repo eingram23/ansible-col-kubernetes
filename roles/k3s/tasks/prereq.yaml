@@ -61,16 +61,16 @@
     device: /dev/sdb
     number: 1
     state: present
-    fs_type: ext4
+    fs_type: xfs
 
-- name: Create an ext4 filesystem on /dev/sdb1
+- name: Create an xfs filesystem on /dev/sdb1
   community.general.filesystem:
-    fstype: ext4
+    fstype: xfs
     dev: /dev/sdb1
 
 - name: Mount longhorn disks
   ansible.posix.mount:
     path: /var/lib/longhorn
     src: /dev/sdb1
-    fstype: ext4
+    fstype: xfs
     state: mounted
