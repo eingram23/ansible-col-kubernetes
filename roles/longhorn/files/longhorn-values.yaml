@@ -3,7 +3,6 @@ defaultSettings:
   backupTarget: nfs://homenas.local.lan:/longhorn_backups
   # backupTargetCredentialSecret: longhorn-s3-secret
   # defaultDataLocality: best-effort
-  replicaAutoBalance: least-effort
   defaultReplicaCount: 2
   defaultLonghornStaticStorageClass: longhorn-homelab-backup
   orphanAutoDeletion: true
