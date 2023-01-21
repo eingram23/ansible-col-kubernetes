@@ -1,3 +1,4 @@
 dest: "/opt/kubernetes/defs/"
 kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 suffix: "{{ env | default() }}"
+ip_range: "192.168.1.231-192.168.1.239"
