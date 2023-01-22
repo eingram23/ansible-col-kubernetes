@@ -15,8 +15,8 @@
   loop:
     - awx-secret-key.yaml
     - awx-admin-password.yaml
-    - awx-cert.yaml
-    - awx-ingressroute.yaml
+    - awx-cert{{ certtype }}.yaml
+    - awx-ingressroute{{ certtype }}.yaml
     - awx-secret-key.yaml
     - homelab_bundleca.crt
     - homelab_bundleca-dev.crt
@@ -93,19 +93,13 @@
     kustomize build {{ dest }}awx/ | kubectl apply -f -
   tags: update
 
-# - name: Create awx-ingressroute manifest
-#   ansible.builtin.template:
-#     src: awx-ingressroute.yaml.j2
-#     dest: "{{ dest }}awx-ingressroute.yaml"
-#     mode: '0644'
-
 - name: Deploy awx-ingressroute
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - awx-ingressroute.yaml
+    - awx-ingressroute{{ certtype }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -129,6 +123,7 @@
   vars:
     appname: awx{{ suffix }}
     target: "{{ ip_address }}"
+  when: certtype != "-vault"
 
 - name: Deploy awx-cert
   kubernetes.core.k8s:
@@ -136,4 +131,8 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - awx-cert.yaml
+    - awx-cert{{ certtype }}.yaml
+
+- name: Display IP Address
+  ansible.builtin.debug:
+    msg: "IP Address is {{ ip_address }}"

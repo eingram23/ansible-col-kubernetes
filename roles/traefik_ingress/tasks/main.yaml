@@ -4,8 +4,8 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - traefik-ingressroute.yaml
-    - traefik-cert.yaml
+    - traefik-ingressroute{{ certtype }}.yaml
+    - traefik-cert{{ certtype }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -16,7 +16,7 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
-- name: Set ip_address 
+- name: Set ip_address
   ansible.builtin.set_fact:
     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
@@ -29,6 +29,7 @@
   vars:
     appname: traefik{{ suffix }}
     target: "{{ ip_address }}"
+  when: certtype != "-vault"
 
 - name: Deploy traefik manifests
   kubernetes.core.k8s:
@@ -36,5 +37,9 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - traefik-ingressroute.yaml
-    - traefik-cert.yaml
+    - traefik-ingressroute{{ certtype }}.yaml
+    - traefik-cert{{ certtype }}.yaml
+
+- name: Display IP Address
+  ansible.builtin.debug:
+    msg: "IP Address is {{ ip_address }}"
