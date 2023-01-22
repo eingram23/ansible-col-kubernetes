@@ -1,5 +1,5 @@
 # longhorn_ver: "1.3.2"
-# longhorn_ver: "1.4.0"
-longhorn_ver: "1.2.6"
+longhorn_ver: "1.4.0"
+# longhorn_ver: "1.2.6"
 iscsi_manifest: "longhorn-iscsi-installation.yaml"
 
