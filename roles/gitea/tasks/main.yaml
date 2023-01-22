@@ -49,7 +49,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - gitea-cert.yaml
+    - gitea-cert{{ certtype }}.yaml
     
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
