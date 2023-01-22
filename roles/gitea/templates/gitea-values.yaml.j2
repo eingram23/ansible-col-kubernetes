@@ -48,7 +48,7 @@ gitea:
           key: password
   config:
     server:
-      DOMAIN: gitea{{ suffix }}.ycdisp.net
+      DOMAIN: gitea{{ suffix }}.{{ app_domain }}
       PROTOCOL: https
       CERT_FILE: /certs/tls.crt
       KEY_FILE: /certs/tls.key
