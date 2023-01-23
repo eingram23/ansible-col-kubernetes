@@ -1,8 +1,8 @@
 ---
-- name: Check if already installed
-  ansible.builtin.stat:
-    path: /usr/local/bin/k3s
-  register: k3s_installed
+# - name: Check if already installed
+#   ansible.builtin.stat:
+#     path: /usr/local/bin/k3s
+#   register: k3s_installed
 
 - name: Run k3s install script
   ansible.builtin.shell: >
@@ -12,7 +12,7 @@
     --disable=servicelb
     --write-kubeconfig-mode 644
     --cluster-init
-  when: not k3s_installed.stat.exists
+  # when: not k3s_installed.stat.exists
 
 - name: Install k3s service
   ansible.builtin.systemd:
