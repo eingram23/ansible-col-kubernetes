@@ -1,21 +1,20 @@
 ---
-# - name: Check if already installed
-#   ansible.builtin.stat:
-#     path: /usr/local/bin/k3s
-#   register: k3s_installed
+- name: Gather service info
+  ansible.builtin.service_facts:
 
-- name: Run k3s install script
-  ansible.builtin.shell: >
-    curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ k3s_version }}
-    K3S_TOKEN={{ host_prefix }} 
-    sh -s - agent --server https://{{ host_prefix }}1.local.lan:6443
-  # --disable=servicelb
-  # --write-kubeconfig-mode 644
-  # when: not k3s_installed.stat.exists
+- block:
+    - name: Run k3s install script
+      ansible.builtin.shell: >
+        curl -sfL https://get.k3s.io |
+        INSTALL_K3S_VERSION={{ k3s_version }}
+        K3S_TOKEN={{ host_prefix }} 
+        sh -s - agent --server https://{{ host_prefix }}1.local.lan:6443
+        --selinux
+        --snapshotter=stargz
 
-- name: Install k3s service
-  ansible.builtin.systemd:
-    name: k3s-agent
-    enabled: true
-    state: started
+    - name: Install k3s service
+      ansible.builtin.systemd:
+        name: k3s-agent
+        enabled: true
+        state: started
+  when: not 'k3s-agent' in services
