@@ -33,12 +33,6 @@
     state: stopped
     enabled: false
 
-- name: Disable nm-cloud-setup service
-  ansible.builtin.systemd:
-    name: nm-cloud-setup
-    state: stopped
-    enabled: false
-
 - name: Check if helm is installed
   ansible.builtin.stat:
     path: /usr/local/bin/helm
