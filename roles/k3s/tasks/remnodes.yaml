@@ -10,8 +10,8 @@
     INSTALL_K3S_VERSION={{ k3s_version }}
     K3S_TOKEN={{ host_prefix }} 
     sh -s - agent --server https://{{ host_prefix }}1.local.lan:6443
-    --disable=servicelb
-    --write-kubeconfig-mode 644
+  # --disable=servicelb
+  # --write-kubeconfig-mode 644
   # when: not k3s_installed.stat.exists
 
 - name: Install k3s service
