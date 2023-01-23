@@ -1,8 +1,8 @@
 ---
-- name: SELinux policy
-  ansible.builtin.shell: |
-    ausearch -c 'iptables' --raw | audit2allow -M my-iptables
-    semodule -X 300 -i my-iptables.pp
+# - name: SELinux policy
+#   ansible.builtin.shell: |
+#     ausearch -c 'iptables' --raw | audit2allow -M my-iptables
+#     semodule -X 300 -i my-iptables.pp
 
 - name: Disable swap for current session
   ansible.builtin.command: swapoff -a
