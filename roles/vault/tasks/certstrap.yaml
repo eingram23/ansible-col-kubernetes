@@ -47,13 +47,12 @@
   become: true
   become_method: sudo
 
-- name: Create certstrap-sign-int.sh and cat-certs.sh on host
+- name: Create certstrap-sign-int.sh
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: ./{{ item }}
     mode: 'u+x'
   loop:
-    - cat-certs.sh
     - certstrap-sign-int.sh
 
 - name: Copy scripts to host
@@ -71,25 +70,8 @@
     mode: '0644'
     remote_src: true
 
-# - name: Pause to copy certs to host
-#   ansible.builtin.pause:
-#     prompt: Copy certs
-
-# - name: Create Int CA
-#   ansible.builtin.shell: |
-#     chmod 440 ~/certstrap/out/Homelab_local.lan_Root_CA*
-#     ./certstrap-sign-int.sh
-#     ./cat-certs.sh
-
-# - name: Get content of cat cert
-#   ansible.builtin.slurp:
-#     src: "certstrap/out/Homelab_local.lan_Root_Int{{ suffix }}_CA.crt"
-#   register: int_cert_enc
-
-# - name: Decode remote content
-#   ansible.builtin.set_fact:
-#     int_cert: "{{ int_cert_enc['content'] | b64decode }}"
-
-# - name: Output int cert
-#   ansible.builtin.debug:
-#     var: int_cert
+- name: Closing message
+  ansible.builtin.debug:
+    msg: |
+      Run from host - ~/copy_cert_certstrap.sh
+      Run from k3s master as ansible user - ~/certstrap-sign-int.sh   

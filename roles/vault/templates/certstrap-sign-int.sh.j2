@@ -8,3 +8,8 @@ certstrap sign \
     --intermediate \
     --CA "Homelab local.lan Root CA" \
     "Homelab{{ suffix }} local.lan Intermediate Authority"
+cd $HOME/certstrap/out
+cat Homelab_Int{{ suffix }}_CA.crt \
+    Homelab_local.lan_Root_CA.crt \
+    > Homelab_local.lan_Root_Int{{ suffix }}_CA.crt
+cat Homelab_local.lan_Root_Int{{ suffix }}_CA.crt
