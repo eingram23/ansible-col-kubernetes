@@ -16,6 +16,6 @@
 
 - name: Install k3s service
   ansible.builtin.systemd:
-    name: k3s
+    name: k3s-agent
     enabled: true
     state: started
