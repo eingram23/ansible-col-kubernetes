@@ -20,7 +20,7 @@
     mode: '0644'
   loop:
     - unifi-cert{{ certtype }}.yaml
-    - unifi-deployment.yaml
+    - unifi-deployment{{ certtype }}.yaml
 
 - name: Deploy unifi-pvc
   kubernetes.core.k8s:
@@ -35,7 +35,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-service.yaml
-    - unifi-deployment.yaml
+    - unifi-deployment{{ certtype }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
