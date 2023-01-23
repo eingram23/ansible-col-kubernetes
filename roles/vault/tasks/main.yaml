@@ -193,6 +193,7 @@
         root_token: "{{ root_token_enc['content'] | b64decode }}"
   tags:
     - show_token
+    - unseal
 
 - name: Configure vault pki
   ansible.builtin.shell:
