@@ -5,6 +5,11 @@
   become: true
   become_method: sudo
 
+- name: Remove certstrap folder if exist
+  ansible.builtin.file:
+    path: certstrap
+    state: absent
+    
 - name: Create certstrap folder
   ansible.builtin.file:
     path: certstrap
