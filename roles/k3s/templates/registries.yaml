@@ -1,0 +1,13 @@
+mirrors:
+  gitea.local.lan:
+    endpoint:
+      - "https://gitea.local.lan"
+configs:
+  "gitea.local.lan":
+    auth:
+      username: eingram
+      password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
+    tls:
+      cert_file: /etc/rancher/k3s/gitea_tls.crt
+      key_file:  /etc/rancher/k3s/gitea_tls.key
+      ca_file:   /etc/rancher/k3s/gitea_ca.crt
