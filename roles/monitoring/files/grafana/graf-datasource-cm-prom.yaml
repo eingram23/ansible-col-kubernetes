@@ -16,6 +16,6 @@ data:
         isDefault: true
         uid: prom
         jsonData:
-          scrapeInterval: '60s'
+          timeInterval: '60s'
           prometheusType: 'Prometheus'
 
