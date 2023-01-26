@@ -15,6 +15,7 @@ data:
         access: proxy
         isDefault: true
         uid: prom
-          jsonData:
-            prometheusType: 'Prometheus'
+        jsonData:
+          scrapeInterval: '60s'
+          prometheusType: 'Prometheus'
 
