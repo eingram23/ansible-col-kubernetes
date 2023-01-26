@@ -15,3 +15,6 @@ data:
         access: proxy
         isDefault: true
         uid: prom
+          jsonData:
+            interval: 60s
+
