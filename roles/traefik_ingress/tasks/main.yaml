@@ -4,8 +4,8 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - traefik-ingressroute{{ certtype }}.yaml
-    - traefik-cert{{ certtype }}.yaml
+    - traefik-ingressroute-{{ cert }}.yaml
+    - traefik-cert-{{ cert }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -20,7 +20,7 @@
   ansible.builtin.set_fact:
     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
-- name: Add calibre GCP DNS record
+- name: Add traefik GCP DNS record
   ansible.builtin.include_role:
     name: eingram23.gcp.cloud_dns
     tasks_from: add
@@ -29,7 +29,7 @@
   vars:
     appname: traefik{{ suffix }}
     target: "{{ ip_address }}"
-  when: certtype != "-vault"
+  when: cert != "vault"
 
 - name: Deploy traefik manifests
   kubernetes.core.k8s:
@@ -37,8 +37,8 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - traefik-ingressroute{{ certtype }}.yaml
-    - traefik-cert{{ certtype }}.yaml
+    - traefik-ingressroute-{{ cert }}.yaml
+    - traefik-cert-{{ cert }}.yaml
 
 - name: Display IP Address
   ansible.builtin.debug:

@@ -19,8 +19,8 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - unifi-cert{{ certtype }}.yaml
-    - unifi-deployment{{ certtype }}.yaml
+    - unifi-cert-{{ cert }}.yaml
+    - unifi-deployment-{{ cert }}.yaml
 
 - name: Deploy unifi-pvc
   kubernetes.core.k8s:
@@ -35,7 +35,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-service.yaml
-    - unifi-deployment{{ certtype }}.yaml
+    - unifi-deployment{{ cert }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -59,7 +59,7 @@
   vars:
     appname: unifi{{ suffix }}
     target: "{{ ip_address }}"
-  when: certtype != "-vault"
+  when: cert != "vault"
 
 - name: Deploy unifi cert
   kubernetes.core.k8s:
@@ -67,7 +67,7 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - unifi-cert{{ certtype }}.yaml
+    - unifi-cert-{{ cert }}.yaml
 
 - name: Display IP Address
   ansible.builtin.debug:

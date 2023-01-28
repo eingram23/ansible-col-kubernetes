@@ -19,7 +19,7 @@
   loop:
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
-    - gitea-cert{{ certtype }}.yaml
+    - gitea-cert-{{ cert }}.yaml
 
 - name: Set storageclass (Dev)
   ansible.builtin.set_fact:
@@ -49,8 +49,18 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - gitea-cert{{ certtype }}.yaml
-    
+    - gitea-cert-{{ cert }}.yaml
+
+- name: Set domain (local.lan)
+  ansible.builtin.set_fact:
+    app_domain: "local.lan"
+  when: cert == "vault"
+
+- name: Set domain (ycdisp.net)
+  ansible.builtin.set_fact:
+    app_domain: "ycdisp.net"
+  when: cert == "acme"
+
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
     release_name: gitea
@@ -85,7 +95,7 @@
   vars:
     appname: gitea{{ suffix }}
     target: "{{ ip_address }}"
-  when: certtype != "-vault"
+  when: cert != "vault"
 
 - name: Display IP Address
   ansible.builtin.debug:

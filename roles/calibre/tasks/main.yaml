@@ -20,10 +20,10 @@
     mode: '0644'
   loop:
     - calibre-deployment.yaml
-    - calibre-ingressroute{{ certtype }}.yaml
-    - calibre-web-ingressroute{{ certtype }}.yaml
-    - calibre-cert{{ certtype }}.yaml
-    - calibre-web-cert{{ certtype }}.yaml
+    - calibre-ingressroute-{{ cert }}.yaml
+    - calibre-web-ingressroute-{{ cert }}.yaml
+    - calibre-cert-{{ cert }}.yaml
+    - calibre-web-cert-{{ cert }}.yaml
 
 - name: Deploy calibre-pvc
   kubernetes.core.k8s:
@@ -42,8 +42,8 @@
     - calibre-service.yaml
     - calibre-deployment.yaml
     - calibre-middleware.yaml
-    - calibre-ingressroute{{ certtype }}.yaml
-    - calibre-web-ingressroute{{ certtype }}.yaml
+    - calibre-ingressroute-{{ cert }}.yaml
+    - calibre-web-ingressroute-{{ cert }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -67,7 +67,7 @@
   vars:
     appname: calibre{{ suffix }}
     target: "{{ ip_address }}"
-  when: certtype != "-vault"
+  when: cert != "vault"
 
 - name: Add calibre-web GCP DNS record
   ansible.builtin.include_role:
@@ -78,7 +78,7 @@
   vars:
     appname: calibre-web{{ suffix }}
     target: "{{ ip_address }}"
-  when: certtype != "-vault"
+  when: cert != "vault"
 
 - name: Deploy calibre certs
   kubernetes.core.k8s:
@@ -86,8 +86,8 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - calibre-cert{{ certtype }}.yaml
-    - calibre-web-cert{{ certtype }}.yaml
+    - calibre-cert-{{ cert }}.yaml
+    - calibre-web-cert-{{ cert }}.yaml
 
 - name: Display IP Address
   ansible.builtin.debug:
