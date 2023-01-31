@@ -23,13 +23,23 @@
     - grafana
     - update_grafdash
 
+- name: Download alertmanager manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/alertmanager/*"
+  tags:
+    - alertmanager
+
 - name: Download alertmanager rules to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "{{ role_path }}/files/alertmanager-rules/*"
-  tags: alerts
+  tags:
+    - alertmanager
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
@@ -53,6 +63,17 @@
     - grafana-admin-pass.yaml
     - grafana-ingressroute.yaml
   tags: grafana
+
+- name: Create templated alertmanager manifests on host
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/alertmanager/{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - alertmanager-config.yaml
+    - alertmanager-ingressroute.yaml
+  tags:
+    - alertmanager
 
 - name: Create vmware-exporter ingressroute manifests on host
   ansible.builtin.template:
@@ -170,12 +191,6 @@
     - vmware-exporter-service.yaml
     - vmware-exporter-ingressroute.yaml
 
-- name: Create alertmanager ingressroute
-  ansible.builtin.template:
-    src: alertmanager-ingressroute.yaml.j2
-    dest: "{{ dest }}alertmanager-ingressroute.yaml"
-    mode: '0644'
-
 - name: Deploy alertmanager and rules
   kubernetes.core.k8s:
     state: present
@@ -190,7 +205,8 @@
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
-  tags: alerts
+  tags:
+    - alertmanager
 
 - name: Deploy grafana secret and ingressroute
   kubernetes.core.k8s:
