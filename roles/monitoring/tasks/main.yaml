@@ -198,6 +198,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - alertmanager.yaml
+    - alertmanager-config.yaml
     - alertmanager-service.yaml
     - alertmanager-main-rules.yaml
     - node-exporter-rules.yaml
