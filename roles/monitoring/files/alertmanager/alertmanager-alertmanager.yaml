@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   replicas: 1
-  alertmanagerConfigSelector:
-    matchLabels:
-      alertmanagerConfig: alertmanagerconfig
+  configSecret: alertmanager
+  # alertmanagerConfigSelector:
+  #   matchLabels:
+  #     alertmanagerConfig: alertmanagerconfig
