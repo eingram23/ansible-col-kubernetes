@@ -23,6 +23,15 @@
     - grafana
     - update_grafdash
 
+- name: Download node-exporter manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/node-exporter/*"
+  tags:
+    - node-exporter
+
 - name: Download alertmanager manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
@@ -43,7 +52,7 @@
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
-    src: node-exporter-daemonset.yaml.j2
+    src: "{{ role_path }}/files/node-exporter/node-exporter-daemonset.yaml.j2"
     dest: "{{ dest }}node-exporter-daemonset.yaml"
     mode: '0644'
 
@@ -151,10 +160,6 @@
   loop:
     - longhorn-servicemonitor.yaml
     - kubelet-servicemonitor.yaml
-    - node-exporter-role.yaml
-    - node-exporter-service.yaml
-    - node-exporter-daemonset.yaml
-    - node-exporter-servicemonitor.yaml
     - kube-state-metrics-role.yaml
     - kube-state-metrics-service.yaml
     - kube-state-metrics-deployment.yaml
@@ -168,6 +173,17 @@
     src: prometheus.yaml.j2
     dest: "{{ dest }}prometheus.yaml"
     mode: '0644'
+
+- name: Deploy node-exporter
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - node-exporter-role.yaml
+    - node-exporter-service.yaml
+    - node-exporter-daemonset.yaml
+    - node-exporter-servicemonitor.yaml
 
 - name: Deploy prometheus
   kubernetes.core.k8s:
