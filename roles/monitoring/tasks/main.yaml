@@ -70,7 +70,7 @@
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
-    - alertmanager.yaml
+    - alertmanager-alertmanager-secret.yaml
     - alertmanager-ingressroute.yaml
   tags:
     - alertmanager
@@ -198,7 +198,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - alertmanager-alertmanager.yaml
-    - alertmanager.yaml
+    - alertmanager-alertmanager-secret.yaml
     - alertmanager-service.yaml
     - alertmanager-main-rules.yaml
     - node-exporter-rules.yaml
