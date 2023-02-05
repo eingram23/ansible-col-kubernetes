@@ -1,0 +1,32 @@
+---
+- name: Create duckdns namespace
+  kubernetes.core.k8s:
+    namespace: duckdns
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Create duckdns token secret
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      type: Opaque
+      metadata:
+        name: duckdns-token
+        namespace: duckdns
+      data:
+        token: "{{ lookup('hashi_vault', 'secret=secret/duckdns:token') }}"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Create deployment manifest on host
+  ansible.builtin.template:
+    src: duckdns-deployment.yaml.j2
+    dest: "{{ dest }}duckdns-deployment.yaml"
+    mode: '0644'
+
+- name: Deploy duckdns
+  kubernetes.core.k8s:
+    src: "{{ dest }}duckdns-deployment.yaml"
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
