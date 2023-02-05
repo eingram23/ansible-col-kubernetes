@@ -17,7 +17,7 @@
       metadata:
         name: duckdns-token
         namespace: duckdns
-      data:
+      stringData:
         token: "{{ lookup('hashi_vault', 'secret=secret/duckdns:token') }}"
     kubeconfig: "{{ kubeconfig }}"
 
