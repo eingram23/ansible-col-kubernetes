@@ -1,7 +1,9 @@
 ---
 - name: Create duckdns namespace
   kubernetes.core.k8s:
-    namespace: duckdns
+    name: duckdns
+    api_version: v1
+    kind: Namespace
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
