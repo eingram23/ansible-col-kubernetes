@@ -11,7 +11,7 @@ metadata:
   namespace: monitoring
 spec:
   groups:
-  - name: general.rules
+  - name: kube-prometheus.rules
     rules:
     - alert: TargetDown
       annotations:

@@ -13,7 +13,7 @@ metadata:
   # annotations:
 spec:
   groups:
-  - name: etcd
+  - name: etcd.rules
     rules:
     - alert: etcdMembersDown
       annotations:

@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/version: 0.24.0
     prometheus: alertmanager
     role: alert-rules
-  name: alertmanager-main-rules
+  name: alertmanager-rules
   namespace: monitoring
 spec:
   groups:

@@ -226,11 +226,12 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - alertmanager-main-rules.yaml
+    - alertmanager-rules.yaml
     - node-exporter-rules.yaml
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
+    - prometheus-rules.yaml
   tags:
     - update_alerts
 
