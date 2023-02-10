@@ -41,14 +41,14 @@
   tags:
     - alertmanager
 
-- name: Download alertmanager rules to host
+- name: Download alert rules to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "{{ role_path }}/files/alertmanager-rules/*"
+  with_fileglob: "{{ role_path }}/files/alert-rules/*"
   tags:
-    - alertmanager
+    - update_alerts
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
@@ -216,14 +216,23 @@
     - alertmanager-alertmanager.yaml
     - alertmanager-alertmanager-secret.yaml
     - alertmanager-service.yaml
+    - alertmanager-ingressroute.yaml
+  tags:
+    - alertmanager
+
+- name: Deploy prometheus alert rules
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
     - alertmanager-main-rules.yaml
     - node-exporter-rules.yaml
-    - alertmanager-ingressroute.yaml
     - general-rules.yaml
     - etcd-rules.yaml
     - kube-prometheus-rules.yaml
   tags:
-    - alertmanager
+    - update_alerts
 
 - name: Deploy grafana secret and ingressroute
   kubernetes.core.k8s:
