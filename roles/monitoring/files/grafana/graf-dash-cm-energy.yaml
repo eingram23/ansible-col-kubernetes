@@ -33,7 +33,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 10,
+      "id": 2,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -45,37 +45,7 @@ data:
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 30,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
+                "mode": "thresholds"
               },
               "mappings": [],
               "thresholds": {
@@ -95,76 +65,41 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
-            "w": 12,
+            "h": 4,
+            "w": 3,
             "x": 0,
             "y": 0
           },
-          "id": 18,
+          "id": 16,
           "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
             },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+            "textMode": "auto"
           },
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "datasource": {
                 "type": "influxdb",
                 "uid": "influx"
               },
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "W",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"value\") FROM \"W\" WHERE (\"entity_id\" = 'envoy_202233021811_current_power_production') AND $timeFilter GROUP BY time($__interval) fill(null)",
+              "query": "SELECT (\"value\") / 1000 FROM \"W\" WHERE (\"entity_id\" = 'envoy_202233021811_current_power_production')",
               "rawQuery": true,
               "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "entity_id",
-                  "operator": "=",
-                  "value": "envoy_202233021811_current_power_production"
-                }
-              ]
+              "resultFormat": "time_series"
             }
           ],
-          "title": "Solar Power Production (History)",
-          "type": "timeseries"
+          "title": "Solar Power Production (kW)",
+          "type": "stat"
         },
         {
           "datasource": {
@@ -196,7 +131,7 @@ data:
           "gridPos": {
             "h": 4,
             "w": 3,
-            "x": 12,
+            "x": 3,
             "y": 0
           },
           "id": 12,
@@ -214,7 +149,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.5",
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "datasource": {
@@ -260,71 +195,7 @@ data:
           "gridPos": {
             "h": 4,
             "w": 3,
-            "x": 15,
-            "y": 0
-          },
-          "id": 16,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "9.2.5",
-          "targets": [
-            {
-              "datasource": {
-                "type": "influxdb",
-                "uid": "influx"
-              },
-              "query": "SELECT (\"value\") FROM \"W\" WHERE (\"entity_id\" = 'envoy_202233021811_current_power_production')",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series"
-            }
-          ],
-          "title": "Solar Power Production",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influx"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 3,
-            "x": 18,
+            "x": 6,
             "y": 0
           },
           "id": 20,
@@ -342,7 +213,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.5",
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "datasource": {
@@ -388,8 +259,8 @@ data:
           "gridPos": {
             "h": 4,
             "w": 3,
-            "x": 12,
-            "y": 4
+            "x": 9,
+            "y": 0
           },
           "id": 4,
           "options": {
@@ -406,7 +277,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "9.2.5",
+          "pluginVersion": "9.3.1",
           "targets": [
             {
               "alias": "Monthly",
@@ -469,8 +340,8 @@ data:
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
-                "drawStyle": "bars",
-                "fillOpacity": 0,
+                "drawStyle": "line",
+                "fillOpacity": 30,
                 "gradientMode": "none",
                 "hideFrom": {
                   "legend": false,
@@ -484,7 +355,7 @@ data:
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "spanNulls": false,
+                "spanNulls": true,
                 "stacking": {
                   "group": "A",
                   "mode": "none"
@@ -511,17 +382,15 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
-            "w": 12,
+            "h": 11,
+            "w": 24,
             "x": 0,
-            "y": 8
+            "y": 4
           },
-          "id": 10,
+          "id": 18,
           "options": {
             "legend": {
-              "calcs": [
-                "lastNotNull"
-              ],
+              "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
               "showLegend": true
@@ -533,102 +402,7 @@ data:
           },
           "targets": [
             {
-              "datasource": {
-                "type": "influxdb",
-                "uid": "influx"
-              },
-              "query": "SELECT (\"value\") FROM \"kW\" WHERE (\"entity_id\" = 'home_power_consumption')",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series"
-            }
-          ],
-          "title": "Home Power Consumption (History)",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influx"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "kW",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 8
-          },
-          "id": 2,
-          "options": {
-            "legend": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "8.0.2",
-          "targets": [
-            {
-              "alias": "kW",
+              "alias": "Solar Production",
               "datasource": {
                 "type": "influxdb",
                 "uid": "influx"
@@ -642,14 +416,16 @@ data:
                 },
                 {
                   "params": [
-                    "linear"
+                    "null"
                   ],
                   "type": "fill"
                 }
               ],
-              "measurement": "kW",
+              "measurement": "W",
               "orderByTime": "ASC",
               "policy": "default",
+              "query": "SELECT mean(\"value\") / 1000 FROM \"W\" WHERE (\"entity_id\" = 'envoy_202233021811_current_power_production') AND $timeFilter GROUP BY time($__interval) fill(previous)",
+              "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -670,12 +446,36 @@ data:
                 {
                   "key": "entity_id",
                   "operator": "=",
-                  "value": "rainforest_emu_2_power"
+                  "value": "envoy_202233021811_current_power_production"
                 }
               ]
+            },
+            {
+              "alias": "Home Power Consumption",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "influx"
+              },
+              "hide": false,
+              "query": "SELECT (\"value\") FROM \"kW\" WHERE (\"entity_id\" = 'home_power_consumption') ",
+              "rawQuery": true,
+              "refId": "B",
+              "resultFormat": "time_series"
+            },
+            {
+              "alias": "Power Net/Debt",
+              "datasource": {
+                "type": "influxdb",
+                "uid": "influx"
+              },
+              "hide": false,
+              "query": "SELECT mean(\"value\") FROM \"kW\" WHERE (\"entity_id\" = 'rainforest_emu_2_power') AND $timeFilter GROUP BY time($__interval) fill(previous)",
+              "rawQuery": true,
+              "refId": "C",
+              "resultFormat": "time_series"
             }
           ],
-          "title": "Power Net/Debt",
+          "title": "Energy",
           "type": "timeseries"
         },
         {
@@ -741,7 +541,7 @@ data:
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 16
+            "y": 15
           },
           "id": 6,
           "options": {
@@ -749,7 +549,7 @@ data:
               "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
-              "showLegend": true
+              "showLegend": false
             },
             "tooltip": {
               "mode": "single",
@@ -808,8 +608,8 @@ data:
               ]
             }
           ],
-          "timeFrom": "2M",
-          "title": "Daily Usage",
+          "timeFrom": "1M",
+          "title": "Daily Usage (kWh)",
           "type": "timeseries"
         },
         {
@@ -827,35 +627,24 @@ data:
                 "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
-                "barAlignment": 1,
-                "drawStyle": "line",
-                "fillOpacity": 67,
+                "fillOpacity": 45,
                 "gradientMode": "none",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
                   "viz": false
                 },
-                "lineInterpolation": "linear",
-                "lineStyle": {
-                  "fill": "solid"
-                },
                 "lineWidth": 1,
-                "pointSize": 5,
                 "scaleDistribution": {
                   "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
                 },
                 "thresholdsStyle": {
                   "mode": "off"
                 }
               },
+              "links": [],
               "mappings": [],
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -876,24 +665,33 @@ data:
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 16
+            "y": 15
           },
-          "id": 8,
+          "id": 21,
           "options": {
+            "barRadius": 0,
+            "barWidth": 0.47,
+            "groupWidth": 0.7,
             "legend": {
               "calcs": [],
               "displayMode": "list",
               "placement": "bottom",
-              "showLegend": true
+              "showLegend": false
             },
+            "orientation": "auto",
+            "showValue": "auto",
+            "stacking": "none",
             "tooltip": {
               "mode": "single",
               "sort": "none"
-            }
+            },
+            "xTickLabelRotation": 0,
+            "xTickLabelSpacing": 0
           },
+          "pluginVersion": "8.0.2",
           "targets": [
             {
-              "alias": "kWh",
+              "alias": "",
               "datasource": {
                 "type": "influxdb",
                 "uid": "influx"
@@ -901,7 +699,7 @@ data:
               "groupBy": [
                 {
                   "params": [
-                    "$__interval"
+                    "1d"
                   ],
                   "type": "time"
                 },
@@ -915,8 +713,8 @@ data:
               "measurement": "kWh",
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT last(\"value\") FROM \"kWh\" WHERE (\"entity_id\" = 'energy_monthly') AND $timeFilter GROUP BY time(1M) fill(previous)",
-              "rawQuery": false,
+              "query": "SELECT max(\"value\") FROM \"kWh\" WHERE (\"entity_id\" = 'energy_monthly') AND $timeFilter GROUP BY time(30d) fill(previous)",
+              "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -937,14 +735,14 @@ data:
                 {
                   "key": "entity_id",
                   "operator": "=",
-                  "value": "energy_monthly"
+                  "value": "energy_daily"
                 }
               ]
             }
           ],
-          "timeFrom": "2y",
-          "title": "Monthly Usage",
-          "type": "timeseries"
+          "timeFrom": "6M",
+          "title": "Monthly Usage (kWh)",
+          "type": "barchart"
         }
       ],
       "refresh": "1m",
@@ -955,7 +753,7 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-24h",
+        "from": "now-12h",
         "to": "now"
       },
       "timepicker": {
@@ -974,6 +772,6 @@ data:
       "timezone": "",
       "title": "Energy",
       "uid": "bCGmfmnGe",
-      "version": 2,
+      "version": 1,
       "weekStart": ""
     }
