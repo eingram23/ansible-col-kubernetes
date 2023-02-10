@@ -16,7 +16,7 @@ spec:
     rules:
     - alert: InstanceDown
       # Condition for alerting
-      expr: up == 0
+      expr: up == 0 and (instance == "homeassistant" or instance == "homenas")
       for: 1m
       # Annotation - additional informational labels to store more information
       annotations:
