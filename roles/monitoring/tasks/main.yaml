@@ -131,6 +131,158 @@
     {{ dest }}prom-scrape-servers.yaml
   tags: update_promjobs
 
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/alertmanager.json"
+  register: alertmanager-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "alertmanager-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        alertmanager.json: "{{ alertmanager-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/climate.json"
+  register: climate-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "climate-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        climate.json: "{{ climate-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/energy.json"
+  register: energy-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "energy-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        energy.json: "{{ energy-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/node-exporter-en-20201010.json"
+  register: node-exporter-en-20201010-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "node-exporter-en-20201010-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        node-exporter-en-20201010.json: "{{ node-exporter-en-20201010-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/node-exporter.json"
+  register: node-exporter-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "node-exporter-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        node-exporter.json: "{{ node-exporter-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/ups.json"
+  register: ups-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "ups-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        ups.json: "{{ ups-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/vmware.json"
+  register: vmware-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "vmware-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        vmware.json: "{{ vmware-dash.content | b64decode }}"
+
+- name: Read dashboard json file
+  ansible.builtin.slurp:
+    src: "/var/tmp/configs/grafana/dashboards/windows.json"
+  register: windows-dash
+
+- name: Create dashboard configmap
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "windows-dash"
+        labels:
+          grafana_dashboard: "1"
+      data:
+        windows.json: "{{ windows-dash.content | b64decode }}"
+
 - name: Deploy prometheus job secret
   kubernetes.core.k8s:
     state: present
