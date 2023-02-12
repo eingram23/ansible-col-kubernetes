@@ -286,7 +286,7 @@
   - name: Read dashboard json file
     ansible.builtin.slurp:
       src: "/var/tmp/configs/grafana/dashboards/windows.json"
-    register: windows-dash
+    register: windows_dash
 
   - name: Create dashboard configmap
     kubernetes.core.k8s:
