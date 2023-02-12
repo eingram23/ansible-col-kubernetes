@@ -135,7 +135,12 @@
 
 - name: Create grafana dashboard configmaps from json files
   ansible.builtin.shell:
-    kubectl apply configmap {{ item }}-dash -n monitoring --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
+    kubectl create configmap {{ item }}-dash
+      --namespace monitoring
+      --save-config
+      --dry-run=client
+      --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
+      -o yaml | kubectl apply -f -
   loop:
     - alertmanager
     - climate
