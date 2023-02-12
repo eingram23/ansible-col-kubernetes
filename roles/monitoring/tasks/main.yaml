@@ -145,6 +145,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -164,6 +165,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -183,6 +185,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -202,6 +205,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -221,6 +225,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -240,6 +245,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -259,6 +265,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -278,6 +285,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -297,6 +305,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -316,6 +325,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
@@ -335,6 +345,7 @@
     kubernetes.core.k8s:
       state: present
       namespace: monitoring
+      kubeconfig: "{{ kubeconfig }}"
       definition:
         apiVersion: v1
         kind: ConfigMap
