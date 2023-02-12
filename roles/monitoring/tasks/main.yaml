@@ -154,7 +154,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          alertmanager.json: "{{ alertmanager_dash.content | b64decode }}"
+          alertmanager.json: |-
+            "{{ alertmanager_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
