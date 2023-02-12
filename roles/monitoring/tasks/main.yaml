@@ -137,7 +137,7 @@
   tags: update_grafdash
   block: 
     - name: Create grafana dashboard configmaps from json files
-      ansible.builtin.shell: >
+      ansible.builtin.shell: 
         kubectl create configmap {{ item }}-dash
           --namespace monitoring
           --save-config
