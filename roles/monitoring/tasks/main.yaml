@@ -297,7 +297,7 @@
         apiVersion: v1
         kind: ConfigMap
         metadata:
-          name: "windows_dash"
+          name: "windows-dash"
           labels:
             grafana_dashboard: "1"
         data:
