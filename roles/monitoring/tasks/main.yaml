@@ -175,7 +175,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          climate.json: "{{ climate_dash.content | b64decode }}"
+          climate.json: |-
+            "{{ climate_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -195,7 +196,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          energy.json: "{{ energy_dash.content | b64decode }}"
+          energy.json: |-
+            "{{ energy_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -215,7 +217,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          node-exporter-en-20201010.json: "{{ node_exporter_en_20201010_dash.content | b64decode }}"
+          node-exporter-en-20201010.json: |-
+            "{{ node_exporter_en_20201010_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -235,7 +238,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          node-exporter.json: "{{ node_exporter_dash.content | b64decode }}"
+          node-exporter.json: |-
+            "{{ node_exporter_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -255,7 +259,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          ups.json: "{{ ups_dash.content | b64decode }}"
+          ups.json: |-
+            "{{ ups_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -275,7 +280,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          vmware.json: "{{ vmware_dash.content | b64decode }}"
+          vmware.json: |-
+            "{{ vmware_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -295,7 +301,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          windows.json: "{{ windows_dash.content | b64decode }}"
+          windows.json: |-
+            "{{ windows_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -315,7 +322,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          k3s.json: "{{ k3s_dash.content | b64decode }}"
+          k3s.json: |-
+            "{{ k3s_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -335,7 +343,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          kube-state.json: "{{ kube_state_dash.content | b64decode }}"
+          kube-state.json: |-
+            "{{ kube_state_dash.content | b64decode }}"
 
   - name: Read dashboard json file
     ansible.builtin.slurp:
@@ -355,7 +364,8 @@
           labels:
             grafana_dashboard: "1"
         data:
-          longhorn.json: "{{ longhorn_dash.content | b64decode }}"
+          longhorn.json: |-
+            "{{ longhorn_dash.content | b64decode }}"
 
 - name: Deploy prometheus job secret
   kubernetes.core.k8s:
