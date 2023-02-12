@@ -497,7 +497,7 @@ lifecycleHooks: {}
 ##
 plugins: 
   - grafana-piechart-panel
-  - flant-grafana-statusmap
+  # - flant-grafana-statusmap
   # - digrich-bubblechart-panel
   # - grafana-clock-panel
 
