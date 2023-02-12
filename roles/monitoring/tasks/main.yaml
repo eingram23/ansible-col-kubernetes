@@ -140,7 +140,7 @@
       --save-config
       --dry-run=client
       --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
-      -o yaml | kubectl apply -f -
+      -o yaml | kubectl apply --server-side -f -
   loop:
     - alertmanager
     - climate
@@ -148,7 +148,7 @@
     - k3s
     - kube-state
     - longhorn
-    - node_exporter_en_20201010
+    - node-exporter-en-20201010
     - node-exporter
     - ups
     - vmware
