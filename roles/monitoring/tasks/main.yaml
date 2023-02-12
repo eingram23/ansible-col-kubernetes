@@ -133,27 +133,45 @@
         -o yaml >
         {{ dest }}prom-scrape-servers.yaml
 
-- name: Create grafana dashboard configmaps from json files
-  ansible.builtin.shell:
-    kubectl create configmap {{ item }}-dash
-      --namespace monitoring
-      --save-config
-      --dry-run=client
-      --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
-      -o yaml | kubectl apply --server-side -f -
-  loop:
-    - alertmanager
-    - climate
-    - energy
-    - k3s
-    - kube-state
-    - longhorn
-    - node-exporter-en-20201010
-    - node-exporter
-    - ups
-    - vmware
-    - windows
+- name: Create grafana dashboard configmaps and set labels
   tags: update_grafdash
+  block: 
+    - name: Create grafana dashboard configmaps from json files
+      ansible.builtin.shell: >
+        kubectl create configmap {{ item }}-dash
+          --namespace monitoring
+          --save-config
+          --dry-run=client
+          --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
+          -o yaml | kubectl apply --server-side -f -
+      loop:
+        - alertmanager
+        - climate
+        - energy
+        - k3s
+        - kube-state
+        - longhorn
+        - node-exporter-en-20201010
+        - node-exporter
+        - ups
+        - vmware
+        - windows
+
+    - name: Label grafana dashboard configmaps from json files
+      ansible.builtin.shell: 
+        kubectl label configmap {{ item }}-dash -n monitoring "grafana_dashboard=1"
+      loop:
+        - alertmanager
+        - climate
+        - energy
+        - k3s
+        - kube-state
+        - longhorn
+        - node-exporter-en-20201010
+        - node-exporter
+        - ups
+        - vmware
+        - windows
 
   # - name: Read dashboard json file
   #   ansible.builtin.slurp:
