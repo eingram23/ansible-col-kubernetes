@@ -116,7 +116,7 @@
         dest: /var/tmp/ssh-key-git.key
         mode: '0400'
 
-    - name: Pull down prometheus.yml from git
+    - name: Pull down configs from git
       ansible.builtin.git:
         repo: 'git@github.com:eingram23/configs.git'
         dest: /var/tmp/configs
