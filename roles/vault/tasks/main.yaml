@@ -33,6 +33,7 @@
     mode: '0644'
   loop:
     - pki-policy.sh
+    - admins-policy.sh
     - vault-csr.conf
 
 - name: Set vault-pvc storageclass (Dev)
