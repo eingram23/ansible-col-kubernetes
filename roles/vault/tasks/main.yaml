@@ -210,14 +210,17 @@
       kubectl exec vault-0 -n vault -- vault write pki_int/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl"
       kubectl exec vault-0 -n vault -- vault write pki_int/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=8760h
 
-- name: Create pki policy
+- name: Create policies
   ansible.builtin.shell:
     cmd: |
       kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}pki-policy.sh`"
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}admins-policy.sh`"
 
-- name: Configure k8s auth
+- name: Configure auth
   ansible.builtin.shell:
     cmd: |
+      kubectl exec vault-0 -n vault -- vault auth enable userpass
+      kubectl exec vault-0 -n vault -- vault write auth/userpass/users/eingram password=temppassword policies=admins
       kubectl exec vault-0 -n vault -- vault auth enable kubernetes
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/config kubernetes_host="https://kubernetes.default.svc.cluster.local:443"
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=cert-manager policies=pki ttl=20m
