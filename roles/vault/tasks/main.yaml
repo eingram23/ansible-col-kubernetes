@@ -209,6 +209,7 @@
     cmd: |
       kubectl exec vault-0 -n vault -- vault write pki_int/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl"
       kubectl exec vault-0 -n vault -- vault write pki_int/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=8760h
+      kubectl exec vault-0 -n vault -- vault write pki_int/roles/ycdisp-dot-net allowed_domains=ycdisp.net allow_subdomains=true max_ttl=8760h
 
 - name: Create policies
   ansible.builtin.shell:
