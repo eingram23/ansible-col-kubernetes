@@ -14,9 +14,9 @@
   with_fileglob: "{{ role_path }}/templates/grafana/*"
 
 - name: Grafana configuration
-  tags:
-    - always
-    - update_grafconf
+  # tags:
+  #   - always
+  #   - update_grafconf
   block:
     - name: Create github key
       ansible.builtin.template:
