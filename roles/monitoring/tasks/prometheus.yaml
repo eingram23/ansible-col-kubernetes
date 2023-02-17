@@ -88,7 +88,7 @@
       --namespace monitoring
       --save-config
       --dry-run=client
-      ----from-file=ca.crt={{ dest }}ca.crt
+      --from-file=ca.crt={{ dest }}ca.crt
       -o yaml | kubectl apply -f -
 
 - name: Deploy prometheus
