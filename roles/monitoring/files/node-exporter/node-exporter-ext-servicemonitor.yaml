@@ -3,7 +3,6 @@ kind: ServiceMonitor
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter-ext
-    name: node-exporter-ext
   name: node-exporter-ext
   namespace: monitoring
 spec:
@@ -23,7 +22,7 @@ spec:
       keySecret:
         name: prometheus-tls
         key: tls.key
-  jobLabel: yc-appsrv1-dev
+  jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
       app.kubernetes.io/name: node-exporter-ext
