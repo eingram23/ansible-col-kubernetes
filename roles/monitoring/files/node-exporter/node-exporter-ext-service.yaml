@@ -6,7 +6,7 @@ metadata:
   name: node-exporter-ext
   namespace: monitoring
 spec:
-  externalName: 10.3.0.23
+  externalName: yc-appsrv1-dev
   ports:
   - name: https
     port: 9100
