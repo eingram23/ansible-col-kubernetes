@@ -12,10 +12,10 @@ spec:
     port: https
     scheme: https
     tlsConfig:
-      ca: 
+      caSecret: 
         name: rootca
-        key: ca.rt
-      cert:
+        key: ca.crt
+      certSecret:
         name: prometheus-tls
         key: tls.crt
       keySecret:
