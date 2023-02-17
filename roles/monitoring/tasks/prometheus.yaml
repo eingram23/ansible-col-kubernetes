@@ -14,8 +14,8 @@
 
 - name: Create templated grafana manifests on host
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/prometheus/{{ item.basename.split('.') | first }}.yaml.j2"
-    dest: "{{ dest }}{{ item.basename.split('.') | first }}.yaml"
+    src: "{{ role_path }}/templates/prometheus/{{ item | basename | split('.') | first }}.yaml.j2"
+    dest: "{{ dest }}{{ item | basename | split('.') | first }}.yaml"
     mode: '0644'
   with_fileglob: "{{ role_path }}/templates/prometheus/*"
 
