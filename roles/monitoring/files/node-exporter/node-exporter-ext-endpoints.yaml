@@ -3,7 +3,7 @@ kind: Endpoints
 metadata:
   labels:
     app.kubernetes.io/name: yc-appsrv1-dev
-    jobLabel: node-exporter-ext
+    jobLabel: yc-appsrv1-dev
   name: yc-appsrv1-dev
   namespace: monitoring
 subsets:

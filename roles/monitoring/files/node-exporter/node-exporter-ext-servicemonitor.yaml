@@ -23,7 +23,7 @@ spec:
       keySecret:
         name: prometheus-tls
         key: tls.key
-  jobLabel: app.kubernetes.io/name
+  jobLabel: yc-appsrv1-dev
   selector:
     matchLabels:
       app.kubernetes.io/name: node-exporter-ext
