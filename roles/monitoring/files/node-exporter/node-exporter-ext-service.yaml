@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter-ext
-  name: node-exporter-ext
+  name: yc-appsrv1-dev
   namespace: monitoring
 spec:
   externalName: yc-appsrv1-dev
