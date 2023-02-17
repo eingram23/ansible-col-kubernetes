@@ -13,4 +13,4 @@ spec:
     targetPort: https
   selector:
     app.kubernetes.io/name: node-exporter-ext
-  type: externalName
+  type: ExternalName
