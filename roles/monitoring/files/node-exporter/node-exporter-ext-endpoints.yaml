@@ -4,7 +4,6 @@ metadata:
   labels:
     app: node-exporter-ext
     jobLabel: node-exporter-ext
-    release: prometheus
   name: node-exporter-ext
   namespace: monitoring
 subsets:
