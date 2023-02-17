@@ -22,3 +22,5 @@
     - node-exporter-service.yaml
     - node-exporter-daemonset.yaml
     - node-exporter-servicemonitor.yaml
+    - node-exporter-ext-service.yaml
+    - node-exporter-ext-servicemonitor.yaml

@@ -55,25 +55,46 @@
         -o yaml >
         {{ dest }}prom-scrape-servers.yaml
 
+# - name: Create prometheus cert secret
+#   ansible.builtin.shell:
+#     cmd: >
+#       kubectl create secret generic prom-tls-crt
+#       --namespace monitoring
+#       --save-config
+#       --dry-run=client
+#       ----from-literal=tls.crt={{ lookup('hashi_vault', 'secret=secret/cert/prom:crt') }}
+#       -o yaml | kubectl apply -f -
+
+# - name: Create prometheus key secret
+#   ansible.builtin.shell:
+#     cmd: >
+#       kubectl create secret generic prom-tls-key
+#       --namespace monitoring
+#       --save-config
+#       --dry-run=client
+#       ----from-literal=tls.key={{ lookup('hashi_vault', 'secret=secret/cert/prom:key') }}
+#       -o yaml | kubectl apply -f -
+
+- name: Create prometheus rootca secret
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic rootca
+      --namespace monitoring
+      --save-config
+      --dry-run=client
+      ----from-literal=ca.crt={{ lookup('hashi_vault', 'secret=secret/cert/rootca:crt') }}
+      -o yaml | kubectl apply -f -
+
 - name: Deploy prometheus
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
+    - prometheus-cert-vault.yaml
     - prom-scrape-servers.yaml
     - prometheus.yaml
     - prometheus-service-ext.yaml
     - prometheus-service-local.yaml
     - prometheus-role.yaml
     - prometheus-ingressroute.yaml
-
-# - name: Create prometheus certs
-#   ansible.builtin.shell:
-#     cmd: >
-#       kubectl create secret generic homelab-bundleca-tls
-#       --namespace awx
-#       --save-config
-#       --dry-run=client
-#       --from-file=bundle-ca.crt={{ dest }}homelab_bundleca{{ suffix }}.crt
-#       -o yaml | kubectl apply -f -

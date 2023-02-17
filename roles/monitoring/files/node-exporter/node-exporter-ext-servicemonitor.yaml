@@ -12,9 +12,9 @@ spec:
     port: https
     scheme: https
     tlsConfig:
-      ca: <CA_CONFIGMAP_OR_SECRET_REF>
-      cert: <CERT_CONFIGMAP_OR_SECRET_REF>
-      keySecret: <KEY_SECRET_REF>
+      ca: rootca
+      cert: prom-tls-crt
+      keySecret: prom-tls-key
   jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:

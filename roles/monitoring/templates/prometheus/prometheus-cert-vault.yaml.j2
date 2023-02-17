@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prometheus-tls
+  namespace: monitoring
+spec:
+  secretName: prometheus-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: vault-cluster-issuer
+  commonName: prom{{ suffix }}.local.lan
+  dnsNames:
+  - prom{{ suffix }}.local.lan
+  duration: 8760h
+  renewBefore: 4380h
