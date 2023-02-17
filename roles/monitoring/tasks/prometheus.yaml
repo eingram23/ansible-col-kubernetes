@@ -23,9 +23,8 @@
   ansible.builtin.shell: kubectl apply --server-side -f {{ dest }}prometheus-operator.yaml
 
 - name: Prometheus configuration
-  # tags:
-  #   - always
-  #   - update_promconf
+  tags:
+    - update_promconf
   block:
     - name: Create github key
       ansible.builtin.template:
