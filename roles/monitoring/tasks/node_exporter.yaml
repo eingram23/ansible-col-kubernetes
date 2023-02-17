@@ -8,7 +8,7 @@
 
 - name: Create node-exporter daemonset manifest on host
   ansible.builtin.template:
-    src: "{{ role_path }}/files/node-exporter/node-exporter-daemonset.yaml.j2"
+    src: "{{ role_path }}/templates/node-exporter/node-exporter-daemonset.yaml.j2"
     dest: "{{ dest }}node-exporter-daemonset.yaml"
     mode: '0644'
 
