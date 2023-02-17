@@ -75,6 +75,12 @@
 #       ----from-literal=tls.key={{ lookup('hashi_vault', 'secret=secret/cert/prom:key') }}
 #       -o yaml | kubectl apply -f -
 
+- name: Create rootca
+  ansible.builtin.copy:
+    content: "{{ lookup('hashi_vault', 'secret=secret/cert/rootca:crt') }}"
+    dest: "{{ dest }}ca.crt"
+    mode: '0644'
+
 - name: Create prometheus rootca secret
   ansible.builtin.shell:
     cmd: >
@@ -82,7 +88,7 @@
       --namespace monitoring
       --save-config
       --dry-run=client
-      ----from-literal=ca.crt={{ lookup('hashi_vault', 'secret=secret/cert/rootca:crt') }}
+      ----from-file=ca.crt={{ dest }}ca.crt
       -o yaml | kubectl apply -f -
 
 - name: Deploy prometheus
