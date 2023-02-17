@@ -12,21 +12,15 @@ spec:
     port: https
     scheme: https
     tlsConfig:
-      - name: ca
-        valueFrom:
-          secretKeyRef:
-            name: rootca
-            key: ca.crt
-      - name: cert
-        valueFrom:
-          secretKeyRef:
-            name: prometheus-tls
-            key: tls.crt
-      - name: keySecret
-        valueFrom:
-          secretKeyRef:
-            name: prometheus-tls
-            key: tls.key
+      ca: 
+        name: rootca
+        key: ca.rt
+      cert:
+        name: prometheus-tls
+        key: tls.crt
+      keySecret:
+        name: prometheus-tls
+        key: tls.key
   jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
