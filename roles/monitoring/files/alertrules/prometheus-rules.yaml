@@ -3,14 +3,26 @@ kind: PrometheusRule
 metadata:
   labels:
     app.kubernetes.io/component: exporter
-    app.kubernetes.io/name: kube-prometheus
+    app.kubernetes.io/instance: main
+    app.kubernetes.io/name: prometheus
     app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.24.0
     prometheus: alertmanager
     role: alert-rules
-  name: kube-prometheus-rules
+  name: prometheus-rules
   namespace: monitoring
 spec:
   groups:
+  - name: prometheus.rules
+    rules:
+    - alert: PrometheusConfigurationReloadFailure
+      expr: prometheus_config_last_reload_successful != 1
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: Prometheus configuration reload failure (instance {{ $labels.instance }})
+        description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
   - name: kube-prometheus.rules
     rules:
     - alert: TargetDown

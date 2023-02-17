@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: node-exporter
+  name: node-exporter-ext
+  namespace: monitoring
+spec:
+  externalName: 10.3.0.23
+  ports:
+  - name: https
+    port: 9100
+    targetPort: https
+  selector:
+    app.kubernetes.io/name: node-exporter-ext
+  type: externalName

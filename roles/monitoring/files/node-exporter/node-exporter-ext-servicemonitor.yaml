@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: node-exporter-ext
+    name: node-exporter-ext
+  name: node-exporter-ext
+  namespace: monitoring
+spec:
+  endpoints:
+    interval: 15s
+    port: https
+    scheme: https
+    tlsConfig:
+      ca: <CA_CONFIGMAP_OR_SECRET_REF>
+      cert: <CERT_CONFIGMAP_OR_SECRET_REF>
+      keySecret: <KEY_SECRET_REF>
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: node-exporter-ext

@@ -1,0 +1,110 @@
+---
+- name: Download grafana manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/grafana/*"
+
+- name: Create templated grafana manifests on host
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/grafana/{{ item.basename.split('.') | first }}.yaml.j2"
+    dest: "{{ dest }}{{ item.basename.split('.') | first }}.yaml"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/templates/grafana/*"
+
+- name: Grafana configuration
+  tags:
+    - always
+    - update_grafconf
+  block:
+    - name: Create github key
+      ansible.builtin.template:
+        src: ssh-key-git.key.j2
+        dest: /var/tmp/ssh-key-git.key
+        mode: '0400'
+
+    - name: Pull down configs from git
+      ansible.builtin.git:
+        repo: 'git@github.com:eingram23/configs.git'
+        dest: /var/tmp/configs
+        clone: true
+        key_file: /var/tmp/ssh-key-git.key
+        accept_hostkey: true
+
+    - name: Delete key
+      ansible.builtin.file:
+        path: /var/tmp/ssh-key-git.key
+        state: absent
+
+    - name: Create grafana dashboard configmaps from json files
+      ansible.builtin.shell:
+        kubectl create configmap {{ item }}-dash
+          --namespace monitoring
+          --save-config
+          --dry-run=client
+          --from-file=/var/tmp/configs/grafana/dashboards/{{ item }}.json
+          -o yaml | kubectl apply --server-side -f -
+      loop:
+        - alertmanager
+        - climate
+        - energy
+        - k3s
+        - kube-state 
+        - longhorn
+        - node-exporter-en-20201010
+        - node-exporter
+        - ups
+        - vmware
+        - windows
+
+    - name: Label grafana dashboard configmaps from json files
+      ansible.builtin.shell:
+        kubectl label configmap {{ item }}-dash -n monitoring "grafana_dashboard=1"
+      loop:
+        - alertmanager
+        - climate
+        - energy
+        - k3s
+        - kube-state
+        - longhorn
+        - node-exporter-en-20201010
+        - node-exporter
+        - ups
+        - vmware
+        - windows
+
+- name: Deploy grafana secret and ingressroute
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafana-ingressroute.yaml
+    - grafana-admin-pass.yaml
+
+- name: Add grafana/grafana chart repo
+  kubernetes.core.helm_repository:
+    name: grafana
+    repo_url: "https://grafana.github.io/helm-charts"
+
+- name: Install grafana/grafana chart from repo
+  kubernetes.core.helm:
+    release_name: grafana
+    release_namespace: monitoring
+    create_namespace: false
+    chart_ref: grafana/grafana
+    chart_version: "{{ grafana_helm_ver }}"
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}grafana-values.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Deploy grafana datasource resources
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - graf-datasource-secret-influx.yaml
+    - graf-datasource-cm-prom.yaml

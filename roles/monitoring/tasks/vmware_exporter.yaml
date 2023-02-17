@@ -1,0 +1,24 @@
+---
+- name: Download vmware-exporter manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/vmware-exporter/*"
+
+- name: Create vmware-exporter templated manifests on host
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/vmware-exporter/{{ item.basename.split('.') | first }}.yaml.j2"
+    dest: "{{ dest }}{{ item.basename.split('.') | first }}.yaml"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/templates/vmware-exporter/*"
+
+- name: Deploy vmware-exporter
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vmware-exporter-deployment.yaml
+    - vmware-exporter-service.yaml
+    - vmware-exporter-ingressroute.yaml
