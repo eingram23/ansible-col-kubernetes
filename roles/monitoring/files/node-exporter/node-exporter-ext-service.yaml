@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter-ext
-  name: yc-appsrv1-dev
+  name: node-exporter-ext
   namespace: monitoring
 spec:
   externalName: yc-appsrv1-dev
@@ -12,5 +12,5 @@ spec:
     port: 9100
     targetPort: https
   selector:
-    app.kubernetes.io/name: node-exporter-ext
+    app.kubernetes.io/name: yc-appsrv1-dev
   type: ExternalName
