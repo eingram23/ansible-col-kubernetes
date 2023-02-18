@@ -4,6 +4,7 @@ metadata:
   name: alertmanager
   namespace: monitoring
 spec:
+  externalUrl: http://alertmanager.local.lan
   replicas: 1
   configSecret: alertmanager-alertmanager
   # alertmanagerConfigSelector:
