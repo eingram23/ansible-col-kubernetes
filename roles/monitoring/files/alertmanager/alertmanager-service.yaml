@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app.kubernetes.io/name: alertmanager
   name: alertmanager
   namespace: monitoring
 spec:
@@ -10,4 +12,4 @@ spec:
     protocol: TCP
     targetPort: web
   selector:
-    alertmanager: alertmanager
+    app.kubernetes.io/name: alertmanager

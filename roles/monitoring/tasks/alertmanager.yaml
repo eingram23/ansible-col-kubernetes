@@ -20,6 +20,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - alertmanager-service.yaml
+    - alertmanager-servicemonitor.yaml
     - alertmanager-alertmanager-secret.yaml
     - alertmanager-ingressroute.yaml
     - alertmanager-alertmanager.yaml

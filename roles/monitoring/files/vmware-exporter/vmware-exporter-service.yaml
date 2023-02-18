@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app.kubernetes.io/name: vmware-exporter
   name: vmware-exporter
-  namespace: monitoring 
+  namespace: monitoring
 spec:
-  selector: 
-    app: vmware-exporter
   ports:
     - name: web
       protocol: TCP
       port: 9272
-
+  selector:
+    app.kubernetes.io/name: vmware-exporter
