@@ -16,7 +16,7 @@ spec:
     - monitoring
   endpoints:
   - port: http-metrics
-    interval: 30s
+    interval: 60s
     honorLabels: true
   jobLabel: app.kubernetes.io/name
   selector:

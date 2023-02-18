@@ -14,3 +14,4 @@ spec:
     - longhorn-system
   endpoints:
   - port: manager
+    interval: 60s
