@@ -9,6 +9,6 @@
 - name: Deploy alertmanager
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}{{ item.path | basename }}"
+    src: "{{ dest }}{{ item | basename }}"
     kubeconfig: "{{ kubeconfig }}"
   with_fileglob: "{{ role_path }}/files/alertrules/*"
