@@ -8,7 +8,6 @@ metadata:
   namespace: monitoring
 subsets:
 - addresses:
-  - ip: 10.3.0.23
   - ip: 138.68.18.20
   ports:
   - name: https
