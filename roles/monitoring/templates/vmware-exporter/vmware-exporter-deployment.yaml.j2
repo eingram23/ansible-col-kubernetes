@@ -4,17 +4,16 @@ metadata:
   name: vmware-exporter
   namespace: monitoring
   labels:
-    app.kubernetes.io/app: vmware-exporter
+    app.kubernetes.io/name: vmware-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/app: vmware-exporter
+      app.kubernetes.io/name: vmware-exporter
   template:
     metadata:
       labels:
         app.kubernetes.io/name: vmware-exporter
-        app.kubernetes.io/app: vmware-exporter
     spec:
       containers:
         - name: vmware-exporter
