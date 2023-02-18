@@ -21,5 +21,5 @@
   loop:
     - vmware-exporter-deployment.yaml
     - vmware-exporter-service.yaml
-    - vmware-exporter-servicemanager.yaml
+    - vmware-exporter-servicemonitor.yaml
     - vmware-exporter-ingressroute.yaml
