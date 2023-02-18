@@ -17,7 +17,7 @@ spec:
     - alert: InstanceDown
       # Condition for alerting
       # expr: up == 0 and (instance == "homeassistant" or instance == "homenas")
-      expr: up{job="WindowsProd | LinuxProd" or instance = "138.68.18.20"} == 0
+      expr: up{job="WindowsProd | LinuxProd" or instance="138.68.18.20"} == 0
       for: 5m
       # Annotation - additional informational labels to store more information
       annotations:
