@@ -9,6 +9,7 @@ metadata:
 subsets:
 - addresses:
   - ip: 138.68.18.20
+  - ip: 10.3.0.23
   ports:
   - name: https
     port: 9100
