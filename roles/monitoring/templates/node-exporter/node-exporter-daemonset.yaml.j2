@@ -40,15 +40,16 @@ spec:
             cpu: 250m
             memory: 180Mi
           requests:
-            cpu: 102m
+            cpu: 100m
             memory: 180Mi
         securityContext:
-          allowPrivilegeEscalation: true
-          capabilities:
-            add:
-            - SYS_TIME
-            drop:
-            - ALL
+          privileged: true
+          # allowPrivilegeEscalation: false
+          # capabilities:
+          #   add:
+          #   - SYS_TIME
+          #   drop:
+          #   - ALL
           readOnlyRootFilesystem: true
         volumeMounts:
         - mountPath: /host/sys
