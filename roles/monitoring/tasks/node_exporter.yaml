@@ -25,3 +25,6 @@
     - node-exporter-ext-service.yaml
     - node-exporter-ext-servicemonitor.yaml
     - node-exporter-ext-endpoints.yaml
+    - node-exporter-ext-dev-service.yaml
+    - node-exporter-ext-dev-servicemonitor.yaml
+    - node-exporter-ext-dev-endpoints.yaml

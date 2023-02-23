@@ -2,9 +2,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app.kubernetes.io/name: node-exporter-ext
+    app.kubernetes.io/name: node-exporter-ext-dev
     env: prod
-  name: node-exporter-ext
+  name: node-exporter-ext-dev
   namespace: monitoring
 spec:
   endpoints:
@@ -26,6 +26,4 @@ spec:
   jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
-      app.kubernetes.io/name: node-exporter-ext
-    targetLabels:
-    - env
+      app.kubernetes.io/name: node-exporter-ext-dev
