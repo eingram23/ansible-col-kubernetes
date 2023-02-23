@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter-ext
+    env: prod
   name: node-exporter-ext
   namespace: monitoring
 spec:

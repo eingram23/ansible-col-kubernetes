@@ -1,4 +1,26 @@
 ---
+- name: Patch label into kubelet svc
+  kubernetes.core.k8s_json_patch:
+    kind: Service
+    namespace: kube-system
+    name: kubelet
+    patch:
+      - op: add
+        path: /metadata/labels/env
+        value: prod
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Patch label into longhorn-backend svc
+  kubernetes.core.k8s_json_patch:
+    kind: Service
+    namespace: longhorn-system
+    name: longhorn-backend
+    patch:
+      - op: add
+        path: /metadata/labels/env
+        value: prod
+    kubeconfig: "{{ kubeconfig }}"
+
 - name: Download k3s manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
