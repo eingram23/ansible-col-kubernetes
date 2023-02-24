@@ -27,5 +27,5 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: node-exporter-ext
-    targetLabels:
-    - env
+  targetLabels:
+  - env
