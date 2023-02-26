@@ -32,9 +32,12 @@
     dest: "{{ dest }}"
     mode: '0644'
   loop:
+    - ansible-policy.sh
     - pki-policy.sh
     - admins-policy.sh
     - vault-csr.conf
+  tags:
+    - update_vaultconf
 
 - name: Set vault-pvc storageclass (Dev)
   ansible.builtin.set_fact:
@@ -215,17 +218,24 @@
 - name: Create policies
   ansible.builtin.shell:
     cmd: |
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}ansible-policy.sh`"
       kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}pki-policy.sh`"
       kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}admins-policy.sh`"
+  tags:
+    - update_vaultconf
 
 - name: Configure auth
   ansible.builtin.shell:
     cmd: |
+      kubectl exec vault-0 -n vault -- vault auth enable approle
+      kubectl exec vault-0 -n vault -- vault write auth/approle/role/ansible token_num_uses=0 token_ttl=0m secret_id_num_uses=0 token_no_default_policy=false token_policies="ansible"
       kubectl exec vault-0 -n vault -- vault auth enable userpass
       kubectl exec vault-0 -n vault -- vault write auth/userpass/users/eingram password=temppassword policies=admins
       kubectl exec vault-0 -n vault -- vault auth enable kubernetes
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/config kubernetes_host="https://kubernetes.default.svc.cluster.local:443"
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=cert-manager policies=pki ttl=20m
+  tags:
+  - update_vaultconf
 
 - name: Unseal vault
   ansible.builtin.shell:
