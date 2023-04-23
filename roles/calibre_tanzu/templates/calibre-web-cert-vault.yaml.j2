@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: calibre-web-tls
+  namespace: calibre
+spec:
+  secretName: calibre-web-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: vault-cluster-issuer
+  commonName: calibre-web{{ suffix }}.local.lan
+  dnsNames:
+  - calibre-web{{ suffix }}.local.lan
+  duration: 8760h
+  renewBefore: 4380h

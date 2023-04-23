@@ -1,0 +1,25 @@
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: calibre
+  namespace: calibre
+spec:
+  entryPoints: 
+    - web
+    - websecure
+  routes:
+  - match: Host(`calibre{{ suffix }}.ycdisp.net`) 
+    kind: Rule
+    services:
+    - name: calibre
+      port: 8080
+  - match: Host(`calibre{{ suffix }}.ycdisp.net`) && PathPrefix(`/admin`)
+    kind: Rule
+    services:
+    - name: calibre
+      port: 8081
+    middlewares:
+    - name: calibre-stripprefix  
+  tls:
+    secretName: calibre-tls

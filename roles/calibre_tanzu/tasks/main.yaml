@@ -1,0 +1,94 @@
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: calibre
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create calibre manifests on host
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - calibre-deployment.yaml
+    # - calibre-ingressroute-{{ cert }}.yaml
+    # - calibre-web-ingressroute-{{ cert }}.yaml
+    # - calibre-cert-{{ cert }}.yaml
+    # - calibre-web-cert-{{ cert }}.yaml
+
+- name: Deploy calibre-pvc
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - calibre-pvc{{ suffix }}.yaml
+
+- name: Deploy calibre
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - calibre-service.yaml
+    - calibre-deployment.yaml
+    # - calibre-middleware.yaml
+    # - calibre-ingressroute-{{ cert }}.yaml
+    # - calibre-web-ingressroute-{{ cert }}.yaml
+
+# - name: Get svc info
+#   kubernetes.core.k8s_info:
+#     api_version: v1
+#     kind: Service
+#     name: traefik
+#     namespace: kube-system
+#     kubeconfig: /etc/rancher/k3s/k3s.yaml
+#   register: service
+
+# - name: Set ip_address 
+#   ansible.builtin.set_fact:
+#     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+
+# - name: Add calibre GCP DNS record
+#   ansible.builtin.include_role:
+#     name: eingram23.gcp.cloud_dns
+#     tasks_from: add
+#     apply:
+#       delegate_to: localhost
+#   vars:
+#     appname: calibre{{ suffix }}
+#     target: "{{ ip_address }}"
+#   when: cert != "vault"
+
+# - name: Add calibre-web GCP DNS record
+#   ansible.builtin.include_role:
+#     name: eingram23.gcp.cloud_dns
+#     tasks_from: add
+#     apply:
+#       delegate_to: localhost
+#   vars:
+#     appname: calibre-web{{ suffix }}
+#     target: "{{ ip_address }}"
+#   when: cert != "vault"
+
+# - name: Deploy calibre certs
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - calibre-cert-{{ cert }}.yaml
+#     - calibre-web-cert-{{ cert }}.yaml
+
+# - name: Display IP Address
+#   ansible.builtin.debug:
+#     msg: "IP Address is {{ ip_address }}"
