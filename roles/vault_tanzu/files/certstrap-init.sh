@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd $HOME/certstrap
+cd /var/tmp/certstrap
 /var/tmp/certstrap/certstrap init \
     --organization "Homelab" \
     --organizational-unit "Homelab Org" \
