@@ -4,24 +4,24 @@
     content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
     dest: "{{ dest }}tanzu.yaml"
 
-- name: Upgrade pip3 if needed
-  ansible.builtin.pip:
-    name: pip
-    state: latest
-  become: true
-  become_method: sudo
+# - name: Upgrade pip3 if needed
+#   ansible.builtin.pip:
+#     name: pip
+#     state: latest
+#   become: true
+#   become_method: sudo
 
-- name: Install cryptography python module
-  ansible.builtin.pip:
-    name: "{{ pip_item }}"
-  loop:
-    - rust
-    - setuptools_rust
-    - cryptography
-  loop_control:
-    loop_var: pip_item
-  # become: true
-  # become_method: sudo
+# - name: Install cryptography python module
+#   ansible.builtin.pip:
+#     name: "{{ pip_item }}"
+#   loop:
+#     - rust
+#     - setuptools_rust
+#     - cryptography
+#   loop_control:
+#     loop_var: pip_item
+#   # become: true
+#   # become_method: sudo
 
 - name: Create vault k8s namespace
   kubernetes.core.k8s:
