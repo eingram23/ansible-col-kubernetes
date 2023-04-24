@@ -7,12 +7,12 @@
 
 - name: Remove certstrap folder if exist
   ansible.builtin.file:
-    path: /var/tmp/certstrap
+    path: "/var/tmp/certstrap"
     state: absent
     
 - name: Create certstrap folder
   ansible.builtin.file:
-    path: /var/tmp/certstrap
+    path: "/var/tmp/certstrap"
     state: directory
     mode: '0755'
 
@@ -29,7 +29,7 @@
 
 - name: Create certstrap subfolders
   ansible.builtin.file:
-    path: /var/tmp/certstrap/{{ item }}
+    path: "/var/tmp/certstrap/{{ item }}"
     state: directory
     mode: '0755'
   loop:
@@ -70,8 +70,8 @@
 
 - name: Copy csr to certstrap folder
   ansible.builtin.copy:
-    src: vault_int{{ suffix }}.csr
-    dest: /var/tmp/certstrap/csr
+    src: "vault_int{{ suffix }}.csr"
+    dest: "/var/tmp/certstrap/csr"
     mode: '0644'
     remote_src: true
 

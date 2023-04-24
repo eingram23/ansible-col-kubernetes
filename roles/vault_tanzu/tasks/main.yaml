@@ -2,7 +2,7 @@
 - name: Create kubeconfig file
   ansible.builtin.copy:
     content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
-    dest: "{{ dest }}tanzu.yaml"
+    dest: "/var/tmp/tanzu.yaml"
 
 # - name: Upgrade pip3 if needed
 #   ansible.builtin.pip:
