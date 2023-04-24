@@ -1,0 +1,82 @@
+# - name: Install go
+#   ansible.builtin.package:
+#     name: go
+#     state: present
+#   become: true
+#   become_method: sudo
+
+- name: Remove certstrap folder if exist
+  ansible.builtin.file:
+    path: /var/tmp/certstrap
+    state: absent
+    
+- name: Create certstrap folder
+  ansible.builtin.file:
+    path: /var/tmp/certstrap
+    state: directory
+    mode: '0755'
+
+- name: Clone certstrap git
+  ansible.builtin.git:
+    repo: https://github.com/square/certstrap
+    dest: certstrap
+
+- name: Build certstrap
+  ansible.builtin.shell: 
+    cmd: |
+      cd /var/tmp/certstrap
+      go build
+
+- name: Create certstrap subfolders
+  ansible.builtin.file:
+    path: /var/tmp/certstrap/{{ item }}
+    state: directory
+    mode: '0755'
+  loop:
+    - csr
+    - out
+
+- name: Copy vault.ca to certstrap out folder
+  ansible.builtin.copy:
+    src: "{{ dest }}vault.ca"
+    dest: /var/tmp/certstrap/out/vault{{ suffix }}.ca
+    remote_src: true
+    mode: '0644'
+
+# - name: Copy certstrap binary to bin folder
+#   ansible.builtin.copy:
+#     src: /var/tmp/certstrap/certstrap
+#     dest: /usr/local/bin/
+#     remote_src: true
+#     mode: 'u+x,g+x,o+x'
+#   become: true
+#   become_method: sudo
+
+- name: Create certstrap-sign-int.sh
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: /var/tmp/{{ item }}
+    mode: 'u+x'
+  loop:
+    - certstrap-sign-int.sh
+
+- name: Copy scripts to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /var/tmp
+    mode: 'u+x'
+  loop:
+    - certstrap-init.sh
+
+- name: Copy csr to certstrap folder
+  ansible.builtin.copy:
+    src: vault_int{{ suffix }}.csr
+    dest: /var/tmp/certstrap/csr
+    mode: '0644'
+    remote_src: true
+
+# - name: Closing message
+#   ansible.builtin.debug:
+#     msg: |
+#       Run from host - /var/tmp/copy_cert_certstrap.sh
+#       Run from k3s master as ansible user - /var/tmp/certstrap-sign-int.sh   

@@ -1,0 +1,54 @@
+global:
+  tlsDisable: false
+server:
+  image:
+    repository: "hashicorp/vault"
+    tag: ""
+    # Overrides the default Image Pull Policy
+    pullPolicy: IfNotPresent
+  resources: {}
+  # resources:
+  #   requests:
+  #     memory: 256Mi
+  #     cpu: 250m
+  #   limits:
+  #     memory: 256Mi
+  #     cpu: 250m
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: {{ storageclass }}
+    mountPath: "/vault/data"
+  volumes:
+    - name: userconfig-vault-server-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-server-tls
+  volumeMounts:
+    - mountPath: /vault/userconfig/vault-server-tls
+      name: userconfig-vault-server-tls
+      readOnly: true
+  standalone:
+    enabled: true
+    config: |
+      ui = true
+      listener "tcp" {
+        tls_disable = false
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+        tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+        tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
+        tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+        tls_disable_client_certs = true
+      }
+
+      storage "file" {
+        path = "/vault/data"
+      }
+ui:
+  enabled: true
+  serviceType: "LoadBalancer"
+injector:
+  enabled: false
