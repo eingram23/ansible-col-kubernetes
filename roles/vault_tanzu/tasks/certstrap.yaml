@@ -19,7 +19,7 @@
 - name: Clone certstrap git
   ansible.builtin.git:
     repo: https://github.com/square/certstrap
-    dest: certstrap
+    dest: /var/tmp/certstrap
 
 - name: Build certstrap
   ansible.builtin.shell: 
