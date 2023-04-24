@@ -171,9 +171,9 @@
   register: vault_ready
 
 - block:
-    - name: Pause 60 seconds
+    - name: Pause 120 seconds
       ansible.builtin.pause:
-        seconds: 60
+        seconds: 120
 
     - name: Init and export cluster-keys.json
       ansible.builtin.shell:
