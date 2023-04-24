@@ -261,7 +261,7 @@
 
 - name: Create cert_manager vault issuer
   ansible.builtin.include_role:
-    name: eingram23.kubernetes.cert_manager
+    name: eingram23.kubernetes.cert_manager_tanzu
     tasks_from: vault_issuer
     
 - name: Show root_token

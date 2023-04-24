@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: acme-cluster-issuer
+  namespace: cert-manager
+spec:
+  acme:
+    email: edward.ingram@ycdisp.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: acme-cluster-issuer
+    solvers:
+    - selector:
+        dnsZones:
+          - "ycdisp.net"
+      dns01:
+        cloudDNS:
+          # The ID of the GCP project
+          project: proj-yc-srv1
+          # This is the secret used to access the service account
+          serviceAccountSecretRef:
+            name: gcp-certmanager
+            key: gcp-certmanager-creds.json
