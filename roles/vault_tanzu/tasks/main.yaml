@@ -189,7 +189,7 @@
 
 - name: Export root_token
   ansible.builtin.shell:
-    cmd: |
+    cmd: >
       cat init-keys.json | jq -r ".root_token" > /var/tmp/root_token
 
 - block:
