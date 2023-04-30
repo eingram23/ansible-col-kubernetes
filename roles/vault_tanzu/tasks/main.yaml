@@ -187,7 +187,8 @@
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" /var/tmp/init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
 
-- ansible.builtin.shell:
+- name: Export root_token
+  ansible.builtin.shell:
     cmd: |
       cat init-keys.json | jq -r ".root_token" > /var/tmp/root_token
 
