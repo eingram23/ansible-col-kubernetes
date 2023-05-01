@@ -6,10 +6,9 @@
 
 - name: Download manifests to host
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: acme-cluster-issuer.yaml
     dest: "{{ dest }}"
     mode: '0644'
-  with_fileglob: "*"
 
 - name: Apply cert-manager CRDs.
   kubernetes.core.k8s:

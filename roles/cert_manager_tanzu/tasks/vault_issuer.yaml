@@ -1,4 +1,10 @@
 ---
+- name: Download manifests to host
+  ansible.builtin.copy:
+    src: issuer-secret.yaml
+    dest: "{{ dest }}"
+    mode: '0644'
+
 - name: Create vault issuer service account
   kubernetes.core.k8s:
     name: issuer
