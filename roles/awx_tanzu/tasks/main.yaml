@@ -1,0 +1,138 @@
+---
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: awx
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "{{ kubeconfig }}"
+
+- name: Create templated manifests/files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - awx-secret-key.yaml
+    - awx-admin-password.yaml
+    - awx-cert-{{ cert }}.yaml
+    - awx-ingressroute-{{ cert }}.yaml
+    - awx-secret-key.yaml
+    - homelab_bundleca.crt
+    - homelab_bundleca-dev.crt
+
+# - name: Create awx admin password secret key
+#   ansible.builtin.template:
+#     src: awx-admin-password.yaml.j2
+#     dest: "{{ dest }}awx-admin-password.yaml"
+#     mode: '0644'
+
+- name: Create homelab_rootca-tls secret
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic homelab-bundleca-tls
+      --namespace awx
+      --save-config
+      --dry-run=client
+      --from-file=bundle-ca.crt={{ dest }}homelab_bundleca{{ suffix }}.crt
+      -o yaml | kubectl apply -f -
+
+- name: Deploy awx-secrets
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-secret-key.yaml
+    - awx-admin-password.yaml
+
+- name: Remove awx kustomize folder if already exists
+  ansible.builtin.file:
+    path: "{{ dest }}awx"
+    state: absent
+
+- name: Create awx kustomize folder
+  ansible.builtin.file:
+    path: "{{ dest }}awx"
+    state: directory
+    mode: '0755'
+
+- name: Create kustomization.yaml file
+  ansible.builtin.template:
+    src: kustomization.yaml.j2
+    dest: "{{ dest }}awx/kustomization.yaml"
+    mode: '0644'
+  tags: update
+
+- name: Deploy awx operator
+  ansible.builtin.shell: >
+    kustomize build {{ dest }}awx/ | kubectl apply -f -
+  tags: update
+
+- name: Set storageclass (Dev)
+  ansible.builtin.set_fact:
+    storageclass: longhorn-homelab-dev
+  when: suffix == "-dev"
+
+- name: Create awx.yaml file
+  ansible.builtin.template:
+    src: awx.yaml.j2
+    dest: "{{ dest }}awx/awx.yaml"
+    mode: '0644'
+  tags: update
+
+- name: Add awx resource to kustomization.yaml
+  ansible.builtin.lineinfile:
+    path: "{{ dest }}awx/kustomization.yaml"
+    line: "  - awx.yaml"
+    insertafter: "resources:"
+  tags: update
+
+- name: Deploy awx instance
+  ansible.builtin.shell: >
+    kustomize build {{ dest }}awx/ | kubectl apply -f -
+  tags: update
+
+- name: Deploy awx-ingressroute
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-ingressroute-{{ cert }}.yaml
+
+- name: Get svc info
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Service
+    name: traefik
+    namespace: kube-system
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+  register: service
+
+- name: Set ip_address 
+  ansible.builtin.set_fact:
+    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+
+- name: Add awx GCP DNS record
+  ansible.builtin.include_role:
+    name: eingram23.gcp.cloud_dns
+    tasks_from: add
+    apply:
+      delegate_to: localhost
+  vars:
+    appname: awx{{ suffix }}
+    target: "{{ ip_address }}"
+  when: cert != "vault"
+
+- name: Deploy awx-cert
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-cert-{{ cert }}.yaml
+
+- name: Display IP Address
+  ansible.builtin.debug:
+    msg: "IP Address is {{ ip_address }}"

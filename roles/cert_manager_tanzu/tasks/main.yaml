@@ -1,8 +1,14 @@
-- name: Download cert-manager CRDs manifest.
-  ansible.builtin.get_url:
-    url: https://github.com/cert-manager/cert-manager/releases/download/{{ cert_manager_ver }}/cert-manager.crds.yaml
-    dest: "{{ dest }}cert-manager.crds.yaml"
-    mode: '0644'
+---
+- name: Create kubeconfig file
+  ansible.builtin.copy:
+    content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
+    dest: "/var/tmp/tanzu.yaml"
+
+# - name: Download cert-manager CRDs manifest.
+#   ansible.builtin.get_url:
+#     url: https://github.com/cert-manager/cert-manager/releases/download/{{ cert_manager_ver }}/cert-manager.crds.yaml
+#     dest: "{{ dest }}cert-manager.crds.yaml"
+#     mode: '0644'
 
 - name: Download manifests to host
   ansible.builtin.copy:
@@ -10,32 +16,32 @@
     dest: "{{ dest }}"
     mode: '0644'
 
-- name: Apply cert-manager CRDs.
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}cert-manager.crds.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Apply cert-manager CRDs.
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}cert-manager.crds.yaml"
+#     kubeconfig: "{{ kubeconfig }}"
 
-- name: Add jetstack chart repo
-  kubernetes.core.helm_repository:
-    name: jetstack
-    repo_url: "https://charts.jetstack.io"
+# - name: Add jetstack chart repo
+#   kubernetes.core.helm_repository:
+#     name: jetstack
+#     repo_url: "https://charts.jetstack.io"
 
-- name: Install jetstack/cert-manager chart from repo
-  kubernetes.core.helm:
-    release_name: cert-manager
-    release_namespace: cert-manager
-    create_namespace: true
-    chart_ref: jetstack/cert-manager
-    chart_version: "{{ cert_manager_ver }}"
-    wait: true
-    update_repo_cache: true
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Install jetstack/cert-manager chart from repo
+#   kubernetes.core.helm:
+#     release_name: cert-manager
+#     release_namespace: cert-manager
+#     create_namespace: true
+#     chart_ref: jetstack/cert-manager
+#     chart_version: "{{ cert_manager_ver }}"
+#     wait: true
+#     update_repo_cache: true
+#     kubeconfig: "{{ kubeconfig }}"
 
 - name: Create gcp certmanager secret json file
   ansible.builtin.template:
     src: gcp-certmanager-creds.json.j2
-    dest: gcp-certmanager-creds.json
+    dest: /var/tmp/gcp-certmanager-creds.json
     mode: '0644'
 
 - name: Create secret from json file
@@ -45,12 +51,12 @@
       --namespace=cert-manager
       --save-config
       --dry-run=client
-      --from-file=gcp-certmanager-creds.json
+      --from-file=/var/tmp/gcp-certmanager-creds.json
       -o yaml | kubectl apply -f -
 
 - name: Delete secret json file
   ansible.builtin.file:
-    path: gcp-certmanager-creds.json
+    path: /var/tmp/gcp-certmanager-creds.json
     state: absent
 
 - name: Deploy acme issuer
