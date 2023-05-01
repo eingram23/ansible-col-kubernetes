@@ -190,7 +190,7 @@
 - name: Export root_token
   ansible.builtin.shell:
     cmd: |
-      cat init-keys.json | jq -r ".root_token" > /var/tmp/root_token
+      cat /var/tmp/init-keys.json | jq -r ".root_token" > /var/tmp/root_token
 
 - block:
     - name: Get content of remote file
