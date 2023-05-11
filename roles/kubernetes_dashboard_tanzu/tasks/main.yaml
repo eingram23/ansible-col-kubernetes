@@ -9,14 +9,14 @@
     url: https://raw.githubusercontent.com/kubernetes/dashboard/{{ dash_ver }}/aio/deploy/recommended.yaml
     dest: "{{ dest }}kubernetes-dashboard.yaml"
 
-- name: Copy kubernetes-dashboard-role manifests to host
+- name: Copy kubernetes-dashboard manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "{{ dest }}kubernetes-dashboard-role.yaml"
+    dest: "{{ dest }}{{ item }}"
     mode: '0644'
   with_fileglob: "*"
 
-- name: Apply kubernetes dashboard role manifest
+- name: Apply kubernetes dashboard manifests
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
