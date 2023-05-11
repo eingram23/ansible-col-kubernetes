@@ -1,4 +1,0 @@
-dest: "/var/tmp/defs/"
-kubeconfig: "/Users/edwardingram/kubeconfig/tanzu.yaml"
-suffix: "{{ env | default() }}"
-
