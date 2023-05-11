@@ -118,11 +118,11 @@
       --from-file=ca.crt={{ dest }}vault.ca
       -o yaml | kubectl apply -f -
 
-# - name: Create vault ingressroutetcp
-#   ansible.builtin.template:
-#     src: vault-ingressroutetcp.yaml.j2
-#     dest: "{{ dest }}vault-ingressroutetcp.yaml"
-#     mode: '0644'
+- name: Create vault httpproxy
+  ansible.builtin.template:
+    src: vault-httpproxy.yaml.j2
+    dest: "{{ dest }}vault-httpproxy.yaml"
+    mode: '0644'
 
 - name: Add hashicorp/vault chart repo
   kubernetes.core.helm_repository:
@@ -141,13 +141,13 @@
     values_files: "{{ dest }}vault-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-# - name: Deploy vault ingressroutetcp
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-#     - vault-ingressroutetcp.yaml
+- name: Deploy vault httpproxy
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - vault-httpproxy.yaml
 
 - name: Wait until vault pod is scheduled
   kubernetes.core.k8s_info:
