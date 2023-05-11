@@ -1,3 +1,9 @@
+---
+- name: Create kubeconfig file
+  ansible.builtin.copy:
+    content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
+    dest: "/var/tmp/tanzu.yaml"
+
 - name: Download kubernetes dashboard manifest
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/kubernetes/dashboard/{{ dash_ver }}/aio/deploy/recommended.yaml
