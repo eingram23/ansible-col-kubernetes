@@ -19,7 +19,6 @@
     - awx-ingressroute-{{ cert }}.yaml
     - awx-secret-key.yaml
     - homelab_bundleca.crt
-    - homelab_bundleca-dev.crt
 
 # - name: Create awx admin password secret key
 #   ansible.builtin.template:
@@ -34,7 +33,7 @@
       --namespace awx
       --save-config
       --dry-run=client
-      --from-file=bundle-ca.crt={{ dest }}homelab_bundleca{{ suffix }}.crt
+      --from-file=bundle-ca.crt={{ dest }}homelab_bundleca.crt
       -o yaml | kubectl apply -f -
 
 - name: Deploy awx-secrets
