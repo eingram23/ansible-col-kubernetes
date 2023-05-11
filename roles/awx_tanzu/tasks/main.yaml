@@ -1,4 +1,9 @@
 ---
+- name: Create kubeconfig file
+  ansible.builtin.copy:
+    content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
+    dest: "/var/tmp/tanzu.yaml"
+
 - name: Create a k8s namespace
   kubernetes.core.k8s:
     name: awx
@@ -16,7 +21,7 @@
     - awx-secret-key.yaml
     - awx-admin-password.yaml
     - awx-cert-{{ cert }}.yaml
-    - awx-ingressroute-{{ cert }}.yaml
+    # - awx-ingressroute-{{ cert }}.yaml
     - awx-secret-key.yaml
     - homelab_bundleca.crt
     - homelab_bundleca-dev.crt
@@ -69,11 +74,6 @@
     kustomize build {{ dest }}awx/ | kubectl apply -f -
   tags: update
 
-- name: Set storageclass (Dev)
-  ansible.builtin.set_fact:
-    storageclass: longhorn-homelab-dev
-  when: suffix == "-dev"
-
 - name: Create awx.yaml file
   ansible.builtin.template:
     src: awx.yaml.j2
@@ -93,37 +93,37 @@
     kustomize build {{ dest }}awx/ | kubectl apply -f -
   tags: update
 
-- name: Deploy awx-ingressroute
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - awx-ingressroute-{{ cert }}.yaml
+# - name: Deploy awx-ingressroute
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - awx-ingressroute-{{ cert }}.yaml
 
-- name: Get svc info
-  kubernetes.core.k8s_info:
-    api_version: v1
-    kind: Service
-    name: traefik
-    namespace: kube-system
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
-  register: service
+# - name: Get svc info
+#   kubernetes.core.k8s_info:
+#     api_version: v1
+#     kind: Service
+#     name: traefik
+#     namespace: kube-system
+#     kubeconfig: /etc/rancher/k3s/k3s.yaml
+#   register: service
 
-- name: Set ip_address 
-  ansible.builtin.set_fact:
-    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+# - name: Set ip_address 
+#   ansible.builtin.set_fact:
+#     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
-- name: Add awx GCP DNS record
-  ansible.builtin.include_role:
-    name: eingram23.gcp.cloud_dns
-    tasks_from: add
-    apply:
-      delegate_to: localhost
-  vars:
-    appname: awx{{ suffix }}
-    target: "{{ ip_address }}"
-  when: cert != "vault"
+# - name: Add awx GCP DNS record
+#   ansible.builtin.include_role:
+#     name: eingram23.gcp.cloud_dns
+#     tasks_from: add
+#     apply:
+#       delegate_to: localhost
+#   vars:
+#     appname: awx{{ suffix }}
+#     target: "{{ ip_address }}"
+#   when: cert != "vault"
 
 - name: Deploy awx-cert
   kubernetes.core.k8s:
@@ -133,6 +133,6 @@
   loop:
     - awx-cert-{{ cert }}.yaml
 
-- name: Display IP Address
-  ansible.builtin.debug:
-    msg: "IP Address is {{ ip_address }}"
+# - name: Display IP Address
+#   ansible.builtin.debug:
+#     msg: "IP Address is {{ ip_address }}"
