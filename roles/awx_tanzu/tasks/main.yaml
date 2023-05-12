@@ -22,7 +22,6 @@
     - awx-admin-password.yaml
     - awx-cert-{{ cert }}.yaml
     - awx-httpproxy-{{ cert }}.yaml
-    - awx-secret-key.yaml
     - homelab_bundleca.crt
 
 # - name: Create awx admin password secret key

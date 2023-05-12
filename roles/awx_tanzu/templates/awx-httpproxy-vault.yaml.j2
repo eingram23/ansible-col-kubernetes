@@ -2,14 +2,14 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: tls-example
-  namespace: default
+  name: awx
+  namespace: awx
 spec:
   virtualhost:
-    fqdn: foo2.bar.com
+    fqdn: awx-tanzu.local.lan
     tls:
-      secretName: testsecret
+      secretName: awx-tls
   routes:
     - services:
-        - name: s1
+        - name: awx-service
           port: 80
