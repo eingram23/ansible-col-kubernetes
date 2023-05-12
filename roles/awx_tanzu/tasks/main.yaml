@@ -21,7 +21,7 @@
     - awx-secret-key.yaml
     - awx-admin-password.yaml
     - awx-cert-{{ cert }}.yaml
-    # - awx-ingressroute-{{ cert }}.yaml
+    - awx-httpproxy-{{ cert }}.yaml
     - awx-secret-key.yaml
     - homelab_bundleca.crt
 
@@ -92,13 +92,13 @@
     kustomize build {{ dest }}awx/ | kubectl apply -f -
   tags: update
 
-# - name: Deploy awx-ingressroute
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ item }}"
-#     kubeconfig: "{{ kubeconfig }}"
-#   loop:
-#     - awx-ingressroute-{{ cert }}.yaml
+- name: Deploy awx-httpproxy
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - awx-httpproxy-{{ cert }}.yaml
 
 # - name: Get svc info
 #   kubernetes.core.k8s_info:
