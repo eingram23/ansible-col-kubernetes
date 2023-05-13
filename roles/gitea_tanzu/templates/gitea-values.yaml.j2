@@ -38,8 +38,8 @@ gitea:
         secretKeyRef:
           name: gitea-postgres-secret
           key: password
-  config:
-    server:
+  # config:
+  #   server:
       # DOMAIN: gitea{{ suffix }}.{{ app_domain }}
       # PROTOCOL: https
       # CERT_FILE: /certs/tls.crt
