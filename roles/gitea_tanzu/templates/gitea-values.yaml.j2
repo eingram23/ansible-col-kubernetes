@@ -38,7 +38,7 @@ gitea:
       valueFrom:
         secretKeyRef:
           name: gitea-postgresql
-          key: postgres-password
+          key: password
   config:
     server:
       DOMAIN: gitea{{ suffix }}.{{ app_domain }}
