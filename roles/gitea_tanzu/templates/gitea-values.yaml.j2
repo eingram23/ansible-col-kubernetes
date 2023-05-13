@@ -27,9 +27,14 @@ resources:
 
 postgresql:
   enabled: true
+  global:
+    postgresql:
+      auth:
+        password: gitea
+        database: gitea
+        username: gitea
   persistence:
     enabled: true
-    size: 10Gi
     storageClass: {{ storageclass }}
 
 gitea:
