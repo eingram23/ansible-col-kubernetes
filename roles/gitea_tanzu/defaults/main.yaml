@@ -1,0 +1,6 @@
+dest: "/var/tmp/defs/"
+kubeconfig: "/var/tmp/tanzu.yaml"
+suffix: "{{ env | default() }}"
+storageclass: "vsan-default-storage-policy"
+app_domain: "{{ domain }}"
+cert: "vault"

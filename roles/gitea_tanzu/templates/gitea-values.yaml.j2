@@ -1,0 +1,108 @@
+image:
+  pullPolicy: IfNotPresent
+
+service:
+  http:
+    port: 443
+    type: LoadBalancer
+  ssh:
+    port: 22
+    type: LoadBalancer
+
+memcached:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: {{ storageclass }}
+
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  gitea:
+    requests:
+      # memory: 500Mi
+      # cpu: 1000m
+      memory: 250Mi
+      cpu: 500m
+    limits:
+      # memory: 2Gi
+      # cpu: 1
+      memory: 500Mi
+      cpu: 500m
+  postgres:
+    requests:
+      memory: 200Mi
+      cpu: 200m
+    limits:
+      # memory: 2Gi
+      # cpu: 1
+      memory: 500Mi
+      cpu: 500m
+  memcached:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+
+postgresql:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: {{ storageclass }}
+
+gitea:
+  additionalConfigFromEnvs:
+    - name: ENV_TO_INI__DATABASE__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: gitea-postgres-secret
+          key: password
+  config:
+    server:
+      DOMAIN: gitea{{ suffix }}.{{ app_domain }}
+      PROTOCOL: https
+      CERT_FILE: /certs/tls.crt
+      KEY_FILE: /certs/tls.key
+    # database:
+    #   DB_TYPE: postgres
+    #   HOST: postgres13.postgres.svc.cluster.local:5432
+    #   NAME: gitea
+    #   USER: gitea
+  admin:
+    existingSecret: gitea-admin-secret
+    email: "edward.ingram23@gmail.com"
+  metrics:
+    enabled: false
+  #   serviceMonitor:
+  #     enabled: true
+  # config:
+  #   server:
+  #     ENABLE_PPROF: true
+  livenessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 200
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+extraVolumes:
+- name: gitea-tls
+  secret:
+    secretName: gitea-tls
+extraVolumeMounts:
+- name: gitea-tls
+  readOnly: true
+  mountPath: /certs

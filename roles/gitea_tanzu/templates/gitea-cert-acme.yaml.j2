@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gitea-tls-acme
+  namespace: gitea
+spec:
+  secretName: gitea-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: acme-cluster-issuer
+  commonName: gitea{{ suffix }}.ycdisp.net
+  dnsNames:
+  - gitea{{ suffix }}.ycdisp.net
