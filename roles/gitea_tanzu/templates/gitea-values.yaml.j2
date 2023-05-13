@@ -5,8 +5,8 @@ service:
   http:
     port: 443
     type: LoadBalancer
-  ssh:
-    type: LoadBalancer
+  # ssh:
+  #   type: LoadBalancer
 
 memcached:
   enabled: true
@@ -20,17 +20,17 @@ resources:
   gitea:
     requests:
       memory: 500Mi
-      cpu: 1000m
+      cpu: 100m
     limits:
       memory: 2Gi
-      cpu: 1
+      cpu: 1000m
   postgres:
     requests:
       memory: 200Mi
       cpu: 200m
     limits:
       memory: 2Gi
-      cpu: 1
+      cpu: 1000m
   memcached:
     requests:
       memory: 64Mi
