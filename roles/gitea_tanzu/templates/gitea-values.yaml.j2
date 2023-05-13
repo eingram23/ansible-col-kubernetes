@@ -27,18 +27,20 @@ resources:
 
 postgresql:
   enabled: true
+  auth:
+    password: gitea
   persistence:
     enabled: true
     size: 10Gi
     storageClass: {{ storageclass }}
 
 gitea:
-  additionalConfigFromEnvs:
-    - name: ENV_TO_INI__DATABASE__PASSWD
-      valueFrom:
-        secretKeyRef:
-          name: gitea-postgresql
-          key: postgres-password
+  # additionalConfigFromEnvs:
+  #   - name: ENV_TO_INI__DATABASE__PASSWD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: gitea-postgresql
+  #         key: postgres-password
   config:
     server:
       DOMAIN: gitea{{ suffix }}.{{ app_domain }}
