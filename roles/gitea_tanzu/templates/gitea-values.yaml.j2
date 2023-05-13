@@ -4,9 +4,12 @@ image:
 service:
   http:
     port: 443
+    annotations:
+      metallb.universe.tf/allow-shared-ip: gitea
     type: LoadBalancer
   ssh:
-    port: 22
+    annotations:
+      metallb.universe.tf/allow-shared-ip: gitea
     type: LoadBalancer
 
 memcached:
