@@ -64,9 +64,9 @@
         - alertmanager
         - climate
         - energy
-        - k8s
+        # - k3s
         - kube-state
-        - longhorn
+        # - longhorn
         - node-exporter-en-20201010
         - node-exporter
         - ups
