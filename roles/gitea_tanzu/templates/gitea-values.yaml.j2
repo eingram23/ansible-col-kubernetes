@@ -4,9 +4,9 @@ image:
 service:
   http:
     port: 443
+    type: ClusterIP
+  ssh:
     type: LoadBalancer
-  # ssh:
-  #   type: LoadBalancer
 
 memcached:
   enabled: true
@@ -52,10 +52,10 @@ gitea:
           key: password
   config:
     server:
-      DOMAIN: gitea{{ suffix }}.{{ app_domain }}
-      PROTOCOL: https
-      CERT_FILE: /certs/tls.crt
-      KEY_FILE: /certs/tls.key
+      # DOMAIN: gitea{{ suffix }}.{{ app_domain }}
+      # PROTOCOL: https
+      # CERT_FILE: /certs/tls.crt
+      # KEY_FILE: /certs/tls.key
     # database:
     #   DB_TYPE: postgres
     #   HOST: postgres13.postgres.svc.cluster.local:5432
@@ -87,11 +87,11 @@ gitea:
     periodSeconds: 10
     successThreshold: 1
     failureThreshold: 3
-extraVolumes:
-- name: gitea-tls
-  secret:
-    secretName: gitea-tls
-extraVolumeMounts:
-- name: gitea-tls
-  readOnly: true
-  mountPath: /certs
+# extraVolumes:
+# - name: gitea-tls
+#   secret:
+#     secretName: gitea-tls
+# extraVolumeMounts:
+# - name: gitea-tls
+#   readOnly: true
+#   mountPath: /certs
