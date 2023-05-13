@@ -17,24 +17,12 @@ persistence:
   storageClass: {{ storageclass }}
 
 resources:
-  gitea:
-    requests:
-      memory: 500Mi
-      cpu: 100m
-    limits:
-      memory: 2Gi
-      cpu: 1000m
-  postgres:
-    requests:
-      memory: 200Mi
-      cpu: 200m
-    limits:
-      memory: 2Gi
-      cpu: 1000m
-  memcached:
-    requests:
-      memory: 64Mi
-      cpu: 50m
+  requests:
+    memory: 500Mi
+    cpu: 100m
+  limits:
+    memory: 1Gi
+    cpu: 1000m
 
 postgresql:
   enabled: true
