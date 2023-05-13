@@ -6,6 +6,16 @@
     state: present
     kubeconfig: "{{ kubeconfig }}"
 
+- name: Set domain (local.lan)
+  ansible.builtin.set_fact:
+    app_domain: "local.lan"
+  when: cert == "vault"
+
+- name: Set domain (ycdisp.net)
+  ansible.builtin.set_fact:
+    app_domain: "ycdisp.net"
+  when: cert == "acme"
+  
 - name: Add gitea-charts/gitea chart repo
   kubernetes.core.helm_repository:
     name: gitea-charts
@@ -50,16 +60,6 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-cert-{{ cert }}.yaml
-
-- name: Set domain (local.lan)
-  ansible.builtin.set_fact:
-    app_domain: "local.lan"
-  when: cert == "vault"
-
-- name: Set domain (ycdisp.net)
-  ansible.builtin.set_fact:
-    app_domain: "ycdisp.net"
-  when: cert == "acme"
 
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
