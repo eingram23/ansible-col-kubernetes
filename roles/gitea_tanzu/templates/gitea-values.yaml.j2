@@ -6,7 +6,6 @@ service:
     port: 443
     type: LoadBalancer
   ssh:
-    port: 22
     type: LoadBalancer
 
 memcached:
@@ -17,35 +16,25 @@ persistence:
   size: 10Gi
   storageClass: {{ storageclass }}
 
-# resources: 
-#   # We usually recommend not to specify default resources and to leave this as a conscious
-#   # choice for the user. This also increases chances charts run on environments with little
-#   # resources, such as Minikube. If you do want to specify resources, uncomment the following
-#   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-#   gitea:
-#     requests:
-#       # memory: 500Mi
-#       # cpu: 1000m
-#       memory: 250Mi
-#       cpu: 500m
-#     limits:
-#       # memory: 2Gi
-#       # cpu: 1
-#       memory: 500Mi
-#       cpu: 500m
-#   postgres:
-#     requests:
-#       memory: 200Mi
-#       cpu: 200m
-#     limits:
-#       # memory: 2Gi
-#       # cpu: 1
-#       memory: 500Mi
-#       cpu: 500m
-#   memcached:
-#     requests:
-#       memory: 64Mi
-#       cpu: 50m
+resources:
+  gitea:
+    requests:
+      memory: 500Mi
+      cpu: 1000m
+    limits:
+      memory: 2Gi
+      cpu: 1
+  postgres:
+    requests:
+      memory: 200Mi
+      cpu: 200m
+    limits:
+      memory: 2Gi
+      cpu: 1
+  memcached:
+    requests:
+      memory: 64Mi
+      cpu: 50m
 
 postgresql:
   enabled: true
