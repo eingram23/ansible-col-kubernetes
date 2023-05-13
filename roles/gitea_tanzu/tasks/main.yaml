@@ -21,7 +21,7 @@
   ansible.builtin.set_fact:
     app_domain: "ycdisp.net"
   when: cert == "acme"
-  
+
 - name: Add gitea-charts/gitea chart repo
   kubernetes.core.helm_repository:
     name: gitea-charts
@@ -71,7 +71,7 @@
   kubernetes.core.helm:
     release_name: gitea
     release_namespace: gitea
-    create_namespace: true
+    create_namespace: false
     chart_ref: gitea-charts/gitea
     chart_version: "{{ gitea_chart_ver }}"
     wait: true
