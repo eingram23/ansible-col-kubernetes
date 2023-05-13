@@ -1,0 +1,15 @@
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: gitea-http
+  namespace: gitea
+spec:
+  virtualhost:
+    fqdn: gitea.local.lan
+    tls:
+      secretName: gitea-tls
+  routes:
+    - services:
+        - name: gitea-http
+          port: 443

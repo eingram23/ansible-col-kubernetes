@@ -36,6 +36,7 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
     - gitea-cert-{{ cert }}.yaml
+    - gitea-httpproxy-{{ cert }}.yaml
 
 # - name: Set storageclass (Dev)
 #   ansible.builtin.set_fact:
@@ -59,13 +60,14 @@
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
 
-- name: Deploy gitea cert
+- name: Deploy gitea cert and httpproxy
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-cert-{{ cert }}.yaml
+    - gitea-httpproxy-{{ cert }}.yaml
 
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
