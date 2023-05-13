@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: node-exporter-ext-dev
+    env: prod
+  name: node-exporter-ext-dev
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 60s
+    port: https
+    scheme: https
+    tlsConfig:
+      ca:
+        secret:
+          name: prometheus-tls
+          key: ca.crt
+      cert:
+        secret:
+          name: prometheus-tls
+          key: tls.crt
+      keySecret:
+        name: prometheus-tls
+        key: tls.key
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: node-exporter-ext-dev

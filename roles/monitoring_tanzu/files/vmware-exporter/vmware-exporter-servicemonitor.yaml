@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: vmware-exporter
+  name: vmware-exporter
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 60s
+    port: web
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmware-exporter

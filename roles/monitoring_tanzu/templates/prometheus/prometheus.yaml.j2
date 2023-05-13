@@ -1,0 +1,58 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-persistent
+  namespace: monitoring
+spec:
+  externalUrl: http://prom.local.lan
+  replicas: 1
+  retention: 3d
+  retentionSize: 10GB
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    # limits:
+    #   cpu: 200m
+    #   memory: 200Mi
+# nodeSelector:
+#   node-type: worker
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: prometheus
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector: {}
+    # matchExpressions:
+    # - key: name
+    #   operator: In
+    #   values:
+    #   - longhorn-prometheus-servicemonitor
+    #   - kube-state-metrics
+    #   - node-exporter
+    #   - kubelet
+    #   - traefik
+  podMonitorSelector: {}
+  additionalScrapeConfigs:
+    name: scrape-configs
+    key: prometheus.yml
+  alerting:
+    alertmanagers:
+    - namespace: monitoring
+      name: alertmanager-operated
+      port: web
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: alertmanager
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: longhorn-homelab{{ suffix }}
+        resources:
+          requests:
+            storage: 10Gi

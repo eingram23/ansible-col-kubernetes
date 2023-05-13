@@ -1,0 +1,4 @@
+dest: "/var/tmp/defs/"
+kubeconfig: "/var/tmp/tanzu.yaml"
+privkey: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
+suffix: "{{ env | default() }}"

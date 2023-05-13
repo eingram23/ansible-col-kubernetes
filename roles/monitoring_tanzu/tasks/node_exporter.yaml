@@ -1,0 +1,30 @@
+---
+- name: Download node-exporter manifests to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "{{ role_path }}/files/node-exporter/*"
+
+- name: Create node-exporter daemonset manifest on host
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/node-exporter/node-exporter-daemonset.yaml.j2"
+    dest: "{{ dest }}node-exporter-daemonset.yaml"
+    mode: '0644'
+
+- name: Deploy node-exporter
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - node-exporter-role.yaml
+    - node-exporter-service.yaml
+    - node-exporter-daemonset.yaml
+    - node-exporter-servicemonitor.yaml
+    - node-exporter-ext-service.yaml
+    - node-exporter-ext-servicemonitor.yaml
+    - node-exporter-ext-endpoints.yaml
+    - node-exporter-ext-dev-service.yaml
+    - node-exporter-ext-dev-servicemonitor.yaml
+    - node-exporter-ext-dev-endpoints.yaml

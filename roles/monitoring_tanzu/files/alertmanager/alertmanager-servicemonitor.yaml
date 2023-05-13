@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: alertmanager
+  name: alertmanager
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 60s
+    port: web
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+  targetLabels:
+  - env

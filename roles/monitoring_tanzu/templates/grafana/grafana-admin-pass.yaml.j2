@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-admin-pass
+  namespace: monitoring
+type: Opaque
+stringData:
+  admin-user: eingram
+  admin-password: "{{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}"
