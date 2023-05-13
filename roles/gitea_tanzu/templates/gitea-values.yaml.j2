@@ -3,9 +3,10 @@ image:
 
 service:
   http:
-    port: 443
+    port: 6443
     type: ClusterIP
   ssh:
+    port: 2222
     type: LoadBalancer
 
 memcached:
