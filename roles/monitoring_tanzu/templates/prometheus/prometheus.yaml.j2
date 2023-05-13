@@ -28,7 +28,6 @@ spec:
     # - key: name
     #   operator: In
     #   values:
-    #   - longhorn-prometheus-servicemonitor
     #   - kube-state-metrics
     #   - node-exporter
     #   - kubelet
@@ -52,7 +51,7 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: longhorn-homelab{{ suffix }}
+        storageClassName: {{ storageclass }}
         resources:
           requests:
             storage: 10Gi
