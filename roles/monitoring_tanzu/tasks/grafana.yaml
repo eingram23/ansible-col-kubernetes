@@ -59,7 +59,7 @@
 
     - name: Label grafana dashboard configmaps from json files
       ansible.builtin.shell:
-        kubectl label configmap {{ item }}-dash -n monitoring "grafana_dashboard=1"
+        kubectl label --overwrite configmap {{ item }}-dash -n monitoring "grafana_dashboard=1"
       loop:
         - alertmanager
         - climate
