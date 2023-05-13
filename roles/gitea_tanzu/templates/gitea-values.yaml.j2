@@ -33,9 +33,10 @@ postgresql:
         password: gitea
         database: gitea
         username: gitea
-  persistence:
-    enabled: true
-    storageClass: {{ storageclass }}
+  primary:
+    persistence:
+      enabled: true
+      storageClass: {{ storageclass }}
 
 gitea:
   # additionalConfigFromEnvs:
