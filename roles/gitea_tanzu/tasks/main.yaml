@@ -34,7 +34,7 @@
     mode: '0644'
   loop:
     - gitea-admin-secret.yaml
-    - gitea-postgres-secret.yaml
+    # - gitea-postgres-secret.yaml
     - gitea-cert-{{ cert }}.yaml
     - gitea-httpproxy-{{ cert }}.yaml
 
@@ -58,7 +58,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-admin-secret.yaml
-    - gitea-postgres-secret.yaml
+    # - gitea-postgres-secret.yaml
 
 - name: Deploy gitea cert and httpproxy
   kubernetes.core.k8s:
