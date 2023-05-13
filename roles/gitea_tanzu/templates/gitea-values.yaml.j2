@@ -37,7 +37,7 @@ gitea:
     - name: ENV_TO_INI__DATABASE__PASSWD
       valueFrom:
         secretKeyRef:
-          name: gitea-postgres-secret
+          name: gitea-postgresql
           key: password
   config:
     server:
