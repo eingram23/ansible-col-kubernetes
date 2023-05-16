@@ -1,0 +1,17 @@
+---
+- name: Login to tanzu using kubectl vsphere
+  ansible.builtin.shell:
+    cmd: >
+      kubectl vsphere login
+      --server={{ tanzu_cp }}
+      --vsphere-username {{ vsphere_username }}
+      --insecure-skip-tls-verify
+      --tanzu-kubernetes-cluster-name tkgs-cluster1
+      --tanzu-kubernetes-cluster-namespace homelab
+  environment:
+    KUBECTL_VSPHERE_PASSWORD: "{{ vsphere_password }}"
+
+- name: Switch context to cluster
+  ansible.builtin.shell:
+    cmd: |
+      kubectl config use-context tkgs-cluster1

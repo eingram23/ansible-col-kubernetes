@@ -1,0 +1,4 @@
+---
+tanzu_cp: "10.80.0.10"
+vsphere_user: "{{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_username') }}"
+vsphere_password: "{{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }}"
