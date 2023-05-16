@@ -1,0 +1,80 @@
+---
+- name: Setup tanzu cluster with prereqs (contour, certmanager)
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Login to control node
+      ansible.builtin.shell:
+        cmd: >
+          kubectl vsphere login
+          --server={{ tanzu_cp }}
+          --vsphere-username {{ vsphere_username }}
+          --insecure-skip-tls-verify
+      environment:
+        KUBECTL_VSPHERE_PASSWORD: "{{ vsphere_password }}"
+
+    - name: Copy manifests to localhost
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ dest }}"
+        mode: '0644'
+      with_fileglob: "*"
+
+    - name: Create cluster manifest
+      ansible.builtin.template:
+        src: tkgs_cluster_setup.yaml.j2
+        dest: "{{ dest }}tkgs_cluster_setup.yaml"
+        mode: '0644'
+
+    - name: Deploy cluster
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}tkgs_cluster_setup.yaml"
+        # kubeconfig: "{{ kubeconfig }}"
+
+    - name: Wait for cluster to be deployed
+      #######
+      #######
+      
+    - name: Switch context to homelab namespace
+      ansible.builtin.shell:
+        cmd: |
+          kubectl config use-context homelab
+
+    - name: Deploy pod security policy
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}tkgs_psp.yaml"
+        # kubeconfig: "{{ kubeconfig }}"
+    
+    - name: Create kubeconfig
+      ansible.builtin.shell:
+        cmd: >
+          kubectl get secret {{ clustername }}-kubeconfig
+          -o jsonpath='{.data.value}' | base64 -d > /var/tmp/tanzu.yaml
+
+    - name: Switch context to cluster namespace
+      ansible.builtin.shell:
+        cmd: |
+          kubectl config use-context {{ clustername }}
+
+    - name: Deploy packagerepo
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}tkgs_cluster_setup.yaml"
+        kubeconfig: "{{ kubeconfig }}"
+
+    - name: Deploy cert-manager PackageInstall
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}cert-manager.yaml"
+        kubeconfig: "{{ kubeconfig }}"
+
+    - name: Deploy contour PackageInstall
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}contour.yaml"
+        kubeconfig: "{{ kubeconfig }}"

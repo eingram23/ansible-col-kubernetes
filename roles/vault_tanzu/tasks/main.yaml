@@ -4,6 +4,11 @@
     content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
     dest: "/var/tmp/tanzu.yaml"
 
+- name: Login to tanzu cluster control node
+  ansible.builtin.include_role:
+    name: eingram23.kubernetes.tanzu
+    tasks_from: login.yaml
+
 # - name: Upgrade pip3 if needed
 #   ansible.builtin.pip:
 #     name: pip
@@ -44,10 +49,10 @@
   tags:
     - update_vaultconf
 
-- name: Set vault-pvc storageclass (Dev)
-  ansible.builtin.set_fact:
-    storageclass: longhorn-homelab-dev
-  when: suffix == "-dev"
+# - name: Set vault-pvc storageclass (Dev)
+#   ansible.builtin.set_fact:
+#     storageclass: longhorn-homelab-dev
+#   when: suffix == "-dev"
 
 - name: Create vault-values file
   ansible.builtin.template:
@@ -273,21 +278,24 @@
     - show_token
     - unseal
 
-# - name: Closing comments
-#   ansible.builtin.debug:
-#     msg: |
-#       Log into {{ hostvar }} as ansible user
-#       Run following scripts in order:
-#         ./certstrap-init.sh ### Only if need to create root CA,
-#           otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
-#         ./certstrap-sign-int.sh
-#         ./cat-certs.sh
+- name: Closing comments
+  ansible.builtin.debug:
+    msg: |
+      TODO:
 
-#       To create pfx (if needed):
-#         cd ~/certs
-#         scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
-#         openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
+      Change password for eingram user
 
-#       Log into Vault UI using {{ root_token }}
-#         Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate
-#         Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
+      Run following scripts in order:
+        ./certstrap-init.sh ### Only if need to create root CA,
+          otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
+        ./certstrap-sign-int.sh
+        ./cat-certs.sh
+
+      To create pfx (if needed):
+        cd ~/certs
+        scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
+        openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
+
+      Log into Vault UI
+        Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate
+        Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
