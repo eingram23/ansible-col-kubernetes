@@ -13,11 +13,11 @@ spec:
   secret_key_secret: awx-secret-key
   postgres_resource_requirements:
     requests:
-      cpu: 250m
-      memory: 250M
+      cpu: 10m
+      memory: 64Mi
     limits:
       cpu: 500m
-      memory: 500Mi
+      memory: 1Gi
   postgres_storage_requirements:
     requests:
       storage: 8Gi
@@ -37,25 +37,25 @@ spec:
     #   image: gitea{{ suffix }}.ycdisp.net/eingram/homelab-awx-ee-v1
   web_resource_requirements:
     requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
       cpu: 250m
-      memory: 250M
-    # limits:
-    #   cpu: 500m
-    #   memory: 500Mi
+      memory: 500Mi
   task_resource_requirements:
     requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
       cpu: 250m
-      memory: 250M
-    # limits:
-    #   cpu: 500m
-    #   memory: 500Mi
+      memory: 500Mi
   ee_resource_requirements:
     requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
       cpu: 250m
-      memory: 100Mi
-    # limits:
-    #   cpu: 500m
-    #   memory: 250Mi
+      memory: 500Mi
   redis_capabilities:
     - CHOWN
     - SETUID
