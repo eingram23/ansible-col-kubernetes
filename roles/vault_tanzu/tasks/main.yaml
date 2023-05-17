@@ -1,4 +1,9 @@
 ---
+- name: Login to tanzu cluster control node
+  ansible.builtin.include_role:
+    name: eingram23.kubernetes.tanzu
+    tasks_from: login.yaml
+
 # - name: Upgrade pip3 if needed
 #   ansible.builtin.pip:
 #     name: pip
