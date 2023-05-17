@@ -1,15 +1,4 @@
 ---
-    - name: Create kubeconfig
-      ansible.builtin.shell:
-        cmd: >
-          kubectl get secret {{ clustername }}-kubeconfig
-          -o jsonpath='{.data.value}' | base64 -d > /var/tmp/tanzu.yaml
-
-- name: Login to tanzu cluster control node
-  ansible.builtin.include_role:
-    name: eingram23.kubernetes.tanzu
-    tasks_from: login.yaml
-
 # - name: Upgrade pip3 if needed
 #   ansible.builtin.pip:
 #     name: pip
