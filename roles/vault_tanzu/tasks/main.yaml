@@ -1,8 +1,9 @@
 ---
-- name: Create kubeconfig file
-  ansible.builtin.copy:
-    content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
-    dest: "/var/tmp/tanzu.yaml"
+    - name: Create kubeconfig
+      ansible.builtin.shell:
+        cmd: >
+          kubectl get secret {{ clustername }}-kubeconfig
+          -o jsonpath='{.data.value}' | base64 -d > /var/tmp/tanzu.yaml
 
 - name: Login to tanzu cluster control node
   ansible.builtin.include_role:
@@ -296,6 +297,6 @@
         scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
         openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
 
-      Log into Vault UI
+      Log into Vault UI using {{ root_token }}
         Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate
         Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
