@@ -15,9 +15,9 @@ spec:
     requests:
       cpu: 10m
       memory: 64Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
+    # limits:
+    #   cpu: 500m
+    #   memory: 1Gi
   postgres_storage_requirements:
     requests:
       storage: 8Gi
@@ -39,23 +39,23 @@ spec:
     requests:
       cpu: 100m
       memory: 64Mi
-    limits:
-      cpu: 250m
-      memory: 500Mi
+    # limits:
+    #   cpu: 250m
+    #   memory: 500Mi
   task_resource_requirements:
     requests:
       cpu: 100m
       memory: 128Mi
-    limits:
-      cpu: 250m
-      memory: 500Mi
+    # limits:
+    #   cpu: 250m
+    #   memory: 500Mi
   ee_resource_requirements:
     requests:
       cpu: 100m
       memory: 128Mi
-    limits:
-      cpu: 250m
-      memory: 500Mi
+    # limits:
+    #   cpu: 250m
+    #   memory: 500Mi
   redis_capabilities:
     - CHOWN
     - SETUID
