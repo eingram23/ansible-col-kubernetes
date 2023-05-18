@@ -4,7 +4,7 @@ metadata:
   name: unifi-tcp
   namespace: unifi
   annotations:
-    aviinfrasettng.ako.vmware.com/enable-shared-vip: unifi
+    aviinfrasetting.ako.vmware.com/enable-shared-vip: unifi
 spec:
   selector:
     app: unifi-controller
@@ -39,7 +39,7 @@ metadata:
   name: unifi-udp
   namespace: unifi
   annotations:
-    aviinfrasettng.ako.vmware.com/enable-shared-vip: unifi
+    aviinfrasetting.ako.vmware.com/enable-shared-vip: unifi
 spec:
   selector:
     app: unifi-controller
