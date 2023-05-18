@@ -35,7 +35,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-service.yaml
-    - unifi-deployment{{ cert }}.yaml
+    - unifi-deployment-{{ cert }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:

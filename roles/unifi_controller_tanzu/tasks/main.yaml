@@ -41,7 +41,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-service.yaml
-    - unifi-deployment{{ cert }}.yaml
+    - unifi-deployment-{{ cert }}.yaml
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -49,7 +49,7 @@
     kind: Service
     name: unifi-tcp
     namespace: unifi
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    kubeconfig: "{{ kubeconfig }}"
   register: service
 
 - name: Set ip_address 
