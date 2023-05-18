@@ -1,0 +1,52 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: unifi-tcp
+  namespace: unifi
+  annotations:
+    aviinfrasetting.ako.vmware.com/enable-shared-vip: unifi
+spec:
+  selector:
+    app: unifi-controller
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: control
+    - protocol: TCP
+      port: 8443
+      targetPort: 8443
+      name: api
+    - protocol: TCP
+      port: 8843
+      targetPort: 8843
+      name: https
+    - protocol: TCP
+      port: 8880
+      targetPort: 8880
+      name: http
+    - protocol: TCP
+      port: 6789
+      targetPort: 6789
+      name: speedtest
+  type: LoadBalancer 
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: unifi-udp
+  namespace: unifi
+  annotations:
+    aviinfrasetting.ako.vmware.com/enable-shared-vip: unifi
+spec:
+  selector:
+    app: unifi-controller
+  ports:
+    - protocol: UDP
+      port: 3478
+      targetPort: 3478
+      name: stun
+  type: LoadBalancer 
+

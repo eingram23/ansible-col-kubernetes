@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: unifi-tls-acme
+  namespace: unifi
+spec:
+  secretName: unifi-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: acme-cluster-issuer
+  commonName: unifi{{ suffix }}.ycdisp.net
+  dnsNames:
+  - unifi{{ suffix }}.ycdisp.net

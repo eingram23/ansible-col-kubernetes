@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi-controller
+  namespace: unifi
+  labels:
+    app: unifi-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unifi-controller
+  template:
+    metadata:
+      labels:
+        app: unifi-controller
+    spec:
+      containers:
+        - name: unifi-controller
+          image: jacobalberty/unifi:{{ unifi_controller_ver }}
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: CERTNAME
+              value: "tls.crt"
+            - name: CERT_PRIVATE_NAME
+              value: "tls.key"
+            - name: CERT_IS_CHAIN
+              value: "true"
+          ports:
+            - containerPort: 3478
+              protocol: UDP
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8843
+              protocol: TCP
+            - containerPort: 8880
+              protocol: TCP
+            - containerPort: 6789
+              protocol: TCP
+          volumeMounts:
+            - name: unifi-data
+              mountPath: /unifi/data
+            - name: unifi-cert
+              mountPath: /unifi/cert
+      initContainers:
+        - name: vol-data-perm-fix
+          image: busybox
+          command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert && cat /cert/tls.crt /cert/ca.crt > /cert/chain.pem']
+          # command: ['sh', '-c', '/bin/chown -R 999:999 /data /cert && cp /tls/* /cert']
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+          volumeMounts:
+          - name: unifi-data
+            mountPath: /data
+          - name: unifi-cert
+            mountPath: /cert
+          - name: unifi-tls
+            mountPath: /tls
+      securityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+      volumes:
+        - name: unifi-data
+          persistentVolumeClaim:
+            claimName: unifi-data-pvc
+        - name: unifi-cert
+          persistentVolumeClaim:
+            claimName: unifi-cert-pvc
+        - name: unifi-tls
+          secret:
+            secretName: unifi-tls
+            optional: false
