@@ -1,15 +1,15 @@
 image:
   pullPolicy: IfNotPresent
 
-  service:
+service:
   http:
     port: 443
     annotations:
-    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+      ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
     type: LoadBalancer
   ssh:
     annotations:
-    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+      ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
     type: LoadBalancer
 
 memcached:
