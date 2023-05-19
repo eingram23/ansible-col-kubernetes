@@ -4,7 +4,7 @@ metadata:
   name: unifi-tcp
   namespace: unifi
   annotations:
-    aviinfrasetting.ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
 spec:
   selector:
     app: unifi-controller
@@ -30,8 +30,8 @@ spec:
       targetPort: 6789
       name: speedtest
   type: LoadBalancer
-  loadBalancerIP: 10.80.0.30
-  
+  # loadBalancerIP: 10.80.0.30
+
 ---
 kind: Service
 apiVersion: v1
@@ -39,7 +39,7 @@ metadata:
   name: unifi-udp
   namespace: unifi
   annotations:
-    aviinfrasetting.ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
 spec:
   selector:
     app: unifi-controller
@@ -49,5 +49,5 @@ spec:
       targetPort: 3478
       name: stun
   type: LoadBalancer
-  loadBalancerIP: 10.80.0.30
+  # loadBalancerIP: 10.80.0.30
 
