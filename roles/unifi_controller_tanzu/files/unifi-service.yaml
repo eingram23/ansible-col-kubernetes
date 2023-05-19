@@ -30,7 +30,7 @@ spec:
       targetPort: 6789
       name: speedtest
   type: LoadBalancer
-  # loadBalancerIP: 10.80.0.19
+  loadBalancerIP: 10.80.0.30
 
 ---
 
@@ -50,5 +50,5 @@ spec:
       targetPort: 3478
       name: stun
   type: LoadBalancer
-  # loadBalancerIP: 10.80.0.19
+  loadBalancerIP: 10.80.0.30
 
