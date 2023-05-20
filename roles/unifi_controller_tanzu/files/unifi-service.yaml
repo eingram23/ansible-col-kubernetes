@@ -4,7 +4,7 @@ metadata:
   name: unifi-tcp
   namespace: unifi
   annotations:
-    # ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
 spec:
   selector:
     app: unifi-controller
@@ -39,7 +39,7 @@ metadata:
   name: unifi-udp
   namespace: unifi
   annotations:
-    # ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
+    ako.vmware.com/enable-shared-vip: "shared-vip-key-1"
 spec:
   selector:
     app: unifi-controller
