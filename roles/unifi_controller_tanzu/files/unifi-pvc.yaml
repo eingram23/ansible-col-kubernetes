@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: {{ storageclass }}
+  storageClassName: vsan-default-storage-policy
   resources:
     requests:
       storage: 10Gi
@@ -21,7 +21,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: {{ storageclass }}
+  storageClassName: vsan-default-storage-policy
   resources:
     requests:
       storage: 1Gi
