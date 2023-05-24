@@ -27,4 +27,6 @@
   #   src: "{{ dest }}tkgs_cluster_setup.yaml"
   #   # kubeconfig: "{{ kubeconfig }}"
   ansible.builtin.shell:
-    cmd: kubectl apply -f {{ dest }}tkgs_cluster_setup.yaml
+    cmd: |
+      kubectl config use-context homelab
+      kubectl apply -f {{ dest }}tkgs_cluster_setup.yaml
