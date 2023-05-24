@@ -1,0 +1,28 @@
+- name: Login to control node
+  ansible.builtin.shell:
+    cmd: >
+      kubectl vsphere login
+      --server={{ tanzu_cp }}
+      --vsphere-username {{ vsphere_username }}
+      --insecure-skip-tls-verify
+  environment:
+    KUBECTL_VSPHERE_PASSWORD: "{{ vsphere_password }}"
+
+- name: Copy manifests to localhost
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  with_fileglob: "*"
+
+- name: Create cluster manifest
+  ansible.builtin.template:
+    src: tkgs_cluster_setup.yaml.j2
+    dest: "{{ dest }}tkgs_cluster_setup.yaml"
+    mode: '0644'
+
+- name: Deploy cluster
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}tkgs_cluster_setup.yaml"
+    # kubeconfig: "{{ kubeconfig }}"

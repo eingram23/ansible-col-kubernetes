@@ -7,7 +7,7 @@ spec:
   topology:
     controlPlane:
       replicas: {{ control_replicas }}
-      vmClass: {{ vmclass }}
+      vmClass: {{ cp_vmclass }}
       storageClass: {{ storageclass }}
       tkr:  
         reference:
@@ -15,7 +15,7 @@ spec:
     nodePools:
     - name: worker-nodepool-a1
       replicas: {{ worker_replicas }}
-      vmClass: {{ vmclass }}
+      vmClass: {{ worker_vmclass }}
       storageClass: {{ storageclass }}
       tkr:  
         reference:

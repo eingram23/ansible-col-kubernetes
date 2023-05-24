@@ -3,8 +3,9 @@ dest: "/var/tmp/defs/"
 kubeconfig: "/var/tmp/tanzu.yaml"
 tanzu_cp: "10.80.0.10"
 tkg_ver: "v1.24.9---vmware.1-tkg.4"
-# clustername: "tkgs-cluster1"
-vmclass: "best-effort-small"
+clustername: "tkgs-cluster1"
+cp_vmclass: "best-effort-xsmall"
+worker_vmclass: "best-effort-small"
 storageclass: "vsan-default-storage-policy"
 control_replicas: 1
 worker_replicas: 3
