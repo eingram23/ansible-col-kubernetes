@@ -22,7 +22,9 @@
     mode: '0644'
 
 - name: Deploy cluster
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}tkgs_cluster_setup.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
+  # kubernetes.core.k8s:
+  #   state: present
+  #   src: "{{ dest }}tkgs_cluster_setup.yaml"
+  #   # kubeconfig: "{{ kubeconfig }}"
+  ansible.builtin.shell:
+    cmd: kubectl apply -f {{ dest }}tkgs_cluster_setup.yaml
