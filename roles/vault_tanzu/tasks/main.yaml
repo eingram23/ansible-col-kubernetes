@@ -289,3 +289,6 @@
       Log into Vault UI using {{ root_token }}
         Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate
         Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
+      Vault CLI
+        vault read auth/approle/role/ansible/role-id
+        vault write -f auth/approle/role/ansible/secret-id
