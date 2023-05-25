@@ -9,11 +9,11 @@
       --tanzu-kubernetes-cluster-namespace homelab
   environment:
     KUBECTL_VSPHERE_PASSWORD: "{{ vsphere_password }}"
-    
-- name: Switch context to homelab namespace
+
+- name: Switch context to cluster namespace
   ansible.builtin.shell:
     cmd: |
-      kubectl config use-context homelab
+      kubectl config use-context {{ clustername }}
 
 - name: Deploy pod security policy
   kubernetes.core.k8s:
