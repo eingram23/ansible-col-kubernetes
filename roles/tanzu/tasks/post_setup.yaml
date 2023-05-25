@@ -1,7 +1,7 @@
 - name: Switch context to homelab namespace
   ansible.builtin.shell:
-  cmd: |
-    kubectl config use-context homelab
+    cmd: |
+      kubectl config use-context homelab
 
 - name: Deploy pod security policy
   kubernetes.core.k8s:
