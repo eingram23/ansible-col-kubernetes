@@ -1,8 +1,8 @@
 ---
-- name: Create kubeconfig file
-  ansible.builtin.copy:
-    content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
-    dest: "/var/tmp/tanzu.yaml"
+# - name: Create kubeconfig file
+#   ansible.builtin.copy:
+#     content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
+#     dest: "/var/tmp/tanzu.yaml"
 
 - name: Login using kubectl vsphere and set context
   ansible.builtin.include_role:
