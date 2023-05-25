@@ -10,17 +10,6 @@
   environment:
     KUBECTL_VSPHERE_PASSWORD: "{{ vsphere_password }}"
 
-- name: Switch context to cluster namespace
-  ansible.builtin.shell:
-    cmd: |
-      kubectl config use-context {{ clustername }}
-
-- name: Deploy pod security policy
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}tkgs_psp.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
-
 - name: Switch context to homelab namespace
   ansible.builtin.shell:
     cmd: |
@@ -36,6 +25,12 @@
   ansible.builtin.shell:
     cmd: |
       kubectl config use-context {{ clustername }}
+
+- name: Deploy pod security policy
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}tkgs_psp.yaml"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy packagerepo
   kubernetes.core.k8s:
