@@ -35,17 +35,17 @@
 - name: Deploy packagerepo
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}tkgs_cluster_setup.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
+    src: "{{ dest }}packagerepo.yaml"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy cert-manager PackageInstall
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}cert-manager.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
+    kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy contour PackageInstall
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}contour.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
+    kubeconfig: "{{ kubeconfig }}"
