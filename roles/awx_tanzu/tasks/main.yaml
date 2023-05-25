@@ -4,6 +4,11 @@
     content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
     dest: "/var/tmp/tanzu.yaml"
 
+- name: Login to Tanzu cluster
+  ansible.builtin.include_role:
+    name: eingram23.kubernetes.tanzu
+    tasks_from: login.yaml
+
 - name: Create a k8s namespace
   kubernetes.core.k8s:
     name: awx
