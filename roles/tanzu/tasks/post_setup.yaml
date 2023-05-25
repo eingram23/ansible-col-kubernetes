@@ -21,6 +21,11 @@
     src: "{{ dest }}tkgs_psp.yaml"
     # kubeconfig: "{{ kubeconfig }}"
 
+- name: Switch context to homelab namespace
+  ansible.builtin.shell:
+    cmd: |
+      kubectl config use-context homelab
+
 - name: Create kubeconfig
   ansible.builtin.shell:
     cmd: >
