@@ -72,7 +72,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-cert-{{ cert }}.yaml
-    # - gitea-httpproxy-{{ cert }}.yaml
+    - gitea-httpproxy-{{ cert }}.yaml
 
 - name: Install gitea-charts/gitea chart from repo
   kubernetes.core.helm:
