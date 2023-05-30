@@ -3,13 +3,8 @@ image:
 
 service:
   http:
-    annotations:
-      aviinfrasetting.ako.vmware.com/enable-shared-vip: shared-vip-key-1
-    type: LoadBalancer
-  ssh:
-    annotations:
-      aviinfrasetting.ako.vmware.com/enable-shared-vip: shared-vip-key-1
-    type: LoadBalancer
+    type: ClusterIP
+    port: 3000
 
 memcached:
   enabled: true
