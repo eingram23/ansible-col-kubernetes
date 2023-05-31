@@ -45,6 +45,7 @@ gitea:
   config:
     server:
       DOMAIN: gitea{{ suffix }}.{{ app_domain }}
+      ROOT_URL: https://gitea{{ suffix }}.{{ app_domain }}/
       # PROTOCOL: https
       # CERT_FILE: /certs/tls.crt
       # KEY_FILE: /certs/tls.key
