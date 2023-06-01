@@ -41,7 +41,7 @@
     - gitea-admin-secret.yaml
     # - gitea-postgres-secret.yaml
     - gitea-cert-{{ cert }}.yaml
-    - gitea-httpproxy-{{ cert }}.yaml
+    - gitea-httpproxy.yaml
 
 # - name: Set storageclass (Dev)
 #   ansible.builtin.set_fact:
