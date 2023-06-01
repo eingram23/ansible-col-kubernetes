@@ -86,18 +86,18 @@
     values_files: "{{ dest }}gitea-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-- name: Get svc info
-  kubernetes.core.k8s_info:
-    api_version: v1
-    kind: Service
-    name: gitea-http
-    namespace: gitea
-    kubeconfig: "{{ kubeconfig }}"
-  register: service
+# - name: Get svc info
+#   kubernetes.core.k8s_info:
+#     api_version: v1
+#     kind: Service
+#     name: gitea-http
+#     namespace: gitea
+#     kubeconfig: "{{ kubeconfig }}"
+#   register: service
 
-- name: Set ip_address
-  ansible.builtin.set_fact:
-    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+# - name: Set ip_address
+#   ansible.builtin.set_fact:
+#     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
 - name: Add unifi GCP DNS record
   ansible.builtin.include_role:
