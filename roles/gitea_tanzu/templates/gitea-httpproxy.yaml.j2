@@ -6,7 +6,7 @@ metadata:
   namespace: gitea
 spec:
   virtualhost:
-    fqdn: gitea.local.lan
+    fqdn: gitea.{{ app_domain }}
     tls:
       secretName: gitea-tls
   routes:
