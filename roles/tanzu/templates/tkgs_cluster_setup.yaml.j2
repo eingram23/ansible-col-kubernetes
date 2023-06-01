@@ -24,3 +24,7 @@ spec:
     network:
       pods:
         cidrBlocks: ["192.0.5.0/16"]
+      trust:
+        additionalTrustedCAs:
+          - name: homelab_root
+            data: {{ lookup('hashi_vault', 'secret=secret/cert/rootca:base64') }}
