@@ -110,6 +110,6 @@
     target: "{{ ip_address }}"
   when: cert != "vault"
 
-- name: Display IP Address
-  ansible.builtin.debug:
-    msg: "IP Address is {{ ip_address }}"
+# - name: Display IP Address
+#   ansible.builtin.debug:
+#     msg: "IP Address is {{ ip_address }}"
