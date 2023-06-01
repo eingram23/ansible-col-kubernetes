@@ -98,6 +98,7 @@
     update_repo_cache: true
     values_files: "{{ dest }}grafana-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
+  tags: update_graf_chart
 
 - name: Deploy grafana datasource resources
   kubernetes.core.k8s:
