@@ -4,12 +4,17 @@ kind: HTTPProxy
 metadata:
   name: awx
   namespace: awx
+  annotations:
+    projectcontour.io/websocket-routes: "/websocket"
 spec:
   virtualhost:
     fqdn: awx.local.lan
     tls:
       secretName: awx-tls
   routes:
+    - conditions:
+      - prefix: /
+      - prefix: /websocket
     - services:
         - name: awx-service
           port: 80
