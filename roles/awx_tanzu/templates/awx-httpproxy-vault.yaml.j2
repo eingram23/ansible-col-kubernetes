@@ -14,7 +14,11 @@ spec:
   routes:
     - conditions:
       - prefix: /
+      services:
+      - name: awx-service
+        port: 80
+    - conditions:
       - prefix: /websocket
-    - services:
-        - name: awx-service
-          port: 80
+      services:
+      - name: awx-service
+        port: 80
