@@ -12,13 +12,12 @@ spec:
     tls:
       secretName: awx-tls
   routes:
-    - conditions:
-      - prefix: /
-      services:
+    - services:
       - name: awx-service
         port: 80
     - conditions:
       - prefix: /websocket
+      enableWebsockets: true
       services:
       - name: awx-service
         port: 80
