@@ -1,3 +1,2 @@
 metallb_manifest: "metallb-native"
-metallb_ver: "v0.13.7"
-# metallb_ver: "v0.13.5"
+metallb_ver: "v0.13.11"
