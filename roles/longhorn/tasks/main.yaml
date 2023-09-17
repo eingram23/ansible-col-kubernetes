@@ -30,13 +30,13 @@
 # - name: Wait for metallb pods become ready
 #   shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
 
-- name: Remove longhorn-iscsi-install DaemonSet
-  kubernetes.core.k8s:
-    state: absent
-    namespace: default
-    kind: DaemonSet
-    name: longhorn-iscsi-installation
-    kubeconfig: "{{ kubeconfig }}"
+# - name: Remove longhorn-iscsi-install DaemonSet
+#   kubernetes.core.k8s:
+#     state: absent
+#     namespace: default
+#     kind: DaemonSet
+#     name: longhorn-iscsi-installation
+#     kubeconfig: "{{ kubeconfig }}"
 
 - name: Copy longhorn manifests to host
   ansible.builtin.copy:
