@@ -39,10 +39,10 @@
   tags:
     - update_vaultconf
 
-- name: Set vault-pvc storageclass (Dev)
-  ansible.builtin.set_fact:
-    storageclass: longhorn-homelab-dev
-  when: suffix == "-dev"
+# - name: Set vault-pvc storageclass (Dev)
+#   ansible.builtin.set_fact:
+#     storageclass: longhorn-homelab-dev
+#   when: suffix == "-dev"
 
 - name: Create vault-values file
   ansible.builtin.template:
