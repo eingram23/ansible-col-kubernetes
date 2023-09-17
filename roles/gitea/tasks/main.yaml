@@ -34,7 +34,7 @@
 - name: Set storageclass (Dev)
   ansible.builtin.set_fact:
     storageclass: longhorn-homelab-dev
-  when: suffix == "-dev"
+  # when: suffix == "-dev"
 
 - name: Create gitea values
   ansible.builtin.template:
