@@ -3,7 +3,7 @@ defaultSettings:
   backupTarget: nfs://homenas.local.lan:/mnt/pool0/Shared/Backup/longhorn_backups/backups
   # backupTargetCredentialSecret: longhorn-s3-secret
   defaultDataLocality: best-effort
-  defaultReplicaCount: 2
-  defaultLonghornStaticStorageClass: longhorn-homelab-backup
+  defaultReplicaCount: 1
+  defaultLonghornStaticStorageClass: longhorn-homelab-dev
   orphanAutoDeletion: true
   nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
