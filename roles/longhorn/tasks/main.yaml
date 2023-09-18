@@ -15,35 +15,19 @@
   ansible.builtin.pause:
     seconds: 20
 
-# - name: Download longhorn manifest
-#   ansible.builtin.get_url:
-#     url: "https://raw.githubusercontent.com/longhorn/longhorn/{{ longhorn_ver }}/deploy/longhorn.yaml"
-#     dest: "{{ dest }}{{ longhorn_manifest }}"
-#     mode: '0644'
-
-# - name: Deploy longhorn deployment
-#   kubernetes.core.k8s:
-#     state: present
-#     src: "{{ dest }}{{ longhorn_manifest }}"
-#     kubeconfig: "{{ kubeconfig }}"
-
-# - name: Wait for metallb pods become ready
-#   shell: "kubectl wait --namespace=longhorn-system --for=condition=Ready pods --all --timeout=600s"
-
-# - name: Remove longhorn-iscsi-install DaemonSet
-#   kubernetes.core.k8s:
-#     state: absent
-#     namespace: default
-#     kind: DaemonSet
-#     name: longhorn-iscsi-installation
-#     kubeconfig: "{{ kubeconfig }}"
-
 - name: Copy longhorn manifests to host
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ dest }}"
     mode: '0644'
   with_fileglob: "*"
+
+- name: Deploy SELinux iSCSI workaround
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}iscsi-workaround.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+  when: ansible_distribution == "Rocky" and ansible_distribution_version == "9.2"
 
 - name: Create templated manifests on host
   ansible.builtin.template:
