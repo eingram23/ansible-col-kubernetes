@@ -19,10 +19,6 @@
     - awx-ingressroute-{{ cert }}.yaml
     - homelab_bundleca.crt
 
-- name: Install jmespath python modules
-  ansible.builtin.pip:
-    name: jmespath
-
 # - name: Create awx admin password secret key
 #   ansible.builtin.template:
 #     src: awx-admin-password.yaml.j2

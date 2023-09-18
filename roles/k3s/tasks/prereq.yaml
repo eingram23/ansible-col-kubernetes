@@ -23,6 +23,11 @@
     group: ansible
     mode: '0755'
 
+- name: Install jmespath
+  ansible.builtin.package:
+    name: python3-jmespath
+    state: present
+    
 - name: Install kubernetes python module
   ansible.builtin.pip:
     name: kubernetes
