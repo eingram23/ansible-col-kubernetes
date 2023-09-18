@@ -108,7 +108,7 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
-- name: Set ip_address 
+- name: Get ip_address 
   ansible.builtin.set_fact:
     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
