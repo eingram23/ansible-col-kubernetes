@@ -31,11 +31,6 @@
     - gitea-postgres-secret.yaml
     - gitea-cert-{{ cert }}.yaml
 
-- name: Set storageclass (Dev)
-  ansible.builtin.set_fact:
-    storageclass: longhorn-homelab-dev
-  # when: suffix == "-dev"
-
 - name: Create gitea values
   ansible.builtin.template:
     src: "{{ item }}.j2"
