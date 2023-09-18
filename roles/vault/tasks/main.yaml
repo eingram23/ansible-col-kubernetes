@@ -18,6 +18,11 @@
   # become: true
   # become_method: sudo
 
+- name: Install json_query
+  ansible.builtin.package:
+    name: jq
+    state: present
+    
 - name: Create vault k8s namespace
   kubernetes.core.k8s:
     name: vault
