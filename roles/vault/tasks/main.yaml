@@ -6,7 +6,7 @@
   become: true
   become_method: sudo
 
-- name: Install cryptography python module
+- name: Install python modules
   ansible.builtin.pip:
     name: "{{ pip_item }}"
   loop:
