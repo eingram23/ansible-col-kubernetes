@@ -25,6 +25,7 @@
 - name: Prometheus configuration
   tags:
     - update_promconf
+    - never
   block:
     - name: Create github key
       ansible.builtin.template:
@@ -62,7 +63,7 @@
     kubeconfig: "{{ kubeconfig }}"
   loop:
     - prometheus-cert-vault.yaml
-    - prom-scrape-servers.yaml
+    # - prom-scrape-servers.yaml
     - prometheus.yaml
     - prometheus-service-ext.yaml
     - prometheus-service-local.yaml
