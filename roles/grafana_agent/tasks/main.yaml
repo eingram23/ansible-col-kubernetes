@@ -1,0 +1,56 @@
+- name: Download files to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - grafana-values.yaml
+
+- name: Add grafana_agent_operator chart repo
+  kubernetes.core.helm_repository:
+    name: grafana_agent_operator
+    repo_url: "https://grafana.github.io/helm-charts"
+
+- name: Install hashicorp/vault chart from repo
+  kubernetes.core.helm:
+    release_name: grafana_agent_operator
+    release_namespace: grafana
+    create_namespace: true
+    chart_ref: grafana/grafana-agent-operator
+    chart_version: "{{ ver }}"
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}grafana-values.yaml"
+    kubeconfig: "{{ kubeconfig }}"
+
+# - name: Wait until grafana agent operator pod is scheduled
+#   kubernetes.core.k8s_info:
+#     kind: Pod
+#     wait: yes
+#     wait_condition:
+#       type: PodScheduled
+#       status: true
+#     name: vault-0
+#     namespace: vault
+#     wait_sleep: 10
+#     wait_timeout: 360
+#     kubeconfig: "{{ kubeconfig }}"
+
+# - name: Check to see if vault is already deployed
+#   kubernetes.core.k8s_info:
+#     kind: Pod
+#     name: vault-0
+#     namespace: vault
+#     kubeconfig: "{{ kubeconfig }}"
+#   register: vault_ready
+
+# - block:
+#     - name: Pause 30 seconds
+#       ansible.builtin.pause:
+#         seconds: 30
+
+#     - name: Init and export cluster-keys.json
+#       ansible.builtin.shell:
+#         cmd: |
+#           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+#   when: vault_ready | json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false

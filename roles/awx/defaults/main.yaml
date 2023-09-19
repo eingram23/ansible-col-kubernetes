@@ -1,5 +1,5 @@
 dest: "/opt/kubernetes/defs/"
 kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 suffix: "{{ env | default() }}"
-storageclass: "longhorn-homelab-dev"
+storageclass: "longhorn-homelab-backup"
 cert: "vault"
