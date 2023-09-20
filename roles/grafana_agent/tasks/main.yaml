@@ -12,11 +12,11 @@
 
 - name: Install hashicorp/vault chart from repo
   kubernetes.core.helm:
-    release_name: grafana_agent_operator
+    release_name: grafana
     release_namespace: grafana
     create_namespace: true
     chart_ref: grafana/grafana-agent-operator
-    chart_version: "{{ ver }}"
+    chart_version: latest
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}grafana-values.yaml"
