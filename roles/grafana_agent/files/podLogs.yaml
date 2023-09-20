@@ -1,0 +1,25 @@
+apiVersion: monitoring.grafana.com/v1alpha1
+kind: PodLogs
+metadata:
+  labels:
+    instance: primary
+  name: kubernetes-pods
+  namespace: grafana
+spec:
+  pipelineStages:
+    - docker: {}
+  namespaceSelector: {}
+    # matchNames:
+    # - default
+    # - vault
+    # - awx
+    # - cert-manager
+    # - gitea
+    # - longhorn-system
+    # - metallb-system
+    # - kube-node-lease
+    # - kube-public
+    # - kube-system
+    # - kubernetes-dashboard
+  selector:
+    matchLabels: {}
