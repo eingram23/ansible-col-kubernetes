@@ -34,3 +34,4 @@
     - cAdvisorServiceMonitor.yaml
     - logsInstance.yaml
     - podLogs.yaml
+    - node_exporter.yaml
