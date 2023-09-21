@@ -37,3 +37,4 @@
     - node-exporter.yaml
     - eventhandler.yaml
     - kube-state-metrics.yaml
+    - longhorn-servicemonitor.yaml
