@@ -5,10 +5,10 @@
     mode: '0644'
   with_fileglob: "*"
 
-# - name: Add grafana_agent_operator chart repo
-#   kubernetes.core.helm_repository:
-#     name: grafana_agent_operator
-#     repo_url: "https://grafana.github.io/helm-charts"
+- name: Add grafana_agent_operator chart repo
+  kubernetes.core.helm_repository:
+    name: grafana_agent_operator
+    repo_url: "https://grafana.github.io/helm-charts"
 
 - name: Install hashicorp/vault chart from repo
   kubernetes.core.helm:
@@ -16,7 +16,6 @@
     release_namespace: grafana
     create_namespace: true
     chart_ref: grafana_agent_operator/grafana-agent-operator
-    chart_repo_url: "https://grafana.github.io/helm-charts"
     chart_version: "{{ ver }}"
     wait: true
     update_repo_cache: true
