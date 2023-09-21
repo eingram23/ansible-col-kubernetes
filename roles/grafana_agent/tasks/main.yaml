@@ -10,7 +10,7 @@
     name: grafana_agent_operator
     repo_url: "https://grafana.github.io/helm-charts"
 
-- name: Install hashicorp/vault chart from repo
+- name: Install grafana-agent-operator chart from repo
   kubernetes.core.helm:
     release_name: grafana-agent-operator
     release_namespace: grafana
