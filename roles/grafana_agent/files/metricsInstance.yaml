@@ -8,13 +8,13 @@ metadata:
 spec:
   remoteWrite:
   - url: http://prom.local.lan:9090/api/v1/write
-    basicAuth:
-      username:
-        name: primary-credentials-metrics
-        key: username
-      password:
-        name: primary-credentials-metrics
-        key: password
+    # basicAuth:
+    #   username:
+    #     name: primary-credentials-metrics
+    #     key: username
+    #   password:
+    #     name: primary-credentials-metrics
+    #     key: password
 
   # Supply an empty namespace selector to look in all namespaces. Remove
   # this to only look in the same namespace as the MetricsInstance CR
