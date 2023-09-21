@@ -15,7 +15,7 @@
     release_name: grafana
     release_namespace: grafana
     create_namespace: true
-    chart_ref: grafana/grafana-agent-operator
+    chart_ref: grafana-agent-operator/grafana-agent-operator
     chart_repo_url: "https://grafana.github.io/helm-charts"
     chart_version: "{{ ver }}"
     wait: true
