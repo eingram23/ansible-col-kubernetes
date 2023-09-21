@@ -22,34 +22,15 @@
     values_files: "{{ dest }}grafana-values.yaml"
     kubeconfig: "{{ kubeconfig }}"
 
-# - name: Wait until grafana agent operator pod is scheduled
-#   kubernetes.core.k8s_info:
-#     kind: Pod
-#     wait: yes
-#     wait_condition:
-#       type: PodScheduled
-#       status: true
-#     name: vault-0
-#     namespace: vault
-#     wait_sleep: 10
-#     wait_timeout: 360
-#     kubeconfig: "{{ kubeconfig }}"
-
-# - name: Check to see if vault is already deployed
-#   kubernetes.core.k8s_info:
-#     kind: Pod
-#     name: vault-0
-#     namespace: vault
-#     kubeconfig: "{{ kubeconfig }}"
-#   register: vault_ready
-
-# - block:
-#     - name: Pause 30 seconds
-#       ansible.builtin.pause:
-#         seconds: 30
-
-#     - name: Init and export cluster-keys.json
-#       ansible.builtin.shell:
-#         cmd: |
-#           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
-#   when: vault_ready | json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false
+- name: Deploy grafana_agent manifests
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - grafanaAgent.yaml
+    - metricsInstance.yaml
+    - kubeletServiceMonitor.yaml
+    - cAdvisorServiceMonitor.yaml
+    - logsInstance.yaml
+    - podLogs.yaml
