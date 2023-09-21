@@ -19,7 +19,7 @@ spec:
         agent: grafana-agent-metrics
     externalLabels:
       cluster: k3s
-
+    scrapeInterval: 60s
   logs:
     instanceSelector:
       matchLabels:

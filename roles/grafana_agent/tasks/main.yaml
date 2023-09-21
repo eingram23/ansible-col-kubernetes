@@ -28,10 +28,12 @@
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - grafanaAgent.yaml
-    - metricsInstance.yaml
-    - kubeletServiceMonitor.yaml
-    - cAdvisorServiceMonitor.yaml
-    - logsInstance.yaml
-    - podLogs.yaml
-    - node_exporter.yaml
+    - grafana-agent.yaml
+    - metrics-instance.yaml
+    - kubelet-servicemonitor.yaml
+    - cadvisor-servicemonitor.yaml
+    - logs-instance.yaml
+    - pod-logs.yaml
+    - node-exporter.yaml
+    - eventhandler.yaml
+    - kube-state-metrics.yaml
