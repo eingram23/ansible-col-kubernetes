@@ -18,7 +18,19 @@ spec:
 
   # Supply an empty namespace selector to look in all namespaces. Remove
   # this to only look in the same namespace as the LogsInstance CR
-  podLogsNamespaceSelector: {}
+  podLogsNamespaceSelector: 
+    matchNames:
+    - default
+    - vault
+    - awx
+    - cert-manager
+    - gitea
+    - longhorn-system
+    - metallb-system
+    - kube-node-lease
+    - kube-public
+    - kube-system
+    - kubernetes-dashboard
   podLogsSelector:
     matchLabels:
       instance: primary
