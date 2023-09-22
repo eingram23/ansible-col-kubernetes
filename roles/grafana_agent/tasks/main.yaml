@@ -9,8 +9,8 @@
   ansible.builtin.template:
     src: kube-state-metrics.yaml.j2
     dest: "{{ dest }}kube-state-metrics.yaml"
-    mode: 644
-    
+    mode: '0644'
+
 - name: Add grafana_agent_operator chart repo
   kubernetes.core.helm_repository:
     name: grafana_agent_operator
