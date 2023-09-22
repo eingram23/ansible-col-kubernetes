@@ -1,2 +1,3 @@
 ---
 ver: "0.3.4"
+kube-state-metrics-ver: "main"
