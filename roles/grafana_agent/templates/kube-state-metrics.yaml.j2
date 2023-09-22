@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+    app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
   namespace: grafana
 ---
@@ -16,7 +16,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+    app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
 rules:
   - apiGroups:
@@ -126,7 +126,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+    app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -143,7 +143,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+    app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
   namespace: grafana
 spec:
@@ -164,7 +164,7 @@ metadata:
   labels:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+    app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
   namespace: grafana
 spec:
@@ -177,11 +177,11 @@ spec:
       labels:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: kube-state-metrics
-        app.kubernetes.io/version: "{{ kube-state-metrics-ver }}"
+        app.kubernetes.io/version: "{{ ksm_ver }}"
     spec:
       automountServiceAccountToken: true
       containers:
-        - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v"{{ kube-state-metrics-ver }}"
+        - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v"{{ ksm_ver }}"
           livenessProbe:
             httpGet:
               path: /healthz
