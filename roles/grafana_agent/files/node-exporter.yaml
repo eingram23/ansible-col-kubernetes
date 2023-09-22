@@ -2,7 +2,7 @@ apiVersion: monitoring.grafana.com/v1alpha1
 kind: Integration
 metadata:
   labels:
-    agent: grafana-agent
+    agent: grafana-agent-integrations
   name: node-exporter
   namespace: grafana
 spec:
