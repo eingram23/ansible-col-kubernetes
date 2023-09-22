@@ -22,7 +22,7 @@ metadata:
 spec:
   config:
     cache_path: /etc/eventhandler/eventhandler.cache
-    logs_instance: grafana/grafana-agent-logs
+    logs_instance: grafana/primary
   name: eventhandler
   type:
     unique: true

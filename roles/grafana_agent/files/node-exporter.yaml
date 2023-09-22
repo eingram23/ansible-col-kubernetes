@@ -9,7 +9,7 @@ spec:
   config:
     autoscrape:
       enable: true
-      metrics_instance: grafana/grafana-agent-metrics
+      metrics_instance: grafana/primary
     procfs_path: host/proc
     rootfs_path: /host/root
     sysfs_path: /host/sys

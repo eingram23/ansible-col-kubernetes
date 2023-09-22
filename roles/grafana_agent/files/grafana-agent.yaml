@@ -6,6 +6,7 @@ metadata:
   labels:
     app: grafana-agent
 spec:
+  configReloaderVersion: main
   disableReporting: true
   disableSupportBundle: true
   image: grafana/agent:v0.36.1
