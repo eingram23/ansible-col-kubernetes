@@ -11,12 +11,12 @@ spec:
   disableSupportBundle: true
   image: grafana/agent:v0.36.1
   integrations:
-    # node_exporter:
-    #   enabled: true
-    #   rootfs_path: /host/root
-    #   sysfs_path: /host/sys
-    #   procfs_path: /host/proc
-    #   udev_data_path: /host/root/run/udev/data
+    node_exporter:
+      enabled: true
+      rootfs_path: /host/root
+      sysfs_path: /host/sys
+      procfs_path: /host/proc
+      udev_data_path: /host/root/run/udev/data
     selector:
       matchLabels:
           agent: grafana-agent-integrations
