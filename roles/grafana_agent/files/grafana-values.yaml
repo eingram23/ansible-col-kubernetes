@@ -14,14 +14,14 @@ podAnnotations: {}
 podLabels: {}
 
 # -- Pod security context (runAsUser, etc.)
-podSecurityContext:
+podSecurityContext: {}
+
+# -- Container security context (allowPrivilegeEscalation, etc.)
+containerSecurityContext: 
   capabilities:
     add: ["SYS_TIME"]
   privileged: true
   runAsUser: 0
-
-# -- Container security context (allowPrivilegeEscalation, etc.)
-containerSecurityContext: {}
 
 rbac:
   # -- Toggle to create ClusterRole and ClusterRoleBinding
