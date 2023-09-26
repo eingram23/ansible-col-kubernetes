@@ -1,36 +1,36 @@
 apiVersion: monitoring.grafana.com/v1alpha1
 kind: Integration
 metadata:
-  labels:
-    agent: grafana-agent-integrations
-  name: node-exporter
-  namespace: grafana
+ name: node-exporter
+ namespace: grafana
+ labels:
+   agent: grafana-agent-integrations
 spec:
-  config:
-    autoscrape:
-      enable: true
-      metrics_instance: grafana/primary
-    procfs_path: host/proc
-    rootfs_path: /host/root
-    sysfs_path: /host/sys
-  name: node_exporter
-  type:
-    allNodes: true
-    unique: true
-  volumeMounts:
-    - mountPath: /host/root
-      name: rootfs
-    - mountPath: /host/sys
-      name: sysfs
-    - mountPath: /host/proc
-      name: procfs
-  volumes:
-    - hostPath:
-        path: /
-      name: rootfs
-    - hostPath:
-        path: /sys
-      name: sysfs
-    - hostPath:
-        path: /proc
-      name: procfs
+ name: node_exporter
+ type:
+   allNodes: true
+   unique: true
+ config:
+   autoscrape:
+     enable: true
+     metrics_instance: grafana/primary
+   rootfs_path: /default/node_exporter/rootfs
+   sysfs_path: /default/node_exporter/sys
+   procfs_path: /default/node_exporter/proc
+ volumeMounts:
+   - mountPath: /default/node_exporter/proc
+     name: proc
+   - mountPath: /default/node_exporter/sys
+     name: sys
+   - mountPath: /default/node_exporter/rootfs
+     name: root
+ volumes:
+   - name: proc
+     hostPath:
+       path: /proc
+   - name: sys
+     hostPath:
+       path: /sys
+   - name: root
+     hostPath:
+       path: /root
