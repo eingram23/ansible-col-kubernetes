@@ -15,8 +15,10 @@ podLabels: {}
 
 # -- Pod security context (runAsUser, etc.)
 podSecurityContext:
-  seLinuxOptions: 
-    type: spc_t
+  capabilities:
+    add: ["SYS_TIME"]
+    privileged: true
+    runAsUser: 0
 
 # -- Container security context (allowPrivilegeEscalation, etc.)
 containerSecurityContext: {}
