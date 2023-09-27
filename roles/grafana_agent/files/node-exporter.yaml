@@ -6,11 +6,6 @@ metadata:
   name: node-exporter
   namespace: grafana
 spec:
-  securityContext:
-    capabilities:
-      add: ["SYS_TIME"]
-    privileged: true
-    runAsUser: 0
   config:
     autoscrape:
       enable: true
