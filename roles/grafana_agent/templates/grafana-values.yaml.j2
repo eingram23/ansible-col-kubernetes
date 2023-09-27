@@ -14,7 +14,9 @@ podAnnotations: {}
 podLabels: {}
 
 # -- Pod security context (runAsUser, etc.)
-podSecurityContext: {}
+podSecurityContext:
+  seLinuxOptions: 
+    type: spc_t
 
 # -- Container security context (allowPrivilegeEscalation, etc.)
 containerSecurityContext: {}
