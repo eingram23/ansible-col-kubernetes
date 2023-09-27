@@ -5,11 +5,15 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create kube-state-metrics.yaml file on host
+- name: Create templated files on host
   ansible.builtin.template:
-    src: kube-state-metrics.yaml.j2
-    dest: "{{ dest }}kube-state-metrics.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
     mode: '0644'
+  loop:
+    - kube-state-metrics.yaml
+    - grafana-agent.yaml
+    - grafana-values.yaml
 
 - name: Add grafana_agent_operator chart repo
   kubernetes.core.helm_repository:
