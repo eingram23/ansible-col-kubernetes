@@ -6,6 +6,9 @@ metadata:
   name: node-exporter
   namespace: grafana
 spec:
+  securityContext: 
+    seLinuxOptions: 
+      type: spc_t
   config:
     autoscrape:
       enable: true
