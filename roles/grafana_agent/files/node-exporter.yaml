@@ -6,6 +6,8 @@ metadata:
   name: node-exporter
   namespace: grafana
 spec:
+  securityContext:
+    allowPrivilegeEscalation: true
   config:
     autoscrape:
       enable: true
