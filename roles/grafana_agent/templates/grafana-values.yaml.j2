@@ -19,7 +19,8 @@ podSecurityContext:
 
 # -- Container security context (allowPrivilegeEscalation, etc.)
 containerSecurityContext: {}
-
+  privileged: true
+  
 rbac:
   # -- Toggle to create ClusterRole and ClusterRoleBinding
   create: true
