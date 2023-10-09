@@ -32,6 +32,8 @@
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
   loop:
+    - postgres-pvc.yaml
+    - pgadmin-pvc.yaml
     - postgres-deployment.yaml
     - postgres-ingressroute.yaml
     - pgadmin-deployment.yaml
