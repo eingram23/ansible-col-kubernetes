@@ -7,6 +7,7 @@ defaultSettings:
   defaultLonghornStaticStorageClass: longhorn-homelab-dev
   orphanAutoDeletion: true
   nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
+  storageOverProvisioningPercentage: 300
 
 persistence:
   defaultClassReplicaCount: 1
