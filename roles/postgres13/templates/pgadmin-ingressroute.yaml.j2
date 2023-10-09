@@ -1,14 +1,14 @@
 kind: IngressRoute
 apiVersion: traefik.containo.us/v1alpha1
 metadata:
-  name: postgres13
+  name: pgadmin
   namespace: postgres
 spec:
   entryPoints: 
     - web
   routes:
-  - match: Host(`postgres13{{ suffix }}.local.lan`) 
+  - match: Host(`pgadmin{{ suffix }}.local.lan`) 
     kind: Rule
     services:
-    - name: postgres13
-      port: 5432
+    - name: pgadmin
+      port: 80

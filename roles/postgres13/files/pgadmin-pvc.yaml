@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres13-data-pvc
+  name: pgadmin-data-pvc
   namespace: postgres
 spec:
   accessModes:

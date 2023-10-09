@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres13
+  name: postgres
   labels: 
-    app: postgres13
+    app: postgres
   namespace: postgres
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: postgres13
+      app: postgres
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: postgres13
+        app: postgres
     spec:
       containers:
       - env:
@@ -29,8 +29,8 @@ spec:
               optional: false
         - name: POSTGRES_USER
           value: postgres
-        image: postgres:{{ postgres13_ver }}
-        name: postgres13
+        image: postgres:{{ postgres_ver }}
+        name: postgres
         # Readiness and Liveness Probe
         readinessProbe:
           exec:
@@ -44,14 +44,14 @@ spec:
           timeoutSeconds: 10
         ports:
           - containerPort: 5432
-            name: postgres13     
+            name: postgres     
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
-          name: postgres13-data
+          name: postgres-data
           subPath: postgres
       restartPolicy: Always
       volumes:
-      - name: postgres13-data
+      - name: postgres-data
         persistentVolumeClaim:
-          claimName: postgres13-data-pvc
+          claimName: postgres-data-pvc
       

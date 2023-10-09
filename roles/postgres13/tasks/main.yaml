@@ -27,38 +27,28 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Create postgres13-deployment.yaml manifest on host
+- name: Create manifests on host
   ansible.builtin.template:
-    src: postgres13-deployment.yaml.j2
-    dest: "{{ dest }}postgres13-deployment.yaml"
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+  loop:
+    - postgres-deployment.yaml
+    - postgres-ingressroute.yaml
+    - pgadmin-deployment.yaml
+    - pgadmin-ingressroute.yaml
 
-- name: Create postgres13-ingressroute.yaml manifest on host
-  ansible.builtin.template:
-    src: postgres13-ingressroute.yaml.j2
-    dest: "{{ dest }}postgres13-ingressroute.yaml"
-
-- name: Create pgadmin4-deployment.yaml manifest on host
-  ansible.builtin.template:
-    src: pgadmin4-deployment.yaml.j2
-    dest: "{{ dest }}pgadmin4-deployment.yaml"
-
-- name: Create pgadmin4-ingressroute.yaml manifest on host
-  ansible.builtin.template:
-    src: pgadmin4-ingressroute.yaml.j2
-    dest: "{{ dest }}pgadmin4-ingressroute.yaml"
-
-- name: Deploy postgres13 + pgadmin4
+- name: Deploy postgres + pgadmin
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
     kubeconfig: "{{ kubeconfig }}"
   loop:
-    - pgadmin4-configmap.yaml
-    - postgres13-pvc.yaml
-    - pgadmin4-pvc.yaml
-    - postgres13-service.yaml
-    - pgadmin4-service.yaml
-    - postgres13-deployment.yaml
-    - pgadmin4-deployment.yaml
-    - postgres13-ingressroute.yaml
-    - pgadmin4-ingressroute.yaml
+    - pgadmin-configmap.yaml
+    - postgres-pvc.yaml
+    - pgadmin-pvc.yaml
+    - postgres-service.yaml
+    - pgadmin-service.yaml
+    - postgres-deployment.yaml
+    - pgadmin-deployment.yaml
+    - postgres-ingressroute.yaml
+    - pgadmin-ingressroute.yaml

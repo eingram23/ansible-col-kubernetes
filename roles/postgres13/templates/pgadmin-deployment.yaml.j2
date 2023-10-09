@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pgadmin4
+  name: pgadmin
   labels: 
-    app: pgadmin4
+    app: pgadmin
   namespace: postgres
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: pgadmin4
+      app: pgadmin
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: pgadmin4
+        app: pgadmin
     spec:
       containers:
-      - name: pgadmin4
-        image: dpage/pgadmin4:{{ pgadmin4_ver }}
+      - name: pgadmin
+        image: dpage/pgadmin4:{{ pgadmin_ver }}
         # securityContext:
         #   runAsUser: 5050
         #   runAsGroup: 5050
@@ -38,23 +38,23 @@ spec:
           - containerPort: 80
             name: web
         volumeMounts:
-        - name: pgadmin4-config
-          mountPath: /pgadmin4/servers.json
+        - name: pgadmin-config
+          mountPath: /pgadmin/servers.json
           subPath: servers.json
         - mountPath: /var/lib/pgadmin
-          name: pgadmin4-data
+          name: pgadmin-data
       initContainers:
       - name: pgadmin-data-permission-fix
         image: busybox
         command: ["/bin/chown", "-R", "5050:5050", "/var/lib/pgadmin"]
         volumeMounts:
-        - name: pgadmin4-data
+        - name: pgadmin-data
           mountPath: /var/lib/pgadmin
       restartPolicy: Always
       volumes:
-      - name: pgadmin4-data
+      - name: pgadmin-data
         persistentVolumeClaim:
-          claimName: pgadmin4-data-pvc
-      - name: pgadmin4-config
+          claimName: pgadmin-data-pvc
+      - name: pgadmin-config
         configMap:
-          name: pgadmin4-config
+          name: pgadmin-config

@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres13
+  name: postgres
   namespace: postgres
 spec:
   selector:
-    app: postgres13
+    app: postgres
   ports:
-  - name: postgres13
+  - name: postgres
     port: 5432
     targetPort: 5432
   type: LoadBalancer 
-#  LoadBalancerIP: {{ postgres13_ip }}
+#  LoadBalancerIP: {{ postgres_ip }}
