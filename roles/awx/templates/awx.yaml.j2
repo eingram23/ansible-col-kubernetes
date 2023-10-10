@@ -56,6 +56,9 @@ spec:
     # limits:
     #   cpu: 500m
     #   memory: 250Mi
+  ee_extra_env: |
+    - name: RECEPTOR_KUBE_SUPPORT_RECONNECT
+      value: disabled
   redis_capabilities:
     - CHOWN
     - SETUID
