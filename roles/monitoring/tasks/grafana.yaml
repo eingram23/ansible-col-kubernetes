@@ -49,7 +49,7 @@
         - climate
         - energy
         - k3s
-        - kube-state 
+        - kube-state
         - longhorn
         - node-exporter-en-20201010
         - node-exporter
