@@ -27,7 +27,7 @@
   ansible.builtin.package:
     name: python3-jmespath
     state: present
-    
+
 - name: Install kubernetes python module
   ansible.builtin.pip:
     name: kubernetes
@@ -59,6 +59,7 @@
   ansible.builtin.shell: |
     curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
     mv kustomize /usr/bin
+  when: not kustomize_bin.stat.exists
 
 - name: Create longhorn mount point
   ansible.builtin.file:
