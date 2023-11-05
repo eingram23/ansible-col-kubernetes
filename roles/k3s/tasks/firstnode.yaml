@@ -13,6 +13,8 @@
         --snapshotter=stargz
         --write-kubeconfig-mode 644
         --cluster-init
+        --kubelet-arg container-log-max-files=4
+        --kubelet-arg container-log-max-size=50Mi
 
     - name: Install k3s service
       ansible.builtin.systemd:
