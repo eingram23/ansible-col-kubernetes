@@ -5,7 +5,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Create templated manifests/files
   ansible.builtin.template:
@@ -33,7 +33,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - awx-secret-key.yaml
     - awx-admin-password.yaml
@@ -102,9 +102,9 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
-- name: Get ip_address 
-  ansible.builtin.set_fact:
-    ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
+# - name: Get ip_address 
+#   ansible.builtin.set_fact:
+#     ip_address: "{{ service | json_query('resources[0].status.loadBalancer.ingress[0].ip') }}"
 
 - name: Add awx GCP DNS record
   ansible.builtin.include_role:
@@ -125,6 +125,6 @@
   loop:
     - awx-cert-{{ cert }}.yaml
 
-- name: Display IP Address
-  ansible.builtin.debug:
-    msg: "IP Address is {{ ip_address }}"
+# - name: Display IP Address
+#   ansible.builtin.debug:
+#     msg: "IP Address is {{ ip_address }}"
