@@ -9,7 +9,7 @@
     state: present
     namespace: default
     src: "{{ dest }}{{ iscsi_manifest }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Pause for 20 seconds
   ansible.builtin.pause:
@@ -26,7 +26,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}iscsi-workaround.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   when: ansible_distribution == "Rocky" and ansible_distribution_version == "9.2"
 
 - name: Create templated manifests on host
@@ -61,13 +61,13 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}longhorn-values.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy ingressroute and storageclass
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     # - longhorn-ui.yaml
     # - longhorn-s3-secret.yaml

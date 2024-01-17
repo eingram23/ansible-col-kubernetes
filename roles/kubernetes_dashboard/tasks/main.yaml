@@ -4,7 +4,7 @@
     kind: L2Advertisement
     name: default-pool-l2adv
     namespace: metallb-system
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    # kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: metallb_installed
 
 - name: Download kubernetes dashboard manifest
@@ -28,7 +28,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - kubernetes-dashboard.yaml
     - kubernetes-dashboard-role.yaml

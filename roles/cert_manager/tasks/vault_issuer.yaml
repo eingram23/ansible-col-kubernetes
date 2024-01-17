@@ -6,7 +6,7 @@
     api_version: v1
     kind: ServiceAccount
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Get caBundle data
   ansible.builtin.shell: >
@@ -27,7 +27,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - issuer-secret.yaml
     - vault-cluster-issuer.yaml

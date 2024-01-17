@@ -155,7 +155,7 @@
     namespace: vault
     wait_sleep: 10
     wait_timeout: 360
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Check to see if vault is already deployed
   kubernetes.core.k8s_info:

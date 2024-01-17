@@ -1,27 +1,27 @@
 ---
-- name: Upgrade pip3 if needed
-  ansible.builtin.pip:
-    name: pip
-    state: latest
-  become: true
-  become_method: sudo
+# - name: Upgrade pip3 if needed
+#   ansible.builtin.pip:
+#     name: pip
+#     state: latest
+#   become: true
+#   become_method: sudo
 
-- name: Install python modules
-  ansible.builtin.pip:
-    name: "{{ pip_item }}"
-  loop:
-    - rust
-    - setuptools_rust
-    - cryptography
-  loop_control:
-    loop_var: pip_item
+# - name: Install python modules
+#   ansible.builtin.pip:
+#     name: "{{ pip_item }}"
+#   loop:
+#     - rust
+#     - setuptools_rust
+#     - cryptography
+#   loop_control:
+#     loop_var: pip_item
   # become: true
   # become_method: sudo
 
-- name: Install json_query
-  ansible.builtin.package:
-    name: jq
-    state: present
+# - name: Install json_query
+#   ansible.builtin.package:
+#     name: jq
+#     state: present
 
 - name: Create vault k8s namespace
   kubernetes.core.k8s:
@@ -29,7 +29,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Download files to host
   ansible.builtin.copy:
@@ -73,12 +73,12 @@
   ansible.builtin.shell: |
     cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
 
-- name: get content of remote file
+- name: get content of vault.csr.contents
   slurp:
     src: "{{ dest }}vault.csr.contents"
   register: vault_csr_enc
 
-- name: decode remote content
+- name: decode vault.csr.contents
   set_fact:
     vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
 
@@ -91,7 +91,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-csr.yaml
 
@@ -105,6 +105,15 @@
       serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
       echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
       kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
+
+- name: Get contents of vault.ca
+  ansible.builtin.slurp:
+    src: "{{ dest }}vault.ca"
+  register: vault_ca_enc
+
+- name: Decode vault.ca
+  ansible.builtin.set_fact:
+    vault_ca: "{{ vault_ca_enc['content'] | b64decode }}"
 
 - name: Create vault-server-tls secret
   ansible.builtin.shell:
@@ -139,13 +148,13 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}vault-values.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy vault ingressroutetcp
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-ingressroutetcp.yaml
 
@@ -160,14 +169,14 @@
     namespace: vault
     wait_sleep: 10
     wait_timeout: 360
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Check to see if vault is already deployed
   kubernetes.core.k8s_info:
     kind: Pod
     name: vault-0
     namespace: vault
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   register: vault_ready
 
 - block:
@@ -178,29 +187,39 @@
     - name: Init and export cluster-keys.json
       ansible.builtin.shell:
         cmd: |
-          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > init-keys.json
+          kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > {{ dest }}init-keys.json
   when: vault_ready | json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false
 
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" {{ dest }}init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
 
 - name: Export root_token
   ansible.builtin.shell:
     cmd: |
-      cat init-keys.json | jq -r ".root_token" > root_token
+      cat {{ dest }}init-keys.json | jq -r ".root_token" > {{ dest }}root_token
 
-- block:
-    - name: Get content of remote file
+- name: Get contents of files
+  block:
+    - name: Get content of root_token
       ansible.builtin.slurp:
-        src: "root_token"
+        src: "{{ dest }}root_token"
       register: root_token_enc
 
     - name: Decode remote content
       ansible.builtin.set_fact:
         root_token: "{{ root_token_enc['content'] | b64decode }}"
+    
+    - name: Get content of init-keys.json
+      ansible.builtin.slurp:
+        src: "{{ dest }}init-keys.json"
+      register: init_keys_enc
+
+    - name: Decode remote content
+      ansible.builtin.set_fact:
+        init_keys: "{{ init_keys_enc['content'] | b64decode }}"
   tags:
     - show_token
     - unseal
@@ -246,7 +265,7 @@
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
-      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" init-keys.json)
+      VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" {{ dest }}init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
   tags:
     - unseal
@@ -254,17 +273,27 @@
 - name: Generate Int CSR
   ansible.builtin.shell:
     cmd: |
-      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab{{ suffix }} local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab{{ suffix }} Org" country="US" locality="Homelab" province="California" > vault_int{{ suffix }}_csr
-      cat vault_int{{ suffix }}_csr | jq -r '.data.csr' > vault_int{{ suffix }}.csr
+      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab{{ suffix }} local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab{{ suffix }} Org" country="US" locality="Homelab" province="California" > {{ dest }}vault_int{{ suffix }}_csr
+      cat {{ dest }}vault_int{{ suffix }}_csr | jq -r '.data.csr' > {{ dest }}vault_int{{ suffix }}.csr
+
+- name: Get contents of vault_int.csr
+  ansible.builtin.slurp:
+    src: "{{ dest }}vault_int{{ suffix }}.csr"
+  register: vault_int_csr_enc
+
+- name: Decode vault_int_csr
+  ansible.builtin.set_fact:
+    vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
 
 - name: Run certstrap tasks
-  ansible.builtin.include_tasks: certstrap.yaml
+  ansible.builtin.include_tasks: 
+    name: certstrap.yaml
 
 - name: Create cert_manager vault issuer
   ansible.builtin.include_role:
     name: eingram23.kubernetes.cert_manager
     tasks_from: vault_issuer
-    
+
 - name: Show root_token
   ansible.builtin.debug:
     var: root_token
@@ -276,7 +305,7 @@
 - name: Closing comments
   ansible.builtin.debug:
     msg: |
-      Log into {{ hostvar }} as ansible user
+      Log into homenas as ansible user
       Run following scripts in order:
         ./certstrap-init.sh ### Only if need to create root CA,
           otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
@@ -292,5 +321,5 @@
         Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate (or Import PEM)
         Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
       Vault CLI
-        vault read auth/approle/role/ansible/role-id
-        vault write -f auth/approle/role/ansible/secret-id
+        vault read auth/approle/role/ansible/role-id # Only needed if using secrets engine for Ansible
+        vault write -f auth/approle/role/ansible/secret-id # Only needed if using secrets engine for Ansible

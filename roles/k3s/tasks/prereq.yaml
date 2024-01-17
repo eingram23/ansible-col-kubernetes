@@ -15,22 +15,22 @@
     backrefs: true
     backup: true
 
-- name: Create folder for storing definition files for ansible to execute
-  ansible.builtin.file:
-    path: /opt/kubernetes/defs
-    state: directory
-    owner: ansible
-    group: ansible
-    mode: '0755'
+# - name: Create folder for storing definition files for ansible to execute
+#   ansible.builtin.file:
+#     path: /opt/kubernetes/defs
+#     state: directory
+#     owner: ansible
+#     group: ansible
+#     mode: '0755'
 
-- name: Install jmespath
-  ansible.builtin.package:
-    name: python3-jmespath
-    state: present
+# - name: Install jmespath
+#   ansible.builtin.package:
+#     name: python3-jmespath
+#     state: present
 
-- name: Install kubernetes python module
-  ansible.builtin.pip:
-    name: kubernetes
+# - name: Install kubernetes python module
+#   ansible.builtin.pip:
+#     name: kubernetes
 
 - name: Disable firewall (RHEL/Rocky)
   ansible.builtin.systemd:
@@ -38,28 +38,28 @@
     state: stopped
     enabled: false
 
-- name: Check if helm is installed
-  ansible.builtin.stat:
-    path: /usr/local/bin/helm
-  register: helm_bin
+# - name: Check if helm is installed
+#   ansible.builtin.stat:
+#     path: /usr/local/bin/helm
+#   register: helm_bin
 
-- name: Install helm
-  ansible.builtin.shell: |
-    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-  when: not helm_bin.stat.exists
-  register: install_result
-  failed_when: install_result.rc != 1
+# - name: Install helm
+#   ansible.builtin.shell: |
+#     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+#   when: not helm_bin.stat.exists
+#   register: install_result
+#   failed_when: install_result.rc != 1
 
-- name: Check if kustomize is installed
-  ansible.builtin.stat:
-    path: /usr/local/bin/kustomize
-  register: kustomize_bin
+# - name: Check if kustomize is installed
+#   ansible.builtin.stat:
+#     path: /usr/local/bin/kustomize
+#   register: kustomize_bin
 
-- name: Install kustomize
-  ansible.builtin.shell: |
-    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-    mv kustomize /usr/bin
-  when: not kustomize_bin.stat.exists
+# - name: Install kustomize
+#   ansible.builtin.shell: |
+#     curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+#     mv kustomize /usr/local/bin
+#   when: not kustomize_bin.stat.exists
 
 - name: Create longhorn mount point
   ansible.builtin.file:

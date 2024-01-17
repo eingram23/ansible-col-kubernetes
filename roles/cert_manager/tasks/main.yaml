@@ -15,7 +15,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}cert-manager.crds.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Add jetstack chart repo
   kubernetes.core.helm_repository:
@@ -31,7 +31,7 @@
     chart_version: "{{ cert_manager_ver }}"
     wait: true
     update_repo_cache: true
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Create gcp certmanager secret json file
   ansible.builtin.template:
@@ -58,4 +58,4 @@
   kubernetes.core.k8s:
     src: "{{ dest }}acme-cluster-issuer.yaml"
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"

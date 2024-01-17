@@ -1,82 +1,82 @@
-- name: Install go
-  ansible.builtin.package:
-    name: go
-    state: present
-  become: true
-  become_method: sudo
+# - name: Install go
+#   ansible.builtin.package:
+#     name: go
+#     state: present
+#   become: true
+#   become_method: sudo
+- name: Run certstrap tasks on homenas
+  block:
+    - name: Remove certstrap folder if exist
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}"
+        state: absent
 
-- name: Remove certstrap folder if exist
-  ansible.builtin.file:
-    path: certstrap
-    state: absent
-    
-- name: Create certstrap folder
-  ansible.builtin.file:
-    path: certstrap
-    state: directory
-    mode: '0755'
+    - name: Create certstrap folder
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}"
+        state: directory
+        mode: '0755'
 
-- name: Clone certstrap git
-  ansible.builtin.git:
-    repo: https://github.com/square/certstrap
-    dest: certstrap
+    - name: Clone certstrap git
+      ansible.builtin.git:
+        repo: https://github.com/square/certstrap
+        dest: "{{ certstrap_dest }}"
 
-- name: Build certstrap
-  ansible.builtin.shell: 
-    cmd: |
-      cd certstrap
-      go build
+    - name: Build certstrap
+      ansible.builtin.shell: 
+        cmd: |
+          cd {{ certstrap_dest }}
+          go build
 
-- name: Create certstrap subfolders
-  ansible.builtin.file:
-    path: ./certstrap/{{ item }}
-    state: directory
-    mode: '0755'
-  loop:
-    - csr
-    - out
+    - name: Create certstrap subfolders
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - csr
+        - out
 
-- name: Copy vault.ca to certstrap out folder
-  ansible.builtin.copy:
-    src: "{{ dest }}vault.ca"
-    dest: ./certstrap/out/vault{{ suffix }}.ca
-    remote_src: true
-    mode: '0644'
+    - name: Create vault.ca in certstrap out folder
+      ansible.builtin.copy:
+        content: "{{ vault_ca }}"
+        dest: "{{ certstrap_dest }}/out/vault{{ suffix }}.ca"
+        mode: '0644'
 
-- name: Copy certstrap binary to bin folder
-  ansible.builtin.copy:
-    src: ./certstrap/certstrap
-    dest: /usr/local/bin/
-    remote_src: true
-    mode: 'u+x,g+x,o+x'
-  become: true
-  become_method: sudo
+    # - name: Copy certstrap binary to bin folder
+    #   ansible.builtin.copy:
+    #     src: "{{ certstrap_dest }}/certstrap"
+    #     dest: /usr/local/bin/
+    #     remote_src: true
+    #     mode: 'u+x,g+x,o+x'
+    #   become: true
+    #   become_method: sudo
 
-- name: Create certstrap-sign-int.sh
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: ./{{ item }}
-    mode: 'u+x'
-  loop:
-    - certstrap-sign-int.sh
+    - name: Create certstrap-sign-int.sh
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "{{ certstrap_dest }}{{ item }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-sign-int.sh
 
-- name: Copy scripts to host
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: ./
-    mode: 'u+x'
-  loop:
-    - certstrap-init.sh
+    - name: Copy scripts to host
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ certstrap_dest }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-init.sh
 
-- name: Copy csr to certstrap folder
-  ansible.builtin.copy:
-    src: vault_int{{ suffix }}.csr
-    dest: ./certstrap/csr
-    mode: '0644'
-    remote_src: true
+    - name: Copy csr to certstrap folder
+      ansible.builtin.copy:
+        content: "{{ vault_int_csr }}"
+        dest: "{{ certstrap_dest }}certstrap/csr/vault_int{{ suffix }}.csr
+        mode: '0644'
 
-- name: Closing message
-  ansible.builtin.debug:
-    msg: |
-      Run from host - ~/copy_cert_certstrap.sh
-      Run from k3s master as ansible user - ~/certstrap-sign-int.sh   
+    - name: Closing message
+      ansible.builtin.debug:
+        msg: |
+          Run from host - ~/copy_cert_certstrap.sh
+          Run from k3s master as ansible user - ~/certstrap-sign-int.sh
+  delegate_to: homenas.local.lan

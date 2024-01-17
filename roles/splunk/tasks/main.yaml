@@ -1,0 +1,39 @@
+---
+- name: Create splunk k8s namespace
+  kubernetes.core.k8s:
+    name: splunk
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy splunk-op pvc
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+    kubeconfig: "{{ kubeconfig }}"
+  loop:
+    - splunk-op-pvc{{ suffix }}.yaml
+
+- name: Add splunk operator chart repo
+  kubernetes.core.helm_repository:
+    name: splunk
+    repo_url: "https://splunk.github.io/splunk-operator/"
+
+- name: Create splunk values
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - splunk-values.yaml
+
+- name: Install splunk operator chart from repo
+  kubernetes.core.helm:
+    release_name: splunk
+    release_namespace: splunk
+    create_namespace: false
+    chart_ref: splunk/splunk-operator
+    chart_version: "{{ splunk_chart_ver }}"
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}splunk-op-values.yaml"

@@ -8,7 +8,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ metallb_manifest }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   register: metallb
 
 - name: Pause for 20 seconds
@@ -29,4 +29,4 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}metallb-ippool.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"

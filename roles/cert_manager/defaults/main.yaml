@@ -1,4 +1,3 @@
-dest: "/opt/kubernetes/defs/"
-kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+dest: "/var/tmp/ansible/k3s/cert_manager"
+# kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 suffix: "{{ env | default() }}"
-
