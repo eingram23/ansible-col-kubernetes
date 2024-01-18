@@ -1,5 +1,5 @@
 dest: "/opt/kubernetes/defs/"
-kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+# kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 privkey: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
 suffix: "{{ env | default() }}"
 storageclass: "longhorn-homelab-dev"

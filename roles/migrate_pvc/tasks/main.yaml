@@ -8,4 +8,4 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}data_migration.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"

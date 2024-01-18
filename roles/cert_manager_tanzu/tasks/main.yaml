@@ -40,4 +40,4 @@
   kubernetes.core.k8s:
     src: "{{ dest }}acme-cluster-issuer.yaml"
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"

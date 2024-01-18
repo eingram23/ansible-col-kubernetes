@@ -1,5 +1,5 @@
 dest: "/var/tmp/defs/"
-kubeconfig: "/var/tmp/tanzu.yaml"
+# kubeconfig: "/var/tmp/tanzu.yaml"
 suffix: "{{ env | default() }}"
 cert: "vault"
 storageclass: "vsan-default-storage-policy"

@@ -89,7 +89,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - awx-ingressroute-{{ cert }}.yaml
 
@@ -99,7 +99,7 @@
     kind: Service
     name: traefik
     namespace: kube-system
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    # kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
 # - name: Get ip_address 
@@ -121,7 +121,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - awx-cert-{{ cert }}.yaml
 

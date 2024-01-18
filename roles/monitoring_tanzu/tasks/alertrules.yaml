@@ -10,5 +10,5 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item | basename }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   with_fileglob: "{{ role_path }}/files/alertrules/*"

@@ -1,2 +1,2 @@
 dest: "/opt/kubernetes/defs/"
-kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+# kubeconfig: "/etc/rancher/k3s/k3s.yaml"

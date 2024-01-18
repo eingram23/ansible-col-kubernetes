@@ -4,7 +4,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Copy nginx-test manifests to host
   ansible.builtin.copy:
@@ -17,7 +17,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - nginx-pvc.yaml
     - nginx-deployment.yaml

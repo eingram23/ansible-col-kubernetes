@@ -8,7 +8,7 @@
       - op: add
         path: /metadata/labels/env
         value: prod
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Patch label into longhorn-backend svc
   kubernetes.core.k8s_json_patch:
@@ -19,7 +19,7 @@
       - op: add
         path: /metadata/labels/env
         value: prod
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Download k3s manifests to host
   ansible.builtin.copy:
@@ -32,5 +32,5 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item | basename }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   with_fileglob: "{{ role_path }}/files/k3s/*"

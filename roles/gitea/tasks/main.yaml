@@ -4,7 +4,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Set domain (local.lan)
   ansible.builtin.set_fact:
@@ -43,7 +43,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-admin-secret.yaml
     - gitea-postgres-secret.yaml
@@ -52,7 +52,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - gitea-cert-{{ cert }}.yaml
 
@@ -66,7 +66,7 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}gitea-values.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Get svc info
   kubernetes.core.k8s_info:
@@ -74,7 +74,7 @@
     kind: Service
     name: gitea-http
     namespace: gitea
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    # kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
 - name: Set ip_address

@@ -77,7 +77,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - grafana-httpproxy.yaml
     - grafana-admin-pass.yaml
@@ -97,14 +97,14 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}grafana-values.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   tags: update_graf_chart
 
 - name: Deploy grafana datasource resources
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - graf-datasource-secret-influx.yaml
     - graf-datasource-cm-prom.yaml

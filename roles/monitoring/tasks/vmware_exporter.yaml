@@ -17,7 +17,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - vmware-exporter-deployment.yaml
     - vmware-exporter-service.yaml

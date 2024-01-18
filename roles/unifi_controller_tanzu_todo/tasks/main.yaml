@@ -10,7 +10,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Download manifests to host
   ansible.builtin.copy:
@@ -32,13 +32,13 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}unifi-pvc{{ suffix }}.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy unifi
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - unifi-service.yaml
     - unifi-deployment-{{ cert }}.yaml
@@ -49,7 +49,7 @@
     kind: Service
     name: unifi-tcp
     namespace: unifi
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   register: service
 
 - name: Set ip_address 

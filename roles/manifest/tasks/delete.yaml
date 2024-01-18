@@ -8,4 +8,4 @@
   kubernetes.core.k8s:
     state: absent
     src: /opt/kubernetes/defs/{{ manifest }}.yaml
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    # kubeconfig: /etc/rancher/k3s/k3s.yaml

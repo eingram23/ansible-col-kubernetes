@@ -4,7 +4,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Create secret for deployment
   kubernetes.core.k8s:
@@ -18,7 +18,7 @@
       data:
         defaultpassword: "{{ defaultpassword | b64encode }}"
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Download manifests to host
   ansible.builtin.copy:
@@ -43,7 +43,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - pgadmin-configmap.yaml
     - postgres-pvc.yaml

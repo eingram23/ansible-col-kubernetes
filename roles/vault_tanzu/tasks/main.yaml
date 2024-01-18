@@ -24,7 +24,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Download files to host
   ansible.builtin.copy:
@@ -86,7 +86,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-csr.yaml
 
@@ -134,13 +134,13 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}vault-values.yaml"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Deploy vault httpproxy
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - vault-httpproxy.yaml
 
@@ -162,7 +162,7 @@
     kind: Pod
     name: vault-0
     namespace: vault
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   register: vault_ready
 
 - block:

@@ -5,7 +5,7 @@
     api_version: v1
     kind: Namespace
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Create duckdns token secret
   kubernetes.core.k8s:
@@ -19,7 +19,7 @@
         namespace: duckdns
       stringData:
         token: "{{ lookup('hashi_vault', 'secret=secret/duckdns:token') }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
 
 - name: Create deployment manifest on host
   ansible.builtin.template:
@@ -31,4 +31,4 @@
   kubernetes.core.k8s:
     src: "{{ dest }}duckdns-deployment.yaml"
     state: present
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"

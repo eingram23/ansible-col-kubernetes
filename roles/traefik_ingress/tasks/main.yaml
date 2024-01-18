@@ -13,7 +13,7 @@
     kind: Service
     name: traefik
     namespace: kube-system
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    # kubeconfig: /etc/rancher/k3s/k3s.yaml
   register: service
 
 - name: Set ip_address
@@ -24,8 +24,8 @@
   ansible.builtin.include_role:
     name: eingram23.gcp.cloud_dns
     tasks_from: add
-    apply:
-      delegate_to: localhost
+    # apply:
+    #   delegate_to: localhost
   vars:
     appname: traefik{{ suffix }}
     target: "{{ ip_address }}"
@@ -35,7 +35,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   loop:
     - traefik-ingressroute-{{ cert }}.yaml
     - traefik-cert-{{ cert }}.yaml
