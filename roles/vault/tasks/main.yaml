@@ -179,7 +179,9 @@
     # kubeconfig: "{{ kubeconfig }}"
   register: vault_ready
 
-- block:
+- name: Wait for vault container to be ready
+  when: vault_ready | json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false
+  block:
     - name: Pause 30 seconds
       ansible.builtin.pause:
         seconds: 30
@@ -188,7 +190,6 @@
       ansible.builtin.shell:
         cmd: |
           kubectl exec vault-0 -n vault -- vault operator init -key-shares=1 -key-threshold=1 -format=json > {{ dest }}init-keys.json
-  when: vault_ready | json_query('resources[0].status.conditions[?type==`ContainersReady`].status') | first | bool == false
 
 - name: Unseal vault
   ansible.builtin.shell:
@@ -202,6 +203,9 @@
       cat {{ dest }}init-keys.json | jq -r ".root_token" > {{ dest }}root_token
 
 - name: Get contents of files
+  # tags:
+  #   - show_token
+  #   - unseal
   block:
     - name: Get content of root_token
       ansible.builtin.slurp:
@@ -211,7 +215,7 @@
     - name: Decode remote content
       ansible.builtin.set_fact:
         root_token: "{{ root_token_enc['content'] | b64decode }}"
-    
+
     - name: Get content of init-keys.json
       ansible.builtin.slurp:
         src: "{{ dest }}init-keys.json"
@@ -220,9 +224,7 @@
     - name: Decode remote content
       ansible.builtin.set_fact:
         init_keys: "{{ init_keys_enc['content'] | b64decode }}"
-  tags:
-    - show_token
-    - unseal
+
 
 - name: Configure vault pki
   ansible.builtin.shell:
@@ -260,15 +262,15 @@
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/config kubernetes_host="https://kubernetes.default.svc.cluster.local:443"
       kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer bound_service_account_names=issuer bound_service_account_namespaces=cert-manager policies=pki ttl=20m
   tags:
-  - update_vaultconf
+    - update_vaultconf
 
 - name: Unseal vault
   ansible.builtin.shell:
     cmd: |
       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" {{ dest }}init-keys.json)
       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
-  tags:
-    - unseal
+  # tags:
+  #   - unseal
 
 - name: Generate Int CSR
   ansible.builtin.shell:
@@ -285,22 +287,101 @@
   ansible.builtin.set_fact:
     vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
 
-- name: Run certstrap tasks
-  ansible.builtin.include_tasks: 
-    name: certstrap.yaml
+- name: Run tasks on certstrap host
+  delegate_to: homenas.local.lan
+  become: true
+  become_method: sudo
+  become_user: root
+  block:
+    - name: Install go
+      ansible.builtin.package:
+        name: go
+        state: present
+
+    - name: Create certstrap folder
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}"
+        state: directory
+        mode: '0700'
+
+    - name: Clone certstrap git
+      ansible.builtin.git:
+        repo: https://github.com/square/certstrap
+        dest: "{{ certstrap_dest }}"
+
+    - name: Check if certstrap already installed
+      stat:
+        path: /usr/local/bin/certstrap
+      register: certstrap_installed
+
+    - name: Build certstrap
+      when: not certstrap_installed.exists
+      ansible.builtin.shell:
+        cmd: |
+          cd {{ certstrap_dest }}
+          go build
+          chmod +x {{ certstrap_dest }}certstrap
+          mv {{ certstrap_dest }}certstrap /usr/local/bin
+
+    - name: Create certstrap subfolders
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}{{ item }}"
+        state: directory
+        mode: '0700'
+      loop:
+        - csr
+        - out
+
+    - name: Create vault.ca in certstrap out folder
+      ansible.builtin.copy:
+        content: "{{ vault_ca }}"
+        dest: "{{ certstrap_dest }}/out/vault{{ suffix }}.ca"
+        mode: '0644'
+
+    - name: Create certstrap-sign-int.sh
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "{{ certstrap_dest }}{{ item }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-sign-int.sh
+
+    - name: Copy scripts to host
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ certstrap_dest }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-init.sh
+
+    - name: Copy csr to certstrap folder
+      ansible.builtin.copy:
+        content: "{{ vault_int_csr }}"
+        dest: "{{ certstrap_dest }}csr/vault_int{{ suffix }}.csr"
+        mode: '0644'
+
+    - name: Create init-keys.json on remote host
+      ansible.builtin.copy:
+        content: "{{ init_keys }}"
+        dest: "{{ certstrap_dest }}init-keys-{{ inventory_hostname }}.json"
+
+    - name: Create root_token on remote host
+      ansible.builtin.copy:
+        content: "{{ root_token }}"
+        dest: "{{ certstrap_dest }}root_token-{{ inventory_hostname }}"
 
 - name: Create cert_manager vault issuer
   ansible.builtin.include_role:
     name: eingram23.kubernetes.cert_manager
     tasks_from: vault_issuer
 
-- name: Show root_token
-  ansible.builtin.debug:
-    var: root_token
-  tags:
-    - never
-    - show_token
-    - unseal
+# - name: Show root_token
+#   ansible.builtin.debug:
+#     var: root_token
+  # tags:
+  #   - never
+  #   - show_token
+  #   - unseal
 
 - name: Closing comments
   ansible.builtin.debug:
