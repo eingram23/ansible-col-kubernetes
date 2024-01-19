@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: "{{ dest }}"
     state: directory
-    mode: '0644'
+    mode: '0755'
 
 - name: Patch label into kubelet svc
   kubernetes.core.k8s_json_patch:

@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ dest }}"
     state: directory
-    mode: '0644'
-  
+    mode: '0755'
+
 - name: Create a k8s namespace
   kubernetes.core.k8s:
     name: test
