@@ -1,3 +1,10 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Download longhorn-iscsi-install manifest
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/longhorn/longhorn/v{{ longhorn_ver }}/deploy/prerequisite/longhorn-iscsi-installation.yaml"

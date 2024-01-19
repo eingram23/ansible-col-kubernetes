@@ -1,4 +1,10 @@
 ---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Create splunk k8s namespace
   kubernetes.core.k8s:
     name: splunk

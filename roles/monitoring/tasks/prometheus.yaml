@@ -1,4 +1,10 @@
 ---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Download prometheus-operator bundle to host
   ansible.builtin.get_url:
     url: https://github.com/prometheus-operator/prometheus-operator/releases/download/{{ prom_oper_ver }}/bundle.yaml

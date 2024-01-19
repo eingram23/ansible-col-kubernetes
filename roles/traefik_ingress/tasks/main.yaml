@@ -1,3 +1,10 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Create traefik manifests
   ansible.builtin.template:
     src: "{{ item }}.j2"

@@ -1,4 +1,10 @@
 ---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Patch label into kubelet svc
   kubernetes.core.k8s_json_patch:
     kind: Service
