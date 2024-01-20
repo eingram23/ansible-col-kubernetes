@@ -47,7 +47,7 @@
     release_namespace: splunk
     create_namespace: false
     chart_ref: splunk/splunk-operator
-    chart_version: "{{ splunk_chart_ver }}"
+    chart_version: "{{ splunk_op_ver }}"
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}splunk-op-values.yaml"
