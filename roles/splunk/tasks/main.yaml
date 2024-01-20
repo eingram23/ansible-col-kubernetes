@@ -24,13 +24,15 @@
     name: splunk
     repo_url: "https://splunk.github.io/splunk-operator/"
 
-- name: Create splunk values files
+- name: Create splunk manifest files
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
     mode: '0644'
   loop:
     - splunk-op-values.yaml
+    - splunk-cert-{{ cert }}.yaml
+    - splunk-ingressroute-{{ cert }}.yaml
 
 - name: Install splunk operator chart from repo
   kubernetes.core.helm:
