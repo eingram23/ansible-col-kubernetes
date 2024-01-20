@@ -48,7 +48,7 @@
     release_name: splunk-ent
     release_namespace: splunk
     create_namespace: false
-    chart_ref: splunk/splunk-operator
+    chart_ref: splunk/splunk-enterprise
     chart_version: "{{ splunk_ent_ver }}"
     wait: true
     update_repo_cache: true
