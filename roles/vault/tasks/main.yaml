@@ -396,7 +396,6 @@
         ./certstrap-init.sh ### Only if need to create root CA,
           otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
         ./certstrap-sign-int.sh (enter required password)
-        ./cat-certs.sh
 
       To create pfx (if needed):
         cd ~/certs
@@ -404,7 +403,7 @@
         openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
 
       Log into Vault UI using {{ root_token }}
-        Secrets -> pki_int -> Configuration -> Configure -> Set signed intermediate (or Import PEM)
+        Secrets -> pki_int -> Configuration -> Configure -> Import CA (or Import PEM)
         Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
       Vault CLI
         vault read auth/approle/role/ansible/role-id # Only needed if using secrets engine for Ansible
