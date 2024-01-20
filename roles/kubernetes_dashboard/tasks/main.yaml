@@ -1,3 +1,10 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0644'
+
 - name: Check to see if metallb is installed
   kubernetes.core.k8s_info:
     api_version: metallb.io/v1beta1
