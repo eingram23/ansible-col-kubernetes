@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: "{{ dest }}"
     state: directory
-    mode: '0644'
+    mode: '0755'
 
 - name: Check to see if metallb is installed
   kubernetes.core.k8s_info:
