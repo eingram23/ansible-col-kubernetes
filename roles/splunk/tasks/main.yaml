@@ -19,7 +19,7 @@
     namespace: splunk
     # kubeconfig: "{{ kubeconfig }}"
   loop:
-    - splunk-op-pvc{{ suffix }}.yaml
+    - splunk-op-pvc.yaml
 
 - name: Add splunk operator chart repo
   kubernetes.core.helm_repository:
