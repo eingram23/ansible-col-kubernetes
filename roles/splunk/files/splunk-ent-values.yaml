@@ -16,7 +16,7 @@ sva:
   # reference: https://www.splunk.com/pdfs/technical-briefs/splunk-validated-architectures.pdf#page=9
   s1:
 
-    enabled: false
+    enabled: true
 
     standalones: 1
 
@@ -682,7 +682,7 @@ licenseManager:
 
 standalone:
 
-  enabled: false
+  enabled: true
 
   name: "stdln"
 

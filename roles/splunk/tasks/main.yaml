@@ -34,7 +34,7 @@
 
 - name: Install splunk operator chart from repo
   kubernetes.core.helm:
-    release_name: splunk
+    release_name: splunk_op
     release_namespace: splunk
     create_namespace: false
     chart_ref: splunk/splunk-operator
@@ -42,3 +42,14 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}splunk-op-values.yaml"
+
+- name: Install splunk enterprise chart from repo
+  kubernetes.core.helm:
+    release_name: splunk_ent
+    release_namespace: splunk
+    create_namespace: false
+    chart_ref: splunk/splunk-operator
+    chart_version: "{{ splunk_ent_ver }}"
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}splunk-ent-values.yaml"
