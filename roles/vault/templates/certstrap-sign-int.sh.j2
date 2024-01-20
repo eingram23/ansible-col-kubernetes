@@ -1,7 +1,6 @@
 #!/bin/sh
 
-chmod 440 $HOME/certstrap/out/Homelab*
-cd $HOME/certstrap
+chmod 400 ./out/Homelab*
 certstrap sign \
     --expires "5 years" \
     --csr csr/vault_int{{ suffix }}.csr \
@@ -9,7 +8,7 @@ certstrap sign \
     --intermediate \
     --CA "Homelab local.lan Root CA" \
     "Homelab{{ suffix }} local.lan Intermediate Authority"
-cd $HOME/certstrap/out
+cd ./out
 cat Homelab_Int{{ suffix }}_CA.crt \
     Homelab_local.lan_Root_CA.crt \
     > Homelab_local.lan_Root_Int{{ suffix }}_CA.crt
