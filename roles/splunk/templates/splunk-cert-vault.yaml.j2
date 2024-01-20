@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: splunk-web-tls
+  namespace: splunk
+spec:
+  secretName: splunk-web-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: vault-cluster-issuer
+  commonName: splunk{{ suffix }}.local.lan
+  dnsNames:
+  - splunk{{ suffix }}.local.lan
+  duration: 8760h
+  renewBefore: 4380h

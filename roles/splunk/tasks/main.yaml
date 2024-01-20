@@ -53,3 +53,11 @@
     wait: true
     update_repo_cache: true
     values_files: "{{ dest }}splunk-ent-values.yaml"
+
+- name: Deploy splunk cert and ingressroute
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}{{ item }}"
+  loop:
+    - splunk-cert-{{ cert }}.yaml
+    - splunk-ingressroute-{{ cert }}.yaml
