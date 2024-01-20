@@ -231,7 +231,6 @@
       ansible.builtin.set_fact:
         init_keys: "{{ init_keys_enc['content'] | b64decode }}"
 
-
 - name: Configure vault pki
   ansible.builtin.shell:
     cmd: |
@@ -321,7 +320,7 @@
       register: certstrap_installed
 
     - name: Build certstrap
-      when: not certstrap_installed.exists
+      when: not certstrap_installed.stat.exists
       ansible.builtin.shell:
         cmd: |
           cd {{ certstrap_dest }}
