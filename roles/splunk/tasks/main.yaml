@@ -19,14 +19,14 @@
     mode: '0644'
   with_fileglob: "*"
 
-- name: Deploy splunk-op pvc
-  kubernetes.core.k8s:
-    state: present
-    src: "{{ dest }}{{ item }}"
-    namespace: splunk
-    # kubeconfig: "{{ kubeconfig }}"
-  loop:
-    - splunk-op-pvc.yaml
+# - name: Deploy splunk-op pvc
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     namespace: splunk
+#     # kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - splunk-op-pvc.yaml
 
 - name: Add splunk operator chart repo
   kubernetes.core.helm_repository:
