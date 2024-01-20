@@ -1,2 +1,2 @@
-dest: "/opt/kubernetes/defs/"
+dest: "/var/tmp/ansible/k3s/nginx_test/"
 # kubeconfig: "/etc/rancher/k3s/k3s.yaml"

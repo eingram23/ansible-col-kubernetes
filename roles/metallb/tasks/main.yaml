@@ -15,7 +15,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ metallb_manifest }}"
-    kubeconfig: "{{ kubeconfig }}"
+    # kubeconfig: "{{ kubeconfig }}"
   register: metallb
 
 - name: Pause for 20 seconds
@@ -26,7 +26,7 @@
 - name: Create metallb-ippool manifest on host
   ansible.builtin.template:
     src: metallb-ippool.yaml.j2
-    dest: "{{ dest }}/metallb-ippool.yaml"
+    dest: "{{ dest }}metallb-ippool.yaml"
     mode: '0644'
 
 - name: Wait for metallb pods become ready

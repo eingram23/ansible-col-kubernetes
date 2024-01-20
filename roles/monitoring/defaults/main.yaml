@@ -1,4 +1,4 @@
-dest: "/opt/kubernetes/defs/"
+dest: "/var/tmp/ansible/k3s/monitoring/"
 # kubeconfig: "/etc/rancher/k3s/k3s.yaml"
 privkey: "{{ lookup('hashi_vault', 'secret=secret/git/ssh:key') }}"
 suffix: "{{ env | default() }}"
