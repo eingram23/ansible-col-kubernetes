@@ -34,7 +34,7 @@
 
 - name: Install splunk operator chart from repo
   kubernetes.core.helm:
-    release_name: splunk_op
+    release_name: splunk-op
     release_namespace: splunk
     create_namespace: false
     chart_ref: splunk/splunk-operator
@@ -45,7 +45,7 @@
 
 - name: Install splunk enterprise chart from repo
   kubernetes.core.helm:
-    release_name: splunk_ent
+    release_name: splunk-ent
     release_namespace: splunk
     create_namespace: false
     chart_ref: splunk/splunk-operator
