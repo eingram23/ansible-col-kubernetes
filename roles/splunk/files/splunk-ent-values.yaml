@@ -8,7 +8,7 @@ image:
 # Deploy Splunk Operator chart
 # Disable if the Splunk Operator is already deployed
 splunk-operator:
-  enabled: true
+  enabled: false
 
 sva:
 
