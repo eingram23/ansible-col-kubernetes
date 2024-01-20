@@ -133,6 +133,7 @@ splunkOperator:
   # reference: https://kubernetes.io/docs/concepts/storage/volumes/
   volumes:
   - name: app-staging
+    storageClass: longhorn-homelab-dev
     persistentVolumeClaim:
       claimName: splunk-operator-app-download
 # - name:
