@@ -205,7 +205,7 @@ clusterManager:
   etcVolumeStorageConfig:
     ephemeralStorage: false
     storageCapacity: 10Gi
-  # storageClassName: gp2
+    # storageClassName: gp2
 
   # Storage configuration for /opt/splunk/var volume
   # To use a StorageClass other than your default StorageClass, specify the storageClassName
@@ -213,7 +213,7 @@ clusterManager:
   varVolumeStorageConfig:
     ephemeralStorage: false
     storageCapacity: 100Gi
-  # storageClassName: gp2
+    # storageClassName: gp2
 
   # Set resource requests and limits for Splunk instance pod containers
   # reference: https://github.com/splunk/splunk-operator/blob/develop/docs/CustomResources.md#examples-of-guaranteed-and-burstable-qos
@@ -761,13 +761,13 @@ standalone:
 
   etcVolumeStorageConfig:
     ephemeralStorage: false
-    storageCapacity: 10Gi
-  # storageClassName: gp2
+    storageCapacity: 5Gi
+    storageClassName: {{ storageclass }}
 
   varVolumeStorageConfig:
     ephemeralStorage: false
-    storageCapacity: 100Gi
-  # storageClassName: gp2
+    storageCapacity: 10Gi
+    storageClassName: {{ storageclass }}
 
   resources: {}
     # requests:
