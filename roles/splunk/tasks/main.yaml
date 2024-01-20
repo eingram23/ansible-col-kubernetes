@@ -16,6 +16,7 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ dest }}{{ item }}"
+    namespace: splunk
     # kubeconfig: "{{ kubeconfig }}"
   loop:
     - splunk-op-pvc{{ suffix }}.yaml
