@@ -34,7 +34,7 @@
     state: present
     src: "{{ dest }}iscsi-workaround.yaml"
     # kubeconfig: "{{ kubeconfig }}"
-  when: ansible_distribution == "Rocky" and ansible_distribution_version == "9.2"
+  # when: ansible_distribution == "Rocky" and ansible_distribution_version == "9.2"
 
 - name: Create templated manifests on host
   ansible.builtin.template:
