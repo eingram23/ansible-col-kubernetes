@@ -332,7 +332,7 @@
       ansible.builtin.file:
         path: "{{ certstrap_dest }}{{ item }}"
         state: directory
-        mode: '0700'
+        mode: '0777'
       loop:
         - csr
         - out
@@ -368,12 +368,12 @@
     - name: Create init-keys.json on remote host
       ansible.builtin.copy:
         content: "{{ init_keys }}"
-        dest: "{{ certstrap_dest }}init-keys-{{ inventory_hostname }}.json"
+        dest: "{{ certstrap_dest }}init-keys{{ suffix }}.json"
 
     - name: Create root_token on remote host
       ansible.builtin.copy:
         content: "{{ root_token }}"
-        dest: "{{ certstrap_dest }}root_token-{{ inventory_hostname }}"
+        dest: "{{ certstrap_dest }}root_token{{ suffix }}"
 
 - name: Create cert_manager vault issuer
   ansible.builtin.include_role:
