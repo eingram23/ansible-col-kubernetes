@@ -1,9 +1,9 @@
 mirrors:
   gitea.local.lan:
     endpoint:
-      - "https://gitea.local.lan"
+      - "https://gitea{{ suffix }}.local.lan"
 configs:
-  "gitea.local.lan":
+  "gitea{{ suffix }}.local.lan":
     auth:
       username: eingram
       password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
