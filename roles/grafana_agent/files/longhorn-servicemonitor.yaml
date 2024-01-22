@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: longhorn-servicemonitor
-  namespace: grafana
+  namespace: grafana-agent
   labels:
     name: longhorn-servicemonitor
     instance: primary

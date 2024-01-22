@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: agent-eventhandler
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   accessModes:
     - ReadWriteOnce
@@ -18,7 +18,7 @@ metadata:
   labels:
     agent: grafana-agent-integrations
   name: agent-eventhandler
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   config:
     cache_path: /etc/eventhandler/eventhandler.cache

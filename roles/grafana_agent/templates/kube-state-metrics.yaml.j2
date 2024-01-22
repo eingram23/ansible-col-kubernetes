@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
-  namespace: grafana
+  namespace: grafana-agent
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -135,7 +135,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: kube-state-metrics
-    namespace: grafana
+    namespace: grafana-agent
 ---
 apiVersion: v1
 kind: Service
@@ -145,7 +145,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   clusterIP: None
   ports:
@@ -166,7 +166,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/version: "{{ ksm_ver }}"
   name: kube-state-metrics
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   replicas: 1
   selector:
@@ -217,7 +217,7 @@ metadata:
   labels:
     instance: primary
   name: ksm-monitor
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   endpoints:
     - honorLabels: true
@@ -235,7 +235,7 @@ spec:
           targetLabel: job
   namespaceSelector:
     matchNames:
-      - grafana
+      - grafana-agent
   selector:
     matchLabels:
       app.kubernetes.io/name: kube-state-metrics

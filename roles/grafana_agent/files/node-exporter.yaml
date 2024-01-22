@@ -4,7 +4,7 @@ metadata:
   labels:
     agent: grafana-agent-integrations
   name: node-exporter
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   securityContext:
     capabilities:

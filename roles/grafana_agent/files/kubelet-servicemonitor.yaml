@@ -4,7 +4,7 @@ metadata:
   labels:
     instance: primary
   name: kubelet-monitor
-  namespace: grafana
+  namespace: grafana-agent
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -28,7 +28,7 @@ spec:
       insecureSkipVerify: true
   namespaceSelector:
     matchNames:
-    - grafana
+    - grafana-agent
   selector:
     matchLabels:
       app.kubernetes.io/name: kubelet

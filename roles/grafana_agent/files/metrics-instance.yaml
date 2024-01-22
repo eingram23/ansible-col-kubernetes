@@ -2,7 +2,7 @@ apiVersion: monitoring.grafana.com/v1alpha1
 kind: MetricsInstance
 metadata:
   name: primary
-  namespace: grafana
+  namespace: grafana-agent
   labels:
     agent: grafana-agent-metrics
 spec:
@@ -18,57 +18,57 @@ spec:
 
   # Supply an empty namespace selector to look in all namespaces. Remove
   # this to only look in the same namespace as the MetricsInstance CR
-  serviceMonitorNamespaceSelector:
-    matchNames:
-    - default
-    - vault
-    - awx
-    - cert-manager
-    - gitea
-    - longhorn-system
-    - metallb-system
-    - kube-node-lease
-    - kube-public
-    - kube-system
-    - kubernetes-dashboard
+  serviceMonitorNamespaceSelector: {}
+    # matchNames:
+    # - default
+    # - vault
+    # - awx
+    # - cert-manager
+    # - gitea
+    # - longhorn-system
+    # - metallb-system
+    # - kube-node-lease
+    # - kube-public
+    # - kube-system
+    # - kubernetes-dashboard
   serviceMonitorSelector:
     matchLabels:
       instance: primary
 
   # Supply an empty namespace selector to look in all namespaces. Remove
   # this to only look in the same namespace as the MetricsInstance CR.
-  podMonitorNamespaceSelector: 
-    matchNames:
-    - default
-    - vault
-    - awx
-    - cert-manager
-    - gitea
-    - longhorn-system
-    - metallb-system
-    - kube-node-lease
-    - kube-public
-    - kube-system
-    - kubernetes-dashboard
+  podMonitorNamespaceSelector: {}
+    # matchNames:
+    # - default
+    # - vault
+    # - awx
+    # - cert-manager
+    # - gitea
+    # - longhorn-system
+    # - metallb-system
+    # - kube-node-lease
+    # - kube-public
+    # - kube-system
+    # - kubernetes-dashboard
   podMonitorSelector:
     matchLabels:
       instance: primary
 
   # Supply an empty namespace selector to look in all namespaces. Remove
   # this to only look in the same namespace as the MetricsInstance CR.
-  probeNamespaceSelector: 
-    matchNames:
-    - default
-    - vault
-    - awx
-    - cert-manager
-    - gitea
-    - longhorn-system
-    - metallb-system
-    - kube-node-lease
-    - kube-public
-    - kube-system
-    - kubernetes-dashboard
+  probeNamespaceSelector: {}
+    # matchNames:
+    # - default
+    # - vault
+    # - awx
+    # - cert-manager
+    # - gitea
+    # - longhorn-system
+    # - metallb-system
+    # - kube-node-lease
+    # - kube-public
+    # - kube-system
+    # - kubernetes-dashboard
   probeSelector:
     matchLabels:
       instance: primary
