@@ -36,8 +36,8 @@ spec:
     # - name: homelab-awx-ee-v1
     #   image: gitea{{ suffix }}.ycdisp.net/eingram/homelab-awx-ee-v1
   ee_extra_env: |
-    # - name: RECEPTOR_KUBE_SUPPORT_RECONNECT
-    #   value: disabled
+    - name: RECEPTOR_KUBE_SUPPORT_RECONNECT
+      value: disabled
   web_resource_requirements:
     requests:
       cpu: 250m
