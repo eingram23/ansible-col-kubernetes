@@ -1,4 +1,7 @@
 ---
-ver: "0.3.4"
-graf_agent_ver: "v0.36.2"
-ksm_ver: "v2.10.0"
+# ver: "0.3.4"
+ver: "0.3.15"
+# graf_agent_ver: "v0.36.2"
+graf_agent_ver: "v0.39.1"
+# ksm_ver: "v2.10.0"
+ksm_ver: "v2.10.1"
