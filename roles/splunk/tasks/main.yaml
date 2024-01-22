@@ -64,3 +64,8 @@
   loop:
     # - splunk-cert-{{ cert }}.yaml
     - splunk-ingressroute-{{ cert }}.yaml
+
+- name: Set admin password
+  ansible.builtin.shell:
+    cmd: |
+      kubectl patch secret splunk-<desired_namespace>-secret -p='{"data":{"password": "{{ lookup('hashi_vault', 'secret=secret/ssh/eingram:base64_password') }}"}}' -v=1
