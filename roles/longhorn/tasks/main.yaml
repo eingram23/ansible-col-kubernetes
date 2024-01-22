@@ -4,12 +4,14 @@
     path: "{{ dest }}"
     state: directory
     mode: '0755'
+  tags: addnode
 
 - name: Download longhorn-iscsi-install manifest
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/longhorn/longhorn/v{{ longhorn_ver }}/deploy/prerequisite/longhorn-iscsi-installation.yaml"
     dest: "{{ dest }}{{ iscsi_manifest }}"
     mode: '0644'
+  tags: addnode
 
 - name: Deploy longhorn-iscsi-install DaemonSet
   kubernetes.core.k8s:
@@ -17,6 +19,7 @@
     namespace: default
     src: "{{ dest }}{{ iscsi_manifest }}"
     # kubeconfig: "{{ kubeconfig }}"
+  tags: addnode
 
 - name: Pause for 20 seconds
   ansible.builtin.pause:
