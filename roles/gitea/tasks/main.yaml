@@ -102,28 +102,3 @@
 - name: Display IP Address
   ansible.builtin.debug:
     msg: "IP Address is {{ ip_address }}"
-
-- name: Run tasks on k3s master node
-  delegate_to: "{{ master_node }}"
-  become: true
-  become_method: sudo
-  become_user: root
-  block:
-    - name: Export gitea certs
-      ansible.builtin.shell: |
-        kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.tls\.key}"|base64 --decode > /etc/rancher/k3s/gitea-tls.key
-        chmod 400 /etc/rancher/k3s/gitea-tls.key
-        kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.tls\.crt}"|base64 --decode > /etc/rancher/k3s/gitea-tls.crt
-        kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.ca\.crt}"|base64 --decode > /etc/rancher/k3s/gitea-ca.crt
-
-    - name: Create registries.yaml file on host
-      ansible.builtin.template:
-        src: registries.yaml.j2
-        dest: /etc/rancher/k3s/registries.yaml
-        mode: 400
-
-- name: Post install notes
-  ansible.builtin.debug:
-    msg: |
-      Copy gitea certs and registries.yaml (/etc/rancher/k3s) to all other master nodes.
-      Restart k3s on all master nodes
