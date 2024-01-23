@@ -7,6 +7,7 @@
     kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.ca\.crt}"|base64 --decode > {{ dest }}gitea-ca.crt
   delegate_to: localhost
   run_once: true
+  become: false
 
 - name: Create /etc/rancher/k3s if missing
   ansible.builtin.file:
