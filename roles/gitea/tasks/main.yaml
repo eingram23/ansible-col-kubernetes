@@ -22,7 +22,7 @@
   ansible.builtin.set_fact:
     app_domain: "ycdisp.net"
   when: cert == "acme"
-  
+
 - name: Add gitea-charts/gitea chart repo
   kubernetes.core.helm_repository:
     name: gitea-charts
@@ -102,3 +102,37 @@
 - name: Display IP Address
   ansible.builtin.debug:
     msg: "IP Address is {{ ip_address }}"
+
+- name: Export gitea certs
+  ansible.builtin.shell: |
+    kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.tls\.key}"|base64 --decode > {{ dest }}gitea_tls.key
+    chmod 400 /etc/rancher/k3s/gitea-tls.key
+    kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.tls\.crt}"|base64 --decode > {{ dest }}gitea_tls.crt
+    kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.ca\.crt}"|base64 --decode > {{ dest }}gitea_ca.crt
+
+- name: Run tasks on master node
+  delegate_to: "{{ master_node }}"
+  become: true
+  block:
+    - name: Create /etc/rancher/k3s if missing
+      ansible.builtin.file:
+        path: /etc/rancher/k3s
+        state: directory
+        mode: '0755'
+
+    - name: Create registries.yaml file on host
+      ansible.builtin.template:
+        src: registries.yaml.j2
+        dest: /etc/rancher/k3s/registries.yaml
+        mode: '0400'
+
+    - name: Copy gitea certs to host
+      ansible.builtin.copy:
+        src: "{{ dest }}{{ item }}"
+        dest: /etc/rancher/k3s/
+        mode: '0400'
+      loop:
+        - gitea_tls.key
+        - gitea_tls.crt
+        - gitea_ca.crt
+      notify: Restart k3s
