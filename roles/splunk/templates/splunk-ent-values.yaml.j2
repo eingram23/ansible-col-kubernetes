@@ -784,15 +784,15 @@ standalone:
 
   tolerations: []
 
-  affinity: 
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: k3s3
-            operator: In
-            values:
-            - kubernetes.io/hostname
+  affinity: {}
+    # nodeAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #     nodeSelectorTerms:
+    #     - matchExpressions:
+    #       - key: k3s3
+    #         operator: In
+    #         values:
+    #         - kubernetes.io/hostname
 
   # Configure a topology spread constraint
   #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
