@@ -32,7 +32,7 @@
   loop:
     - splunk-op-values.yaml
     - splunk-ent-values.yaml
-    - splunk-cert-{{ cert }}.yaml
+    # - splunk-cert-{{ cert }}.yaml
     - splunk-ingressroute-{{ cert }}.yaml
 
 - name: Install splunk operator chart from repo
@@ -62,7 +62,7 @@
     state: present
     src: "{{ dest }}{{ item }}"
   loop:
-    - splunk-cert-{{ cert }}.yaml
+    # - splunk-cert-{{ cert }}.yaml
     - splunk-ingressroute-{{ cert }}.yaml
 
 - name: Set admin password

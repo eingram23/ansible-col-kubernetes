@@ -7,17 +7,17 @@ metadata:
 spec:
   entryPoints: 
     - web
-    - websecure
+    # - websecure
   routes:
   - match: Host(`splunk{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: splunk-stdln-standalone-service
       port: 8000
-  - match: Host(`splunk{{ suffix }}.local.lan`) && PathPrefix(`/services/collector`)
-    kind: Rule
-    services:
-    - name: splunk-stdln-standalone-service
-      port: 8088
-  tls:
-    secretName: splunk-web-tls
+  # - match: Host(`splunk{{ suffix }}.local.lan`) && PathPrefix(`/services/collector`)
+  #   kind: Rule
+  #   services:
+  #   - name: splunk-stdln-standalone-service
+  #     port: 8088
+  # tls:
+  #   secretName: splunk-web-tls
