@@ -70,11 +70,6 @@
     kustomize build {{ dest }}awx/ | kubectl apply -f -
   tags: update
 
-- name: Set storageclass (Dev)
-  ansible.builtin.set_fact:
-    storageclass: longhorn-homelab-dev
-  when: suffix == "-dev"
-
 - name: Create awx.yaml file
   ansible.builtin.template:
     src: awx.yaml.j2

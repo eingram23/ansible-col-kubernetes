@@ -28,20 +28,29 @@ resources:
   #   memory: 1Gi
   #   cpu: 1000m
 
+postgresql-ha:
+  enabled: false
+
 postgresql:
   enabled: true
-  persistence:
-    enabled: true
-    size: 10Gi
-    storageClass: {{ storageclass }}
+  global:
+    postgresql:
+      auth:
+        password: {{ lookup('hashi_vault', 'secret=secret/ssh/eingram:ssh_password') }}
+        database: gitea
+        username: gitea
+  primary:
+    persistence:
+      size: 10Gi
+      storageClass: {{ storageclass }}
 
 gitea:
-  additionalConfigFromEnvs:
-    - name: ENV_TO_INI__DATABASE__PASSWD
-      valueFrom:
-        secretKeyRef:
-          name: gitea-postgres-secret
-          key: password
+  # additionalConfigFromEnvs:
+  #   - name: ENV_TO_INI__DATABASE__PASSWD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: gitea-postgres-secret
+  #         key: password
   config:
     server:
       DOMAIN: gitea{{ suffix }}.{{ app_domain }}
@@ -54,6 +63,7 @@ gitea:
     #   NAME: gitea
     #   USER: gitea
   admin:
+    username: admin
     existingSecret: gitea-admin-secret
     email: "edward.ingram23@gmail.com"
   metrics:

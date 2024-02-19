@@ -1,4 +1,4 @@
 dest: "/var/tmp/ansible/k3s/vault/"
-certstrap_dest: "/mnt/pool0/Shared/Files/"
+certstrap_dest: "/mnt/pool0/Shared/Files/rootca/"
 suffix: "{{ env | default() }}"
-storageclass: "longhorn-homelab-dev"
+storageclass: "local-path"

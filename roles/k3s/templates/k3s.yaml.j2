@@ -1,0 +1,19 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: {{ kubeconfig | json_query('clusters[0].cluster."certificate-authority-data"') }}
+    server: https://{{ k8shost }}:6443
+  name: {{ k8shost }}
+contexts:
+- context:
+    cluster: {{ k8shost }}
+    user: default
+  name: {{ k8shost }}
+current-context: {{ k8shost }}
+kind: Config
+preferences: {}
+users:
+- name: default
+  user:
+    client-certificate-data: {{ kubeconfig | json_query('users[0].user."client-certificate-data"') }}
+    client-key-data: {{ kubeconfig | json_query('users[0].user."client-key-data"') }}

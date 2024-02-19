@@ -1,5 +1,7 @@
 ---
 - name: Restart k3s
+  delegate_to: "{{ k8shost }}.local.lan"
+  become: true
   ansible.builtin.systemd_service:
     name: k3s
     state: restarted

@@ -1,1 +1,2 @@
-cert_manager_ver: "v1.13.0"
+# cert_manager_ver: "v1.13.0"
+cert_manager_ver: "v1.14.2"

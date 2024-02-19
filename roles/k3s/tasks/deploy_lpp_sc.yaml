@@ -1,0 +1,18 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
+
+- name: Download files to host
+  ansible.builtin.copy:
+    src: lpp_storageclass.yaml
+    dest: "{{ dest }}"
+    mode: '0644'
+
+- name: Deploy local-path-provisioner storage class manifest
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ dest }}lpp_storageclass.yaml"
+

@@ -1,4 +1,9 @@
 ---
+# - name: Ensure vars are set
+#   ansible.builtin.assert:
+#     that:
+#       - master_node is defined
+
 - name: Create staging folders
   ansible.builtin.file:
     path: "{{ dest }}"
@@ -111,7 +116,7 @@
     kubectl get secret gitea-tls -n gitea -o jsonpath="{.data.ca\.crt}"|base64 --decode > {{ dest }}gitea_ca.crt
 
 - name: Run tasks on master node
-  delegate_to: "{{ master_node }}"
+  delegate_to: "{{ k8shost }}.local.lan"
   become: true
   block:
     - name: Create /etc/rancher/k3s if missing

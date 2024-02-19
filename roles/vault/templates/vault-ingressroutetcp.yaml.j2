@@ -9,7 +9,7 @@ spec:
     - web
     - websecure
   routes:
-  - match: HostSNI(`vault{{ suffix }}.local.lan`) 
+  - match: HostSNI(`vault-k3s{{ suffix }}.local.lan`) 
     kind: Rule
     services:
     - name: vault-ui

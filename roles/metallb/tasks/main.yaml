@@ -1,4 +1,9 @@
 ---
+- name: Ensure vars are set
+  ansible.builtin.assert:
+    that: 
+      - ip_range is defined
+
 - name: Create staging folders
   ansible.builtin.file:
     path: "{{ dest }}"

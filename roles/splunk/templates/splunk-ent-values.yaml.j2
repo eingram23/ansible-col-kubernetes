@@ -205,7 +205,7 @@ clusterManager:
   etcVolumeStorageConfig:
     ephemeralStorage: false
     storageCapacity: 10Gi
-    # storageClassName: gp2
+  # storageClassName: gp2
 
   # Storage configuration for /opt/splunk/var volume
   # To use a StorageClass other than your default StorageClass, specify the storageClassName
@@ -213,7 +213,7 @@ clusterManager:
   varVolumeStorageConfig:
     ephemeralStorage: false
     storageCapacity: 100Gi
-    # storageClassName: gp2
+  # storageClassName: gp2
 
   # Set resource requests and limits for Splunk instance pod containers
   # reference: https://github.com/splunk/splunk-operator/blob/develop/docs/CustomResources.md#examples-of-guaranteed-and-burstable-qos
@@ -240,7 +240,7 @@ clusterManager:
   # Define affinity scheduling rules
   # reference: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#affinity-v1-core
   affinity: {}
-    ## Example: schedule Splunk instance pod on a node in zone-1a 
+    ## Example: schedule Splunk instance pod on a node in zone-1a
     # nodeAffinity:
     #   requiredDuringSchedulingIgnoredDuringExecution:
     #     nodeSelectorTerms:
@@ -385,9 +385,9 @@ searchHeadCluster:
     #     endpoint:
     #     region:
     #     secretRef:
- 
+
   volumes: []
- 
+
   licenseUrl: ""
 
   defaultsUrl: ""
@@ -397,8 +397,8 @@ searchHeadCluster:
   defaultsUrlApps: ""
 
   extraEnv: []
-  # - name: 
-  #   value: 
+  # - name:
+  #   value:
 
   livenessInitialDelaySeconds: 300
 
@@ -438,7 +438,7 @@ searchHeadCluster:
     #   cpu: "4"
     # limits:
     #   memory: "12Gi"
-    #   cpu: "24"  
+    #   cpu: "24"
 
   serviceAccount: ""
 
@@ -598,7 +598,7 @@ licenseManager:
     #     endpoint:
     #     region:
     #     secretRef:
-  
+
   volumes: []
   ## Example: mounting volume containing license in Splunk instance pod container
   # - name: licenses
@@ -769,13 +769,13 @@ standalone:
     storageCapacity: 10Gi
     storageClassName: {{ storageclass }}
 
-  resources: 
-    requests:
-      memory: "1Gi"
-      cpu: "1"
-    limits:
-      memory: "2Gi"
-      cpu: "2"
+  resources: {}
+    # requests:
+    #   memory: "2Gi"
+    #   cpu: "4"
+    # limits:
+    #   memory: "12Gi"
+    #   cpu: "24"
 
   serviceAccount: ""
 
@@ -785,14 +785,6 @@ standalone:
   tolerations: []
 
   affinity: {}
-    # nodeAffinity:
-    #   requiredDuringSchedulingIgnoredDuringExecution:
-    #     nodeSelectorTerms:
-    #     - matchExpressions:
-    #       - key: k3s3
-    #         operator: In
-    #         values:
-    #         - kubernetes.io/hostname
 
   # Configure a topology spread constraint
   #  https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
@@ -801,7 +793,7 @@ standalone:
   #    minDomains: <integer> # optional; beta since v1.25
   #    topologyKey: <string>
   #    whenUnsatisfiable: <string>
-  #    labelSelector: <object>÷
+  #    labelSelector: <object>
   #    matchLabelKeys: <list> # optional; alpha since v1.25
   #    nodeAffinityPolicy: [Honor|Ignore] # optional; beta since v1.26
   #    nodeTaintsPolicy: [Honor|Ignore] # optional; beta since v1.26

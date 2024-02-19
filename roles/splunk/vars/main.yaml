@@ -1,4 +1,1 @@
-splunk_ent_ver: "2.4.0"
-splunk_op_ver: "2.4.0"
-# splunk_ver: "9.1.2"
-splunk_ver: "9.2.0"
+splunk_ver: "2.5.0"

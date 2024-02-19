@@ -1,0 +1,33 @@
+---
+# - name: Install k3s with etcd database
+#   when: db == "etcd"
+#   ansible.builtin.shell: >
+#     curl -sfL https://get.k3s.io |
+#     INSTALL_K3S_VERSION={{ ver }}
+#     K3S_TOKEN={{ k3s_token }} sh -s - server
+#     --disable=servicelb
+#     --selinux
+#     --snapshotter=stargz
+#     --write-kubeconfig-mode 644
+#     --cluster-init
+#     --kubelet-arg container-log-max-files=4
+#     --kubelet-arg container-log-max-size=50Mi
+#     --kubelet-arg image-gc-high-threshold=50
+#     --kubelet-arg image-gc-low-threshold=40
+
+- name: Install k3s with sqllite database
+  ansible.builtin.shell: >
+    curl -sfL https://get.k3s.io |
+    INSTALL_K3S_VERSION={{ ver }}
+    K3S_TOKEN={{ k3s_token }} sh -s - server
+    --disable=servicelb
+    --selinux
+    --write-kubeconfig-mode 644
+    --kubelet-arg container-log-max-files=4
+    --kubelet-arg container-log-max-size=50Mi
+
+- name: Install k3s service
+  ansible.builtin.systemd_service:
+    name: k3s
+    enabled: true
+    state: started
