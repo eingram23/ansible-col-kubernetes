@@ -1,0 +1,12 @@
+---
+# VARS: cert, domain, env
+- name: Deploy gitea to tanzu
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Deploy gitea
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.gitea_tanzu

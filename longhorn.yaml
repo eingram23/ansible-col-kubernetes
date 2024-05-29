@@ -1,0 +1,14 @@
+- name: Deploy longhorn
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Deploy longhorn
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.longhorn

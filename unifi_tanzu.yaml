@@ -1,0 +1,10 @@
+---
+- name: Deploy unifi controller to k3s
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - ansible.builtin.include_role:
+        name: eingram23.kubernetes.unifi_controller_tanzu

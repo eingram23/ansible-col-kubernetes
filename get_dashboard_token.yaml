@@ -1,0 +1,17 @@
+- name: Obtain admin-user bearer token
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Run command to create token
+      ansible.builtin.shell: kubectl -n kubernetes-dashboard create token admin-user
+      register: admin_token
+
+    - ansible.builtin.debug:
+        var: admin_token.stdout

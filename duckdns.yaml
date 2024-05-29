@@ -1,0 +1,15 @@
+---
+- name: Deploy duckdns to k3s
+  hosts: "{{ hostvar }}"
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Deploy duckdns
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.duckdns

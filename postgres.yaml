@@ -1,0 +1,14 @@
+---
+- name: Deploy postgres to k3s
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - ansible.builtin.import_role:
+        name: eingram23.kubernetes.postgres

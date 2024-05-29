@@ -1,0 +1,95 @@
+---
+- name: Deploy monitoring to tanzu
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - block:
+        - name: Create kubeconfig file
+          ansible.builtin.copy:
+            content: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/kubeconfig:tanzu') }}"
+            dest: "/var/tmp/tanzu.yaml"
+
+        - name: Login to Tanzu cluster
+          ansible.builtin.include_role:
+            name: eingram23.kubernetes.tanzu
+            tasks_from: login.yaml
+
+        - name: Create monitoring namespace
+          kubernetes.core.k8s:
+            name: monitoring
+            api_version: v1
+            kind: Namespace
+            state: present
+            kubeconfig: "/var/tmp/tanzu.yaml"
+      tags: always
+
+    - name: Deploy prometheus
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: prometheus
+      tags:
+        - prometheus
+    
+    - name: Deploy alertmanager
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: alertmanager
+      tags:
+        - alertmanager
+    
+    - name: Deploy grafana
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: grafana
+      tags:
+        - grafana
+
+    - name: Deploy node_exporter
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: node_exporter
+      tags:
+        - node_exporter
+    
+    - name: Deploy vmware_exporter
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: vmware_exporter
+      tags:
+        - vmware_exporter
+
+    - name: Deploy k8s monitoring
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: k8s
+      tags:
+        - k8s
+
+    - name: Deploy alertrules
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: alertrules
+      tags:
+        - alertrules
+
+    - name: Update grafana
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: grafana
+      tags:
+        - never
+        - update_grafconf
+        - update_graf_chart
+
+    - name: Update prometheus configs
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.monitoring_tanzu
+        tasks_from: prometheus
+      tags:
+        - never
+        - update_promconf
+
+

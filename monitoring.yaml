@@ -1,0 +1,98 @@
+---
+# Grafana, node-exporter and vmware-exporter are disabled. Prometheus manual scrape targets disabled. Both moved to monitoring container.
+- name: Deploy monitoring to k3s
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Create monitoring namespace
+      kubernetes.core.k8s:
+        name: monitoring
+        api_version: v1
+        kind: Namespace
+        state: present
+        # kubeconfig: /etc/rancher/k3s/k3s.yaml
+      tags: always
+
+    - name: Deploy prometheus
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: prometheus
+      tags:
+        - prometheus
+    
+    - name: Deploy alertmanager
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: alertmanager
+      tags:
+        - alertmanager
+    
+    - name: Deploy grafana
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: grafana
+      tags:
+        - grafana
+        - never
+
+    - name: Deploy node_exporter
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: node_exporter
+      tags:
+        - node_exporter
+        - never
+    
+    - name: Deploy vmware_exporter
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: vmware_exporter
+      tags:
+        - vmware_exporter
+        - never
+
+    - name: Deploy k3s monitoring
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: k3s
+      tags:
+        - k3s
+
+    - name: Deploy promtail
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: promtail
+      tags:
+        - promtail
+
+    - name: Deploy alertrules
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: alertrules
+      tags:
+        - alertrules
+
+    - name: Update grafana configs
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: grafana
+      tags:
+        - never
+        - update_grafconf
+
+    - name: Update prometheus configs
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.monitoring
+        tasks_from: prometheus
+      tags:
+        - never
+        - update_promconf
+
+

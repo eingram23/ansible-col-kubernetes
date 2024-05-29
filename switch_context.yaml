@@ -1,0 +1,20 @@
+---
+- name: Switch k8s cluster context
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Get current-context
+      ansible.builtin.shell:
+        cmd: kubectl config current-context
+      register: context
+
+    - name: Display current-context
+      ansible.builtin.debug:
+        var: context.stdout

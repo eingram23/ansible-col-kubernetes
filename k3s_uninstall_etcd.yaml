@@ -1,0 +1,29 @@
+---
+- name: Uninstall k3s from master node
+  hosts: "{{ host_prefix }}1.local.lan"
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Run uninstall script
+      ansible.builtin.shell:
+        k3s-uninstall.sh
+      tags: 
+        - uninstall
+        - never
+
+- name: Uninstall k3s from agent nodes
+  hosts: "{{ host_prefix }}[2-3].local.lan"
+  gather_facts: false
+  become: false
+  ignore_unreachable: true
+
+  tasks:
+
+    - name: Run uninstall script
+      ansible.builtin.shell:
+        k3s-agent-uninstall.sh
+      tags: 
+        - uninstall
+        - never

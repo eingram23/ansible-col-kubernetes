@@ -1,0 +1,16 @@
+---
+# VARS NEEDED: hostvar, env
+# TAGS: unseal, show_token
+- name: Deploy vault to Tanzu
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - ansible.builtin.include_role:
+        name: eingram23.kubernetes.vault_tanzu
+      tags:
+        - show_token
+        - unseal
+        - update_vaultconf

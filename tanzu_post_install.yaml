@@ -1,0 +1,30 @@
+- name: Post tanzu install tasks
+# VARS: env (-dev)
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Tanzu post-install tasks
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.tanzu
+        tasks_from: post_setup.yaml
+
+    # - name: Deploy cert_manager
+    #   ansible.builtin.import_role:
+    #     name: eingram23.kubernetes.cert_manager_tanzu
+    #   tags:
+    #     - cert_manager
+
+    - name: Deploy kubernetes dashboard
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubernetes_dashboard_tanzu
+      tags:
+        - dashboard
+
+    - name: Deploy vault
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.vault_tanzu
+      tags:
+        - vault

@@ -1,0 +1,18 @@
+---
+- hosts: "{{ hostvar | default([])}}"
+  become: false
+  gather_facts: false
+
+  tasks:
+
+    - kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ ns }}"
+        # label_selectors:
+        #   - app = unifi-controller
+        kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+      register: pod_list
+
+    - ansible.builtin.debug:
+        var: pod_list

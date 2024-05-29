@@ -1,0 +1,21 @@
+---
+# VARS NEEDED: hostvar, env
+# TAGS: unseal, show_token
+- name: Deploy vault to k3s
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Run vault role
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.vault
+      tags:
+        - show_token
+        - unseal
+        - update_vaultconf

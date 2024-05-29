@@ -1,0 +1,15 @@
+---
+- name: Deploy traefik ingress and cert to k3s
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Deploy traefik ingress
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.traefik_ingress

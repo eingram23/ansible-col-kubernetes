@@ -1,0 +1,13 @@
+- name: Deploy test manifest
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - ansible.builtin.include_role:
+        name: eingram23.kubernetes.nginx_test

@@ -1,0 +1,13 @@
+---
+- name: Deploy awx to tanzu
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Deploy awx
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.awx_tanzu
+      tags:
+        - always

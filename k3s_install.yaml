@@ -1,0 +1,22 @@
+---
+- name: Install k3s
+  hosts: "{{ hostvar | default([]) }}"
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: Run k3s prereq role
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: prereq
+
+    - name: Run first_master role
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: first_master
+
+    - name: Create kubeconfig in hashi vault
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: create_kubeconfig
