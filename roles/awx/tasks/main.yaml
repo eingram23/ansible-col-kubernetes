@@ -67,7 +67,7 @@
 
 - name: Deploy awx operator
   ansible.builtin.shell: >
-    kustomize build {{ dest }}awx/ | kubectl apply -f -
+    kubectl apply -k {{ dest }}awx/
   tags: update
 
 - name: Create awx.yaml file
@@ -86,7 +86,7 @@
 
 - name: Deploy awx instance
   ansible.builtin.shell: >
-    kustomize build {{ dest }}awx/ | kubectl apply -f -
+    kubectl apply -k {{ dest }}awx/
   tags: update
 
 - name: Deploy awx-ingressroute

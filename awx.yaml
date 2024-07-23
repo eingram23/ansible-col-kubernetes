@@ -6,6 +6,11 @@
 
   tasks:
 
+    - name: Assert k8shost set
+      ansible.builtin.assert:
+        that:
+          - k8shost is defined
+      
     - name: Set environment
       ansible.builtin.import_role:
         name: eingram23.kubernetes.kubeconfig
