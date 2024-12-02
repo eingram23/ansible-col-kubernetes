@@ -1,0 +1,77 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}{{ dir_item }}"
+    state: directory
+    mode: '0755'
+    recurse: true
+  loop_control:
+    loop_var: dir_item
+  loop:
+    - base
+    - overlays
+
+- name: Create kustomizition.yaml
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ dest }}{{ item }}"
+    mode: '0644'
+  loop:
+    - kustomization.yaml
+
+- name: Copy base manifest files
+  ansible.builtin.copy:
+    src: "{{ base_item }}"
+    dest: "{{ dest }}base"
+    mode: '0644'
+  loop_control:
+    loop_var: base_item
+  loop:
+    - namespace.yaml
+    - ingressroute.yaml
+    - cmp-plugin.yaml
+    - argocd-repo-server-rbac.yaml
+
+- name: Copy overlay files
+  ansible.builtin.copy:
+    src: "{{ overlay_item }}"
+    dest: "{{ dest }}overlays"
+    mode: '0644'
+  loop_control:
+    loop_var: overlay_item
+  loop:
+    - argocd-repo-server.yaml
+
+- name: Create templated base manifest files
+  ansible.builtin.template:
+    src: "{{ tmp_base_item }}.j2"
+    dest: "{{ dest }}base/{{ tmp_base_item }}"
+    mode: '0644'
+  loop_control:
+    loop_var: tmp_base_item
+  loop:
+    - argocd-vault-plugin-credentials.yaml
+    - kustomization.yaml
+
+
+- name: Create templated overlay manifest files
+  ansible.builtin.template:
+    src: "{{ tmp_base_item }}.j2"
+    dest: "{{ dest }}overlays/{{ tmp_base_item }}"
+    mode: '0644'
+  loop_control:
+    loop_var: tmp_base_item
+  loop:
+    - argocd-secret.yaml
+
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    name: "{{ app_name }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy argocd using kustomize
+  ansible.builtin.shell: |
+    export KUBECONFIG=~/.kube/config-{{ cluster }}
+    kubectl apply -k {{ dest }}

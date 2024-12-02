@@ -1,0 +1,26 @@
+---
+- name: Initial deployment of argocd on new cluster
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  vars:
+    app_name: argocd
+
+  environment:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+
+  tasks:
+
+    - name: Assert cluster set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+
+    - name: Deploy argocd
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.argocd
