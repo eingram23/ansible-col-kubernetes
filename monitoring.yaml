@@ -1,11 +1,19 @@
 ---
 # Grafana, node-exporter and vmware-exporter are disabled. Prometheus manual scrape targets disabled. Both moved to monitoring container.
-- name: Deploy monitoring to k3s
+- name: Deploy monitoring to k8s
   hosts: localhost
   gather_facts: false
   become: false
 
+  environment:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+
   tasks:
+
+    - name: Assert cluster set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
 
     - name: Set environment
       ansible.builtin.import_role:

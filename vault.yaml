@@ -1,12 +1,20 @@
 ---
 # VARS NEEDED: hostvar, env
 # TAGS: unseal, show_token
-- name: Deploy vault to k3s
+- name: Deploy vault to k8s
   hosts: localhost
   gather_facts: false
   become: false
 
+  environment:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+
   tasks:
+
+    - name: Assert cluster set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
 
     - name: Set environment
       ansible.builtin.import_role:

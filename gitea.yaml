@@ -5,7 +5,17 @@
   gather_facts: false
   become: false
 
+  environment:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+
   tasks:
+
+    - name: Assert vars set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+          - cert is defined
+          - master_node is defined
 
     - name: Set environment
       ansible.builtin.import_role:
