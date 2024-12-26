@@ -1,3 +1,6 @@
+# Usage:
+# ansible-playbook -i inventory_file -e "cluster=your_cluster_name" /path/to/argocd.yaml
+
 ---
 - name: Initial deployment of argocd on new cluster
   hosts: localhost
