@@ -2,7 +2,7 @@
 - name: Run k3s install script
   ansible.builtin.shell: >
     curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ ver }}
+    INSTALL_K3S_VERSION={{ k3s_ver }}
     K3S_TOKEN={{ k3s_token }}
     sh -s - agent
     --server https://{{ k3s_master }}.local.lan:6443

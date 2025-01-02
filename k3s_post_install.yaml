@@ -40,11 +40,11 @@
       tags:
         - metallb
 
-    - name: Deploy vault
-      ansible.builtin.import_role:
-        name: eingram23.kubernetes.vault
-      tags:
-        - vault
+    # - name: Deploy vault
+    #   ansible.builtin.import_role:
+    #     name: eingram23.kubernetes.vault
+    #   tags:
+    #     - vault
 
     - name: Pause playbook to import PEM cert to vault
       ansible.builtin.pause:

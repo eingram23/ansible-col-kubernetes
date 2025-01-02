@@ -1,4 +1,5 @@
 ---
 dest: "/var/tmp/ansible/k3s/lpp/"
-db: "sqllite"
+db: "etcd"
 k3s_token: "k3s"
+longhorn: "no"
