@@ -12,57 +12,28 @@
       ansible.builtin.assert:
         that:
           - storage == "lpp" or storage == "longhorn"
-          # - ip_range is defined
-          - k8shost is defined
-      tags: always
+          - ip_range is defined
+          - cluster is defined
 
     - name: Set environment
       ansible.builtin.import_role:
         name: eingram23.kubernetes.kubeconfig
-      tags: always
 
     - name: Deploy local-path-provisioner storage
       when: storage == "lpp"
       ansible.builtin.import_role:
         name: eingram23.kubernetes.k3s
         tasks_from: deploy_lpp_sc.yaml
-      tags: lpp
-
-    - name: Deploy longhorn
-      when: storage == "longhorn"
-      ansible.builtin.import_role:
-        name: eingram23.kubernetes.longhorn
-      tags: longhorn
 
     - name: Deploy metallb
       ansible.builtin.import_role:
         name: eingram23.kubernetes.metallb
-      tags:
-        - metallb
 
-    # - name: Deploy vault
+    # - name: Deploy kubernetes dashboard
     #   ansible.builtin.import_role:
-    #     name: eingram23.kubernetes.vault
-    #   tags:
-    #     - vault
+    #     name: eingram23.kubernetes.kubernetes_dashboard
 
-    - name: Pause playbook to import PEM cert to vault
-      ansible.builtin.pause:
+    # - name: Deploy traefik_ingress
+    #   ansible.builtin.import_role:
+    #     name: eingram23.kubernetes.traefik_ingress
 
-    - name: Deploy kubernetes dashboard
-      ansible.builtin.import_role:
-        name: eingram23.kubernetes.kubernetes_dashboard
-      tags:
-        - dashboard
-
-    - name: Deploy cert_manager
-      ansible.builtin.import_role:
-        name: eingram23.kubernetes.cert_manager
-      tags:
-        - cert_manager
-
-    - name: Deploy traefik_ingress
-      ansible.builtin.import_role:
-        name: eingram23.kubernetes.traefik_ingress
-      tags:
-        - traefik_ingress
