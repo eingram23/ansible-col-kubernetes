@@ -24,7 +24,7 @@
 #   become: false
 
 #   vars:
-#     kubeconfig: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/' + k8shost + ':kubeconfig' | default('')) }}"
+#     kubeconfig: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/' + ansible_hostname + ':kubeconfig' | default('')) }}"
 
 #   tasks:
 

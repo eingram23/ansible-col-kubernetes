@@ -7,11 +7,11 @@
   gather_facts: false
   become: false
 
-  vars:
-    app_name: argocd
+  # vars:
+  #   app_name: argocd
 
-  environment:
-    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+  # environment:
+  #   K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
 
   tasks:
 

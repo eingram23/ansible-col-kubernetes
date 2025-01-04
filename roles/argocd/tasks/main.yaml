@@ -72,5 +72,5 @@
 
 - name: Deploy argocd using kustomize
   ansible.builtin.shell: |
-    export KUBECONFIG=~/.kube/config-{{ cluster }}
+    # export KUBECONFIG=~/.kube/config-{{ cluster }}
     kubectl apply -k {{ dest }}

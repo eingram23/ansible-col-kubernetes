@@ -4,23 +4,22 @@
     that:
       - ip_range is defined
 
-- name: Create staging folders
-  ansible.builtin.file:
-    path: "{{ dest }}"
-    state: directory
-    mode: '0755'
+# - name: Create staging folders
+#   ansible.builtin.file:
+#     path: "{{ dest }}"
+#     state: directory
+#     mode: '0755'
 
 - name: Download metallb definitions manifest
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_ver }}/config/manifests/metallb-native.yaml"
-    dest: "{{ dest }}{{ metallb_manifest }}"
+    dest: "~/metallb-native.yaml"
     mode: '0644'
 
 - name: Deploy metallb
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}{{ metallb_manifest }}"
-    # kubeconfig: "{{ kubeconfig }}"
+    src: "~/metallb-native.yaml"
   register: metallb
 
 - name: Pause for 20 seconds
@@ -28,11 +27,11 @@
     seconds: 20
   when: metallb.changed
 
-- name: Create metallb-ippool manifest on host
-  ansible.builtin.template:
-    src: metallb-ippool.yaml.j2
-    dest: "{{ dest }}metallb-ippool.yaml"
-    mode: '0644'
+# - name: Create metallb-ippool manifest on host
+#   ansible.builtin.template:
+#     src: metallb-ippool.yaml.j2
+#     dest: "{{ dest }}metallb-ippool.yaml"
+#     mode: '0644'
 
 - name: Wait for metallb pods become ready
   shell: "kubectl wait --namespace=metallb-system --for=condition=Ready pods --all --timeout=600s"
@@ -40,5 +39,4 @@
 - name: Deploy metallb ippool
   kubernetes.core.k8s:
     state: present
-    src: "{{ dest }}metallb-ippool.yaml"
-    # kubeconfig: "{{ kubeconfig }}"
+    template: "metallb-ippool.yaml.j2"

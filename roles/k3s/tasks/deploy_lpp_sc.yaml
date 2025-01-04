@@ -14,4 +14,4 @@
 - name: Deploy local-path-provisioner storage class manifest
   kubernetes.core.k8s:
     state: present
-    src: "{{ lookup('file', 'lpp_storageclass.yaml') }}"
+    definition: "{{ lookup('file', 'lpp_storageclass.yaml') | from_yaml }}"

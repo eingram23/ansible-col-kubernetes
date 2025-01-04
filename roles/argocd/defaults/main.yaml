@@ -1,1 +1,2 @@
+app_name: "argocd"
 dest: "/var/tmp/ansible/k8s/{{ app_name }}/"

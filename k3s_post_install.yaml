@@ -6,6 +6,10 @@
   vars:
     storage: lpp
 
+  # environment:
+  #   K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+  #   KUBECONFIG: ~/.kube/config-{{ cluster }}
+
   tasks:
 
     - name: Check for necessary vars
@@ -32,6 +36,10 @@
     # - name: Deploy kubernetes dashboard
     #   ansible.builtin.import_role:
     #     name: eingram23.kubernetes.kubernetes_dashboard
+
+    - name: Deploy argocd
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.argocd
 
     # - name: Deploy traefik_ingress
     #   ansible.builtin.import_role:
