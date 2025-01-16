@@ -11,7 +11,7 @@
     - base
     - overlays
 
-- name: Create kustomizition.yaml
+- name: Create kustomization.yaml
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ dest }}{{ item }}"
