@@ -3,3 +3,5 @@ dest: "/var/tmp/ansible/k3s/lpp/"
 db: "etcd"
 k3s_token: "k3s"
 longhorn: "no"
+control_plane_count: 1
+worker_count: 0
