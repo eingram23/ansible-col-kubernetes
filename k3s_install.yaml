@@ -1,7 +1,31 @@
 ---
 - name: Install k3s
-  hosts: "{{ hostvar | default([]) }}"
-  gather_facts: true
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Assert vars set
+      ansible.builtin.assert:
+        that:
+          - cp_count is defined
+          - worker_count is defined
+          - cluster_name is defined
+          - storage in ["lpp", "longhorn"]
+          - ip_range is defined
+
+    - name: Set cp_nodes
+      ansible.builtin.set_fact:
+        cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster_name + '\\1') | list }}"
+
+    - name: Set worker_nodes
+      ansible.builtin.set_fact:
+        worker_nodes: "{{ range(cp_count | int + 1, worker_count | int + cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster_name + '\\1') | list }}"
+
+- name: Install k3s control plane
+  hosts: "{{ hostvars['localhost']['cp_nodes'] | default([]) }}"
+  gather_facts: false
   become: true
 
   tasks:
@@ -11,12 +35,71 @@
         name: eingram23.kubernetes.k3s
         tasks_from: prereq
 
-    - name: Run first_master role
+    - name: Run control plane role
       ansible.builtin.include_role:
         name: eingram23.kubernetes.k3s
-        tasks_from: first_master
+        tasks_from: control_plane
 
-    - name: Create kubeconfig in hashi vault
+    - name: Create kubeconfig secret in hashi vault
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: k3s_to_vault
+      run_once: true
+
+- name: Install k3s worker nodes
+  hosts: "{{ hostvars['localhost']['worker_nodes'] | default([]) }}"
+  gather_facts: false
+  become: true
+
+  tasks:
+
+    - name: Run k3s prereq role
       ansible.builtin.include_role:
         name: eingram23.kubernetes.k3s
-        tasks_from: create_kubeconfig
+        tasks_from: prereq
+
+    - name: Install worker nodes
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: worker
+
+- name: Post k3s install tasks
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  vars:
+    storage: lpp
+
+  environment:
+    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+    KUBECONFIG: ~/.kube/config-{{ cluster }}
+
+  tasks:
+
+    - name: Create kubeconfig in $HOME/.kube
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
+
+    - name: Deploy local-path-provisioner storage
+      when: storage == "lpp"
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: deploy_lpp_sc.yaml
+
+    - name: Deploy metallb
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.metallb
+
+    # - name: Deploy kubernetes dashboard
+    #   ansible.builtin.import_role:
+    #     name: eingram23.kubernetes.kubernetes_dashboard
+
+    - name: Deploy argocd
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.argocd
+
+    # - name: Deploy traefik_ingress
+    #   ansible.builtin.import_role:
+    #     name: eingram23.kubernetes.traefik_ingress

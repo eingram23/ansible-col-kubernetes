@@ -1,9 +1,4 @@
 ---
-- name: Set dev env based on cluster name
-  when: cluster is match(".+dev.+")
-  ansible.builtin.set_fact:
-    env: -dev
-
 - name: Create .kube folder
   ansible.builtin.file:
     path: ~/.kube
@@ -13,5 +8,5 @@
 - name: Create kubeconfig
   ansible.builtin.copy:
     content: "{{ kubeconfig }}"
-    dest: ~/.kube/config
+    dest: ~/.kube/config-{{ cluster }}
     mode: '0400'

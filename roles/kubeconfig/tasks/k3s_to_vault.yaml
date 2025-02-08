@@ -11,6 +11,5 @@
   delegate_to: localhost
   become: false
   community.hashi_vault.vault_write:
-    path: secret/kubernetes/{{ ansible_hostname }}
     data:
       kubeconfig: "{{ lookup('template', 'k3s.yaml.j2') }}"
