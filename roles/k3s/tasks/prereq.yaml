@@ -5,8 +5,9 @@
 #     semodule -X 300 -i my-iptables.pp
 
 - name: Disable swap for current session
+  when: ansible_swaptotal_mb > 0
   ansible.builtin.command: swapoff -a
-
+  
 - name: Disable swap permanently, persist reboots
   ansible.builtin.lineinfile:
     path: /etc/fstab

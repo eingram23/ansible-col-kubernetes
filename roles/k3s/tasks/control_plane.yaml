@@ -1,10 +1,17 @@
 ---
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- debug: var=ansible_facts['services']['k3s.service']['status']
+
 - name: Install k3s with etcd database
-  when: db == "etcd"
+  when: 
+    - db == "etcd"
+    - ansible_facts['services']['k3s.service']['status'] is not defined
   ansible.builtin.shell: >
     curl -sfL https://get.k3s.io |
     INSTALL_K3S_VERSION={{ k3s_ver }}
-    K3S_TOKEN={{ k3s_token }} sh -s - server
+    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
     --disable=servicelb
     --selinux
     --snapshotter=stargz
@@ -15,9 +22,12 @@
     --kubelet-arg image-gc-high-threshold=50
     --kubelet-arg image-gc-low-threshold=40
     --etcd-expose-metrics=true
+  register: k3s_cp_install_status
+
+- debug: var=k3s_cp_install_status
 
 - name: Install k3s with sqllite database
-  when: db == "sqllite"
+  when: db == "sqllite" and k3s_cp_status.status is not defined
   ansible.builtin.shell: >
     curl -sfL https://get.k3s.io |
     INSTALL_K3S_VERSION={{ k3s_ver }}

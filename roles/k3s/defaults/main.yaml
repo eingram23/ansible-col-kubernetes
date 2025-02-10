@@ -1,7 +1,6 @@
 ---
 dest: "/var/tmp/ansible/k3s/lpp/"
 db: "etcd"
-k3s_token: "{{ lookup('hashi_vault', 'secret=/secret/kubernetes/' + cluster_name + ':token') }}"
 longhorn: "no"
 # cp_count: 1
 # worker_count: 0

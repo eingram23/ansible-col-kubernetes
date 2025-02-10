@@ -1,13 +1,20 @@
 ---
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
 - name: Run k3s install script
+  when: ansible_facts['services']['k3s-agent.service']['status'] is not defined
   ansible.builtin.shell: >
     curl -sfL https://get.k3s.io |
     INSTALL_K3S_VERSION={{ k3s_ver }}
-    K3S_TOKEN={{ k3s_token }}
+    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }}
     sh -s - agent
-    --server https://{{ k3s_master }}.local.lan:6443
+    --server https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443
     --selinux
     --snapshotter=stargz
+  register: k3s_worker_install_status
+
+- debug: var=k3s_worker_install_status
 
 - name: Install k3s service
   ansible.builtin.systemd:

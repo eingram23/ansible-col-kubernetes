@@ -11,5 +11,7 @@
   delegate_to: localhost
   become: false
   community.hashi_vault.vault_write:
+    path: "secret/kubernetes/{{ cluster }}"
     data:
       kubeconfig: "{{ lookup('template', 'k3s.yaml.j2') }}"
+      token: "{{ hostvars['localhost']['k3s_token'] }}"

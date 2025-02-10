@@ -1,7 +1,7 @@
 ---
-- name: Install k3s
+- name: Precheck and set node names
   hosts: localhost
-  gather_facts: false
+  gather_facts: true
   become: false
 
   tasks:
@@ -9,23 +9,28 @@
     - name: Assert vars set
       ansible.builtin.assert:
         that:
+          - cluster is defined
           - cp_count is defined
           - worker_count is defined
-          - cluster_name is defined
           - storage in ["lpp", "longhorn"]
           - ip_range is defined
+        msg: "cp_count, worker_count, cluster_name, storage, and ip_range must be defined"
 
     - name: Set cp_nodes
       ansible.builtin.set_fact:
-        cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster_name + '\\1') | list }}"
+        cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-cp\\1.local.lan') | list }}"
 
     - name: Set worker_nodes
       ansible.builtin.set_fact:
-        worker_nodes: "{{ range(cp_count | int + 1, worker_count | int + cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster_name + '\\1') | list }}"
+        worker_nodes: "{{ range(1, worker_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-worker\\1.local.lan') | list }}"
+
+    - name: Set k3s_token
+      ansible.builtin.set_fact:
+        k3s_token: "{{ lookup('hashi_vault', 'secret=secret/ssh/ansible:ssh_password') }}"
 
 - name: Install k3s control plane
   hosts: "{{ hostvars['localhost']['cp_nodes'] | default([]) }}"
-  gather_facts: false
+  gather_facts: true
   become: true
 
   tasks:
@@ -48,7 +53,7 @@
 
 - name: Install k3s worker nodes
   hosts: "{{ hostvars['localhost']['worker_nodes'] | default([]) }}"
-  gather_facts: false
+  gather_facts: true
   become: true
 
   tasks:
@@ -65,31 +70,28 @@
 
 - name: Post k3s install tasks
   hosts: localhost
-  gather_facts: false
+  gather_facts: true
   become: false
 
-  vars:
-    storage: lpp
-
-  environment:
-    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
-    KUBECONFIG: ~/.kube/config-{{ cluster }}
+  # environment:
+    # K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
+    # KUBECONFIG: ~/.kube/config-{{ cluster }}
 
   tasks:
 
     - name: Create kubeconfig in $HOME/.kube
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
     - name: Deploy local-path-provisioner storage
       when: storage == "lpp"
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: eingram23.kubernetes.k3s
         tasks_from: deploy_lpp_sc.yaml
 
     - name: Deploy metallb
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: eingram23.kubernetes.metallb
 
     # - name: Deploy kubernetes dashboard

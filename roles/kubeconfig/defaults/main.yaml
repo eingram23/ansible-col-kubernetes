@@ -1,1 +1,2 @@
+---
 kubeconfig: "{{ lookup('hashi_vault', 'secret=secret/kubernetes/' + cluster + ':kubeconfig' | default('')) }}"
