@@ -23,6 +23,7 @@
     - name: Set environment
       ansible.builtin.import_role:
         name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
 
     - name: Deploy argocd
       ansible.builtin.include_role:
