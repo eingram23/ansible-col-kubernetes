@@ -7,13 +7,13 @@ clusters:
 contexts:
 - context:
     cluster: {{ ansible_hostname }}
-    user: default
+    user: default-{{ cluster }}
   name: {{ ansible_hostname }}
 current-context: {{ ansible_hostname }}
 kind: Config
 preferences: {}
 users:
-- name: default
+- name: default-{{ cluster}}
   user:
     client-certificate-data: {{ kubeconfig | json_query('users[0].user."client-certificate-data"') }}
     client-key-data: {{ kubeconfig | json_query('users[0].user."client-key-data"') }}
