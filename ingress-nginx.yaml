@@ -1,0 +1,21 @@
+---
+- name: Deploy ingress-nginx
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Assert cluster set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
+
+    - name: Deploy argocd
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.ingress-nginx

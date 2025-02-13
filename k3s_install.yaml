@@ -87,8 +87,7 @@
     - name: Deploy local-path-provisioner storage
       when: storage == "lpp"
       ansible.builtin.include_role:
-        name: eingram23.kubernetes.k3s
-        tasks_from: deploy_lpp_sc.yaml
+        name: eingram23.kubernetes.local_path_provisioner
 
     - name: Deploy metallb
       ansible.builtin.include_role:
@@ -98,9 +97,9 @@
     #   ansible.builtin.import_role:
     #     name: eingram23.kubernetes.kubernetes_dashboard
 
-    - name: Deploy argocd
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.argocd
+    # - name: Deploy argocd
+    #   ansible.builtin.include_role:
+    #     name: eingram23.kubernetes.argocd
 
     # - name: Deploy traefik_ingress
     #   ansible.builtin.import_role:
