@@ -9,11 +9,13 @@ namespace: argocd
 
 resources:
 - base/namespace.yaml
-- base/ingressroute.yaml
+{{ '- base/ingressroute.yaml' if ingress == 'traefik' | default(omit) }}
+{{ '- base/ingress.yaml' if ingress == 'ingress-nginx' | default(omit) }}
 - base/argocd-repo-server-rbac.yaml
 - base/argocd-vault-plugin-credentials.yaml
 - base/cmp-plugin.yaml
 - https://raw.githubusercontent.com/argoproj/argo-cd/{{ ver }}/manifests/install.yaml
+
 
 configMapGenerator:
 - name: argocd-cmd-params-cm

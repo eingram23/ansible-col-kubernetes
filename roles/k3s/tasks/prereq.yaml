@@ -23,7 +23,7 @@
     enabled: false
 
 - name: Setup dedicated volume for storage
-  when: longhorn == "yes"
+  when: storage == "longhorn"
   block:
     - name: Create mount point
       ansible.builtin.file:

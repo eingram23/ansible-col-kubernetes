@@ -1,0 +1,15 @@
+---
+- name: Add chart repo - {{ app_name }}
+  kubernetes.core.helm_repository:
+    name: ingress-nginx
+    repo_url: "https://kubernetes.github.io/ingress-nginx"
+
+- name: Install chart from repo - {{ app_name }}
+  kubernetes.core.helm:
+    release_name: "{{ app_name }}"
+    release_namespace: "{{ app_name }}"
+    create_namespace: true
+    chart_ref: "{{ app_name }}/ingress-nginx"
+    chart_version: "{{ ingress_nginx_ver }}"
+    wait: false # Setting to true will fail due to loadbalancer not being ready
+    update_repo_cache: true

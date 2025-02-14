@@ -33,7 +33,7 @@
 #     dest: "{{ dest }}metallb-ippool.yaml"
 #     mode: '0644'
 
-- name: Wait for metallb pods become ready
+- name: Wait for metallb pods to become ready
   shell: "kubectl wait --namespace=metallb-system --for=condition=Ready pods --all --timeout=600s"
 
 - name: Deploy metallb ippool

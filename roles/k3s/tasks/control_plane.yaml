@@ -5,7 +5,7 @@
 - name: Set fact for --disable=traefik
   ansible.builtin.set_fact:
     disable_traefik: "{{ '--disable=traefik' }}"
-  when: traefik == "no"
+  when: not ingress == "traefik"
 
 - name: Install k3s with etcd database
   when:
@@ -32,3 +32,13 @@
     name: k3s
     enabled: true
     state: started
+
+- name: Wait until k3s is ready
+  ansible.builtin.wait_for:
+    host: localhost
+    port: 6443
+    delay: 10
+    timeout: 300
+    state: started
+  register: k3s_ready
+  until: k3s_ready is succeeded
