@@ -1,0 +1,16 @@
+---
+- name: Create list of IPs from all nodes
+  ansible.builtin.shell: |
+    set -o pipefail kubectl get node -o wide | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ '
+  register: k3s_node_ips
+
+- name: Create manifest
+  ansible.builtin.template:
+    src: k3s-metrics-service.yaml.j2
+    dest: "/var/tmp/k3s-metrics-service.yaml"
+    mode: '0644'
+
+- name: Deploy k3s metrics service
+  kubernetes.core.k8s:
+    state: present
+    src: "/var/tmp/k3s-metrics-service.yaml"

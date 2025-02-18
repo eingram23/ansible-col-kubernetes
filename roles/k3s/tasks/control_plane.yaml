@@ -1,44 +1,48 @@
 ---
-- name: Populate service facts
-  ansible.builtin.service_facts:
+  - name: Populate service facts
+    ansible.builtin.service_facts:
 
-- name: Set fact for --disable=traefik
-  ansible.builtin.set_fact:
-    disable_traefik: "{{ '--disable=traefik' }}"
-  when: not ingress == "traefik"
+  - name: Set fact for --disable=traefik
+    ansible.builtin.set_fact:
+      disable_traefik: "{{ '--disable=traefik' }}"
+    when: not ingress == "traefik"
 
-- name: Install k3s with etcd database
-  when:
-    - ansible_facts['services']['k3s.service']['status'] is not defined
-  ansible.builtin.shell: >
-    curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ k3s_ver }}
-    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
-    --disable=servicelb
-    {{ disable_traefik | default(omit) }}
-    --selinux
-    --snapshotter=stargz
-    --write-kubeconfig-mode 644
-    --cluster-init
-    --kubelet-arg container-log-max-files=4
-    --kubelet-arg container-log-max-size=50Mi
-    --kubelet-arg image-gc-high-threshold=50
-    --kubelet-arg image-gc-low-threshold=40
-    --etcd-expose-metrics=true
-  register: k3s_cp_install_status
+  - name: Install k3s with etcd database
+    when:
+      - ansible_facts['services']['k3s.service']['status'] is not defined
+    ansible.builtin.shell: >
+      curl -sfL https://get.k3s.io |
+      INSTALL_K3S_VERSION={{ k3s_ver }}
+      K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
+      --disable=servicelb
+      {{ disable_traefik | default(omit) }}
+      --selinux
+      --write-kubeconfig-mode 644
+      --cluster-init
+      --kubelet-arg container-log-max-files=4
+      --kubelet-arg container-log-max-size=50Mi
+      --kubelet-arg image-gc-high-threshold=50
+      --kubelet-arg image-gc-low-threshold=40
+      --etcd-expose-metrics=true
+      --tls-san {{ lb_ip }}
+      --kube-controller-manager-arg 'bind-address=0.0.0.0'
+      --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
+      --kube-scheduler-arg 'bind-address=0.0.0.0'
+      --kube-controller-manager-arg 'terminated-pod-gc-threshold=10'
+    register: k3s_cp_install_status
 
-- name: Install k3s service
-  ansible.builtin.systemd_service:
-    name: k3s
-    enabled: true
-    state: started
+  - name: Install k3s service
+    ansible.builtin.systemd_service:
+      name: k3s
+      enabled: true
+      state: started
 
-- name: Wait until k3s is ready
-  ansible.builtin.wait_for:
-    host: localhost
-    port: 6443
-    delay: 10
-    timeout: 300
-    state: started
-  register: k3s_ready
-  until: k3s_ready is succeeded
+  - name: Wait until k3s is ready
+    ansible.builtin.wait_for:
+      host: localhost
+      port: 6443
+      delay: 10
+      timeout: 300
+      state: started
+    register: k3s_ready
+    until: k3s_ready is succeeded

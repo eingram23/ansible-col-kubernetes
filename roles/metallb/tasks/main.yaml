@@ -1,15 +1,4 @@
 ---
-- name: Ensure vars are set
-  ansible.builtin.assert:
-    that:
-      - ip_range is defined
-
-# - name: Create staging folders
-#   ansible.builtin.file:
-#     path: "{{ dest }}"
-#     state: directory
-#     mode: '0755'
-
 - name: Download metallb definitions manifest
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_ver }}/config/manifests/metallb-native.yaml"
@@ -26,12 +15,6 @@
   ansible.builtin.pause:
     seconds: 20
   when: metallb.changed
-
-# - name: Create metallb-ippool manifest on host
-#   ansible.builtin.template:
-#     src: metallb-ippool.yaml.j2
-#     dest: "{{ dest }}metallb-ippool.yaml"
-#     mode: '0644'
 
 - name: Wait for metallb pods to become ready
   shell: "kubectl wait --namespace=metallb-system --for=condition=Ready pods --all --timeout=600s"

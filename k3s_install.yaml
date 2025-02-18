@@ -13,9 +13,9 @@
           - cp_count is defined and cp_count | int > 0
           - worker_count is defined and worker_count | int > -1
           - storage in ["lpp", "longhorn"]
-          - ip_range | regex_search('^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$') is not none
-          - ingress in ["traefik", "ingress-nginx"]
-        msg: "cp_count, worker_count, cluster_name, storage, ip_range, and ingress must be defined"
+          - lb_ip | regex_search('^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$') is not none
+          - ingress in ["traefik", "nginx"]
+        msg: "cluster, cp_count, worker_count, storage, lb_ip, and ingress must be defined"
 
     - name: Set cp_nodes
       ansible.builtin.set_fact:
@@ -81,13 +81,18 @@
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
-    - name: Deploy local-path-provisioner storage
-      when: storage == "lpp"
+    # - name: Deploy local-path-provisioner storage
+    #   when: storage == "lpp"
+    #   ansible.builtin.include_role:
+    #     name: eingram23.kubernetes.local_path_provisioner
+
+    - name: Deploy k3s-metrics-service # Exposes metrics from single endpoint
       ansible.builtin.include_role:
-        name: eingram23.kubernetes.local_path_provisioner
+        name: eingram23.kubernetes.k3s
+        tasks_from: install_k3s-metrics-service
 
     - name: Deploy ingress-nginx
-      when: ingress == "ingress-nginx"
+      when: ingress == "nginx"
       ansible.builtin.include_role:
         name: eingram23.kubernetes.ingress_nginx
 
@@ -103,6 +108,7 @@
       ansible.builtin.include_role:
         name: eingram23.kubernetes.argocd
 
-    # - name: Deploy traefik_ingress
-    #   ansible.builtin.import_role:
-    #     name: eingram23.kubernetes.traefik_ingress
+    - name: Deploy traefik_ingress
+      when: ingress == "traefik"
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.traefik_ingress
