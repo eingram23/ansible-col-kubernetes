@@ -1,0 +1,132 @@
+---
+- name: Generate Int CSR
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab{{ suffix }} local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab{{ suffix }} Org" country="US" locality="Homelab" province="California" > {{ dest }}vault_int{{ suffix }}_csr
+      cat {{ dest }}vault_int{{ suffix }}_csr | jq -r '.data.csr' > {{ dest }}vault_int{{ suffix }}.csr
+
+- name: Get contents of vault_int.csr
+  ansible.builtin.slurp:
+    src: "{{ dest }}vault_int{{ suffix }}.csr"
+  register: vault_int_csr_enc
+
+- name: Decode vault_int_csr
+  ansible.builtin.set_fact:
+    vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
+
+- name: Run tasks on certstrap host
+  delegate_to: homenas.local.lan
+  become: true
+  become_method: sudo
+  become_user: root
+  block:
+    - name: Install go
+      ansible.builtin.package:
+        name: go
+        state: present
+
+    - name: Remove certstrap folder if it exists
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}{{ k8shost }}"
+        state: absent
+
+    - name: Create certstrap folder
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}{{ k8shost }}"
+        state: directory
+        mode: '0755'
+
+    - name: Clone certstrap git
+      ansible.builtin.git:
+        repo: https://github.com/square/certstrap
+        dest: "{{ certstrap_dest }}{{ k8shost }}"
+
+    - name: Check if certstrap already installed
+      stat:
+        path: /usr/local/bin/certstrap
+      register: certstrap_installed
+
+    - name: Build certstrap
+      when: not certstrap_installed.stat.exists
+      ansible.builtin.shell:
+        cmd: |
+          cd {{ certstrap_dest }}{{ k8shost }}
+          go build
+          chmod +x {{ certstrap_dest }}{{ k8shost }}/certstrap
+          mv {{ certstrap_dest }}{{ k8shost }}/certstrap /usr/local/bin
+
+    - name: Create certstrap subfolders
+      ansible.builtin.file:
+        path: "{{ certstrap_dest }}{{ k8shost }}/{{ item }}"
+        state: directory
+        mode: '0777'
+      loop:
+        - csr
+        - out
+
+    - name: Create vault.ca in certstrap out folder
+      ansible.builtin.copy:
+        content: "{{ vault_ca }}"
+        dest: "{{ certstrap_dest }}{{ k8shost }}/out/vault{{ suffix }}.ca"
+        mode: '0644'
+
+    - name: Create certstrap-sign-int.sh
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "{{ certstrap_dest }}{{ k8shost }}/{{ item }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-sign-int.sh
+
+    - name: Copy scripts to host
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ certstrap_dest }}{{ k8shost }}"
+        mode: 'u+x'
+      loop:
+        - certstrap-init.sh
+
+    - name: Copy csr to certstrap folder
+      ansible.builtin.copy:
+        content: "{{ vault_int_csr }}"
+        dest: "{{ certstrap_dest }}{{ k8shost }}/csr/vault_int{{ suffix }}.csr"
+        mode: '0644'
+
+    - name: Create init-keys.json on remote host
+      ansible.builtin.copy:
+        content: "{{ init_keys }}"
+        dest: "{{ certstrap_dest }}{{ k8shost }}/init-keys{{ suffix }}.json"
+
+    - name: Create root_token on remote host
+      ansible.builtin.copy:
+        content: "{{ root_token }}"
+        dest: "{{ certstrap_dest }}{{ k8shost }}/root_token{{ suffix }}"
+
+# - name: Show root_token
+#   ansible.builtin.debug:
+#     var: root_token
+  # tags:
+  #   - never
+  #   - show_token
+  #   - unseal
+
+- name: Closing comments
+  ansible.builtin.debug:
+    msg: |
+      Log into homenas as ansible user
+      Run following scripts in order:
+        ./certstrap-init.sh ### Only if need to create root CA,
+          otherwise copy existing Homelab_local.lan_Root_CA.* files to certstrap/out folder
+        ./certstrap-sign-int.sh (enter required password)
+
+      To create pfx (if needed):
+        cd ~/certs
+        scp ansible@k3s-dev1.local.lan:./certstrap/out/* ./
+        openssl pkcs12 -export -out Homelab_local.lan_Root_CA.pfx -inkey Homelab_local.lan_Root_CA.key -in Homelab_local.lan_Root_CA.crt
+
+      Log into Vault UI using {{ root_token }}
+        Secrets -> pki_int -> Configuration -> Configure -> Import CA (or Import PEM)
+        Paste in contents of Homelab_local.lan_Root_Int{{ suffix }}_CA.crt and Save
+      Vault CLI
+        vault read auth/approle/role/ansible/role-id # Only needed if using secrets engine for Ansible
+        vault write -f auth/approle/role/ansible/secret-id # Only needed if using secrets engine for Ansible

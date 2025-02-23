@@ -1,0 +1,236 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
+
+- name: Create vault k8s namespace
+  kubernetes.core.k8s:
+    name: vault
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Download files to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - ansible-policy.sh
+    - pki-policy.sh
+    - admins-policy.sh
+    - vault-csr.conf
+
+- name: Create vault-values file
+  ansible.builtin.template:
+    src: vault-ha-raft-axure-values.yaml.j2
+    dest: "{{ dest }}vault-values.yaml"
+    mode: '0644'
+
+# - name: Create key for k8s to sign (for TLS Listener)
+#   community.crypto.openssl_privatekey:
+#     path: "{{ dest }}vault.key"
+#     type: RSA
+#     size: 2048
+
+# - name: Generate an OpenSSL csr
+#   ansible.builtin.shell:
+#     cmd: >
+#       openssl req -new -key {{ dest }}vault.key
+#       -subj "/O=system:nodes/CN=system:node:vault.vault.svc"
+#       -out {{ dest }}vault.csr
+#       -config {{ dest }}vault-csr.conf
+
+# - name: Extract vault.csr contents
+#   ansible.builtin.shell: |
+#     cat {{ dest }}vault.csr | base64 | tr -d '\r\n' > {{ dest }}vault.csr.contents
+
+# - name: get content of vault.csr.contents
+#   slurp:
+#     src: "{{ dest }}vault.csr.contents"
+#   register: vault_csr_enc
+
+# - name: decode vault.csr.contents
+#   set_fact:
+#     vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
+
+# - name: Create vault-csr.yaml file
+#   ansible.builtin.template:
+#     src: vault-csr.yaml.j2
+#     dest: "{{ dest }}vault-csr.yaml"
+
+# - name: Create csr and send to k8s
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     # kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - vault-csr.yaml
+
+# - name: Approve cert Request
+#   ansible.builtin.shell:
+#     cmd: kubectl certificate approve vault-csr
+
+# - name: Retrieve cert, write out to file, retrieve k8s CA
+#   ansible.builtin.shell:
+#     cmd: |
+#       serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
+#       echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
+#       kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
+
+# - name: Get contents of vault.ca
+#   ansible.builtin.slurp:
+#     src: "{{ dest }}vault.ca"
+#   register: vault_ca_enc
+
+# - name: Decode vault.ca
+#   ansible.builtin.set_fact:
+#     vault_ca: "{{ vault_ca_enc['content'] | b64decode }}"
+
+# - name: Create vault-server-tls secret
+#   ansible.builtin.shell:
+#     cmd: >
+#       kubectl create secret generic vault-server-tls
+#       --namespace vault
+#       --save-config
+#       --dry-run=client
+#       --from-file=tls.key={{ dest }}vault.key
+#       --from-file=tls.crt={{ dest }}vault.crt
+#       --from-file=ca.crt={{ dest }}vault.ca
+#       -o yaml | kubectl apply -f -
+
+# - name: Create vault ingressroutetcp
+#   ansible.builtin.template:
+#     src: vault-ingressroutetcp.yaml.j2
+#     dest: "{{ dest }}vault-ingressroutetcp.yaml"
+#     mode: '0644'
+
+- name: Add hashicorp/vault chart repo
+  kubernetes.core.helm_repository:
+    name: hashicorp
+    repo_url: "https://helm.releases.hashicorp.com"
+
+- name: Install hashicorp/vault chart from repo
+  kubernetes.core.helm:
+    release_name: vault
+    release_namespace: vault
+    create_namespace: false
+    chart_ref: hashicorp/vault
+    chart_version: "{{ vault_helm_ver }}"
+    wait: true
+    update_repo_cache: true
+    values_files: "{{ dest }}vault-values.yaml"
+    # kubeconfig: "{{ kubeconfig }}"
+
+# - name: Deploy vault ingressroutetcp
+#   kubernetes.core.k8s:
+#     state: present
+#     src: "{{ dest }}{{ item }}"
+#     # kubeconfig: "{{ kubeconfig }}"
+#   loop:
+#     - vault-ingressroutetcp.yaml
+
+- name: Wait until vault pod is scheduled
+  kubernetes.core.k8s_info:
+    kind: Pod
+    wait: true
+    wait_condition:
+      type: PodScheduled
+      status: true
+    name: vault-0
+    namespace: vault
+    wait_sleep: 10
+    wait_timeout: 360
+
+- name: Pause 30 seconds
+  ansible.builtin.pause:
+    seconds: 30
+
+- name: Init and export cluster-keys.json
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault operator init -format=json > {{ dest }}init-keys.json
+
+# - name: Unseal vault
+#   ansible.builtin.shell:
+#     cmd: |
+#       VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" {{ dest }}init-keys.json)
+#       kubectl exec vault-0 -n vault -- vault operator unseal $VAULT_UNSEAL_KEY
+
+- name: Export root_token
+  ansible.builtin.shell:
+    cmd: |
+      cat {{ dest }}init-keys.json | jq -r ".root_token" > {{ dest }}root_token
+
+- name: Get contents of files
+  # tags:
+  #   - show_token
+  #   - unseal
+  block:
+    - name: Get content of root_token
+      ansible.builtin.slurp:
+        src: "{{ dest }}root_token"
+      register: root_token_enc
+
+    - name: Decode remote content
+      ansible.builtin.set_fact:
+        root_token: "{{ root_token_enc['content'] | b64decode }}"
+
+    - name: Get content of init-keys.json
+      ansible.builtin.slurp:
+        src: "{{ dest }}init-keys.json"
+      register: init_keys_enc
+
+    - name: Decode remote content
+      ansible.builtin.set_fact:
+        init_keys: "{{ init_keys_enc['content'] | b64decode }}"
+
+- name: Configure vault pki
+  ansible.builtin.shell:
+    cmd: |
+      # kubectl exec vault-0 -n vault -- vault login {{ root_token }}
+      # mount backend
+      kubectl exec vault-0 -n vault -- vault secrets enable -path=pki_int pki
+      # Configure Int CA
+      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=43800h pki_int
+
+- name: Set URL config and configure a role
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write pki_int/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl"
+      kubectl exec vault-0 -n vault -- vault write pki_int/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=8760h
+      kubectl exec vault-0 -n vault -- vault write pki_int/roles/ycdisp-dot-net allowed_domains=ycdisp.net allow_subdomains=true max_ttl=8760h
+
+- name: Create policies
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}ansible-policy.sh`"
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}pki-policy.sh`"
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}admins-policy.sh`"
+  tags:
+    - update_vaultconf
+
+- name: Configure auth
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault auth enable approle
+      kubectl exec vault-0 -n vault -- vault write auth/approle/role/ansible \
+                                       token_num_uses=0 \
+                                       token_ttl=0m \
+                                       secret_id_num_uses=0 \
+                                       token_no_default_policy=false \
+                                       token_policies="ansible"
+      kubectl exec vault-0 -n vault -- vault auth enable userpass
+      kubectl exec vault-0 -n vault -- vault write auth/userpass/users/eingram \
+                                       password=temppassword \
+                                       policies=admins
+      kubectl exec vault-0 -n vault -- vault auth enable kubernetes
+      kubectl exec vault-0 -n vault -- vault write auth/kubernetes/config \
+                                       kubernetes_host="https://kubernetes.default.svc.cluster.local:443"
+      kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer \
+                                       bound_service_account_names=issuer \
+                                       bound_service_account_namespaces=cert-manager \
+                                       policies=pki ttl=20m
+
