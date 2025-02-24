@@ -9,7 +9,7 @@ global:
   enabled: true
 
   # The namespace to deploy to. Defaults to the `helm` installation namespace.
-  namespace: "vault"
+  namespace: ""
 
   # Image pull secret to use for registry authentication.
   # Alternatively, the value may be specified as an array of strings.
@@ -180,7 +180,7 @@ injector:
     #    matchLabels:
     #      sidecar-injector: enabled
     namespaceSelector: {}
-
+{% raw %}
     # objectSelector is the selector for restricting the webhook to only
     # specific labels.
     # See https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-objectselector
@@ -195,7 +195,7 @@ injector:
         operator: NotIn
         values:
         - {{ template "vault.name" . }}-agent-injector
-
+{% endraw %}
     # Extra annotations to attach to the webhook
     annotations: {}
 
@@ -255,9 +255,11 @@ injector:
   # Security context for the pod template and the injector container
   # The default pod securityContext is:
   #   runAsNonRoot: true
+{% raw %}
   #   runAsGroup: {{ .Values.injector.gid | default 1000 }}
   #   runAsUser: {{ .Values.injector.uid | default 100 }}
   #   fsGroup: {{ .Values.injector.gid | default 1000 }}
+{% endraw %}
   # and for container is
   #    allowPrivilegeEscalation: false
   #    capabilities:
@@ -280,7 +282,7 @@ injector:
   # injector deployment.
   extraEnvironmentVars: {}
     # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
-
+{% raw %}
   # Affinity Settings for injector pods
   # This can either be a multi-line string or YAML matching the PodSpec's affinity field.
   # Commenting out or setting as empty the affinity variable, will allow
@@ -294,7 +296,7 @@ injector:
               app.kubernetes.io/instance: "{{ .Release.Name }}"
               component: webhook
           topologyKey: kubernetes.io/hostname
-
+{% endraw %}
   # Topology settings for injector pods
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   # This should be either a multi-line string or YAML matching the topologySpreadConstraints array
@@ -387,7 +389,7 @@ server:
 
   # Configure the logging verbosity for the Vault server.
   # Supported log levels include: trace, debug, info, warn, error
-  logLevel: "debug"
+  logLevel: ""
 
   # Configure the logging format for the Vault server.
   # Supported log formats include: standard, json
@@ -603,7 +605,7 @@ server:
   #   - mountPath: /usr/local/libexec/vault
   #     name: plugins
   #     readOnly: true
-
+{% raw %}
   # Affinity Settings
   # Commenting out or setting as empty the affinity variable, will allow
   # deployment to single node services such as Minikube
@@ -617,7 +619,7 @@ server:
               app.kubernetes.io/instance: "{{ .Release.Name }}"
               component: server
           topologyKey: kubernetes.io/hostname
-
+{% endraw %}
   # Topology settings for server pods
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   # This should be either a multi-line string or YAML matching the topologySpreadConstraints array
@@ -694,6 +696,7 @@ server:
       # YAML-formatted multi-line templated string map of the annotations to apply
       # to the standby service.
       annotations: {}
+{% raw %}
     # If enabled, the service selectors will include `app.kubernetes.io/instance: {{ .Release.Name }}`
     # When disabled, services may select Vault pods not deployed from the chart.
     # Does not affect the headless vault-internal service with `ClusterIP: None`
@@ -706,7 +709,7 @@ server:
     # used to communicate with pods directly through DNS instead of a round-robin
     # load balancer.
     # clusterIP: None
-
+{% endraw %}
     # Configures the service type for the main Vault service.  Can be ClusterIP
     # or NodePort.
     #type: ClusterIP
@@ -885,7 +888,9 @@ server:
 
     # Set the cluster_addr configuration for Vault HA
     # See https://developer.hashicorp.com/vault/docs/configuration#cluster_addr
+{% raw %}
     # If set to null, this will be set to https://$(HOSTNAME).{{ template "vault.fullname" . }}-internal:8201
+{% endraw %}
     clusterAddr: null
 
     # Enables Vault's integrated Raft storage.  Unlike the typical HA modes where
@@ -927,9 +932,9 @@ server:
         # GKMS keys must already exist, and the cluster must have a service account
         # that is authorized to access GCP KMS.
         seal "azurekeyvault" {
-          client_id     = {{ lookup('hashi_vault', 'secret/azure/app/vault:id') }}
-          client_secret     = {{ lookup('hashi_vault', 'secret/azure/app/vault:client_secret') }}
-          tenant_id    = {{ lookup('hashi_vault', 'secret/azure/tenant:id') }}
+          client_id     = "{{ lookup('hashi_vault', 'secret/azure/app/vault:id') }}"
+          client_secret     = "{{ lookup('hashi_vault', 'secret/azure/app/vault:secret') }}"
+          tenant_id    = "{{ lookup('hashi_vault', 'secret/azure/tenant:id') }}"
           vault_name  = "vault-key-data"
           key_name    = "vault-unseal-key"
           use_rbac    = "true"
@@ -1014,9 +1019,11 @@ server:
     # If not set, these will default to, and for *not* OpenShift:
     # pod:
     #   runAsNonRoot: true
+{% raw %}
     #   runAsGroup: {{ .Values.server.gid | default 1000 }}
     #   runAsUser: {{ .Values.server.uid | default 100 }}
     #   fsGroup: {{ .Values.server.gid | default 1000 }}
+{% endraw %}
     # container:
     #   allowPrivilegeEscalation: false
     #

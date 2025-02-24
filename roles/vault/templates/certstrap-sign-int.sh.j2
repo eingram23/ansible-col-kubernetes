@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 chmod 400 ./out/Homelab*
-./certstrap sign \
+./certstrap --password {{ lookup('hashi_vault', 'secret/ssh/ansible:ssh_password') }}sign \
     --expires "5 years" \
     --csr csr/vault_int{{ suffix }}.csr \
     --cert out/Homelab_Int{{ suffix }}_CA.crt \

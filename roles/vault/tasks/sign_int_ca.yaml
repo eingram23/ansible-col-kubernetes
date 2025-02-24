@@ -20,13 +20,11 @@
     dest: "{{ certstrap_dest }}{{ cluster }}"
 
 - name: Build certstrap
-  when: not certstrap_installed.stat.exists
   ansible.builtin.shell:
     cmd: |
       cd {{ certstrap_dest }}{{ cluster }}
       go build
       chmod +x {{ certstrap_dest }}{{ cluster }}/certstrap
-      # mv {{ certstrap_dest }}{{ cluster }}/certstrap /usr/local/bin
 
 - name: Create certstrap subfolders
   ansible.builtin.file:
@@ -61,18 +59,18 @@
 
 - name: Copy csr to certstrap folder
   ansible.builtin.copy:
-    content: "{{ vault_int_csr }}"
+    content: "{{ hostvars['localhost']['vault_int_csr'] }}"
     dest: "{{ certstrap_dest }}{{ cluster }}/csr/vault_int{{ suffix }}.csr"
     mode: '0644'
 
 - name: Create init-keys.json on remote host
   ansible.builtin.copy:
-    content: "{{ init_keys }}"
+    content: "{{ hostvars['localhost']['init_keys'] }}"
     dest: "{{ certstrap_dest }}{{ cluster }}/init-keys{{ suffix }}.json"
 
 - name: Create root_token on remote host
   ansible.builtin.copy:
-    content: "{{ root_token }}"
+    content: "{{ hostvars['localhost']['root_token'] }}"
     dest: "{{ certstrap_dest }}{{ cluster }}/root_token{{ suffix }}"
 
 - name: Create Homelab root cert on remote host
