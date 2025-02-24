@@ -1,4 +1,5 @@
+---
 dest: "/var/tmp/ansible/k3s/vault/"
 certstrap_dest: "/mnt/pool0/Shared/Files/rootca/"
-suffix: "{{ env | default() }}"
-storageclass: "local-path"
+suffix: ""
+

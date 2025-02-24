@@ -1,13 +1,11 @@
+# Usage:
+# ansible-playbook -i inventory_file -e "cluster=your_cluster_name" /path/to/argocd.yaml
+
 ---
-# VARS NEEDED: hostvar, env
-# TAGS: unseal, show_token
-- name: Deploy vault to k8s
+- name: Initial deployment of vault on new cluster
   hosts: localhost
   gather_facts: false
   become: false
-
-  environment:
-    K8S_AUTH_KUBECONFIG: ~/.kube/config-{{ cluster }}
 
   tasks:
 
@@ -19,11 +17,25 @@
     - name: Set environment
       ansible.builtin.import_role:
         name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
 
-    - name: Run vault role
+    - name: Deploy vault
       ansible.builtin.include_role:
         name: eingram23.kubernetes.vault
-      tags:
-        - show_token
-        - unseal
-        - update_vaultconf
+        tasks_from: ha_raft_azure
+
+    - name: Create intermediate CA CSR
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.vault
+        tasks_from: create_int_csr
+
+- name: Sign intermediate CA
+  hosts: homenas.local.lan
+  gather_facts: false
+  become: true
+
+  tasks:
+
+    - ansible.builtin.include_role:
+        name: eingram23.kubernetes.vault
+        tasks_from: sign_int_ca

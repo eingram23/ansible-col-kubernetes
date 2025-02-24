@@ -190,7 +190,7 @@
 - name: Configure vault pki
   ansible.builtin.shell:
     cmd: |
-      # kubectl exec vault-0 -n vault -- vault login {{ root_token }}
+      kubectl exec vault-0 -n vault -- vault login {{ root_token }}
       # mount backend
       kubectl exec vault-0 -n vault -- vault secrets enable -path=pki_int pki
       # Configure Int CA
@@ -233,4 +233,3 @@
                                        bound_service_account_names=issuer \
                                        bound_service_account_namespaces=cert-manager \
                                        policies=pki ttl=20m
-
