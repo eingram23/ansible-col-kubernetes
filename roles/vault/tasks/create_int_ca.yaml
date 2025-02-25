@@ -1,0 +1,52 @@
+- name: Configure vault pki
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault login {{ root_token }}
+      # mount backend
+      kubectl exec vault-0 -n vault -- vault secrets enable -path=pki_int pki
+      # Configure Int CA
+      kubectl exec vault-0 -n vault -- vault secrets tune -max-lease-ttl=43800h pki_int
+
+- name: Create pki policy
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}pki-policy.sh`"
+
+- name: Create pki auth
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer \
+                                       bound_service_account_names=issuer \
+                                       bound_service_account_namespaces=cert-manager \
+                                       policies=pki ttl=20m
+
+- name: Generate Int CSR
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write -format=json pki_int/intermediate/generate/internal common_name="Homelab{{ suffix }} local.lan Intermediate Authority" key_type="rsa" key_bits="2048" ou="Homelab" organization="Homelab{{ suffix }} Org" country="US" locality="Homelab" province="California" > {{ dest }}vault_int{{ suffix }}_csr
+      cat {{ dest }}vault_int{{ suffix }}_csr | jq -r '.data.csr' > {{ dest }}vault_int{{ suffix }}.csr
+
+- name: Get contents of vault_int.csr
+  ansible.builtin.slurp:
+    src: "{{ dest }}vault_int{{ suffix }}.csr"
+  register: vault_int_csr_enc
+
+- name: Decode vault_int_csr
+  ansible.builtin.set_fact:
+    vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
+
+- name: Include task to sign intermediate CA
+  include_tasks: sign_int_ca.yaml
+
+- name: Import intermediate CA certificate into Vault
+  ansible.builtin.shell:
+    cmd: |
+      # Set the signed certificate in Vault
+      echo "{{ vault_int_ca_enc.content | b64decode }}" | kubectl exec vault-0 -n vault -- vault write pki_int/intermediate/set-signed certificate=-
+
+- name: Set URL config and configure a role
+  ansible.builtin.shell:
+    cmd: |
+      kubectl exec vault-0 -n vault -- vault write pki_int/config/urls issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca" crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl"
+      kubectl exec vault-0 -n vault -- vault write pki_int/roles/local-dot-lan allowed_domains=local.lan allow_subdomains=true max_ttl=8760h
+      kubectl exec vault-0 -n vault -- vault write pki_int/roles/ycdisp-dot-net allowed_domains=ycdisp.net allow_subdomains=true max_ttl=8760h

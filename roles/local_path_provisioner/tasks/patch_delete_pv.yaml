@@ -1,0 +1,16 @@
+- name: Patch lpp config-map to add securityContext
+  kubernetes.core.k8s:
+    kind: configmap
+    name: local-path-config
+    namespace: kube-system
+    state: patched
+    definition:
+      spec:
+        containers:
+        - name: helper-pod
+          securityContext:
+            seLinuxOptions:
+              level: s0-s0:c0.c1023
+        securityContext:
+          seLinuxOptions:
+              level: s0-s0:c0.c1023

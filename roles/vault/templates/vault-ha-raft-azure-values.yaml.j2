@@ -280,7 +280,8 @@ injector:
 
   # extraEnvironmentVars is a list of extra environment variables to set in the
   # injector deployment.
-  extraEnvironmentVars: {}
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
     # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
 {% raw %}
   # Affinity Settings for injector pods
@@ -594,14 +595,21 @@ server:
   # volumes is a list of volumes made available to all containers. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
   # The purpose is to make it easy to share volumes between containers.
-  volumes: null
+  volumes:
+    - name: userconfig-vault-server-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-server-tls
   #   - name: plugins
   #     emptyDir: {}
 
   # volumeMounts is a list of volumeMounts for the main server container. These are rendered
   # via toYaml rather than pre-processed like the extraVolumes value.
   # The purpose is to make it easy to share volumes between containers.
-  volumeMounts: null
+  volumeMounts:
+    - mountPath: /vault/userconfig/vault-server-tls
+      name: userconfig-vault-server-tls
+      readOnly: true
   #   - mountPath: /usr/local/libexec/vault
   #     name: plugins
   #     readOnly: true
@@ -913,9 +921,13 @@ server:
         ui = true
 
         listener "tcp" {
-          tls_disable = 1
+          tls_disable = 0
           address = "[::]:8200"
           cluster_address = "[::]:8201"
+          tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+          tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
+          tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+          tls_disable_client_certs = true
           # Enable unauthenticated metrics access (necessary for Prometheus Operator)
           telemetry {
            unauthenticated_metrics_access = "true"

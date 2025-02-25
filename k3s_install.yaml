@@ -81,10 +81,11 @@
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
-    # - name: Deploy local-path-provisioner storage
-    #   when: storage == "lpp"
-    #   ansible.builtin.include_role:
-    #     name: eingram23.kubernetes.local_path_provisioner
+    - name: Deploy local-path-provisioner patch to fix auto delete pv
+      when: storage == "lpp"
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.local_path_provisioner
+        tasks_from: patch_delete_pv
 
     - name: Deploy k3s-metrics-service # Exposes metrics from single endpoint
       ansible.builtin.include_role:
