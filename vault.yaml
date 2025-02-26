@@ -24,18 +24,7 @@
         name: eingram23.kubernetes.vault
         tasks_from: ha_raft_azure
 
-    - name: Create intermediate CA CSR
+    - name: Create pki and int CA
       ansible.builtin.include_role:
         name: eingram23.kubernetes.vault
-        tasks_from: create_int_csr
-
-- name: Sign intermediate CA
-  hosts: homenas.local.lan
-  gather_facts: false
-  become: true
-
-  tasks:
-
-    - ansible.builtin.include_role:
-        name: eingram23.kubernetes.vault
-        tasks_from: sign_int_ca
+        tasks_from: create_pki_int_ca

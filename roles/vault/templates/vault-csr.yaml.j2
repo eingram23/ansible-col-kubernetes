@@ -3,8 +3,6 @@ kind: CertificateSigningRequest
 metadata:
   name: vault-csr
 spec:
-  groups:
-  - system:authenticated
   request: {{ vault_csr }}
   signerName: kubernetes.io/kubelet-serving
   usages:

@@ -21,12 +21,11 @@
     - ansible-policy.sh
     - pki-policy.sh
     - admins-policy.sh
-    - vault-csr.conf
 
-- name: Create vault-values file
+- name: Create vault-csr.conf
   ansible.builtin.template:
-    src: vault-ha-raft-azure-values.yaml.j2
-    dest: "{{ dest }}vault-values.yaml"
+    src: vault-csr.conf.j2
+    dest: "{{ dest }}vault-csr.conf"
     mode: '0644'
 
 - name: Create key for k8s to sign (for TLS Listener)
@@ -56,10 +55,11 @@
   set_fact:
     vault_csr: "{{ vault_csr_enc['content'] | b64decode }}"
 
-- name: Create vault-csr.yaml file
+- name: Create vault-csr.yaml
   ansible.builtin.template:
     src: vault-csr.yaml.j2
     dest: "{{ dest }}vault-csr.yaml"
+    mode: '0644'
 
 - name: Create csr and send to k8s
   kubernetes.core.k8s:
@@ -76,9 +76,16 @@
 - name: Retrieve cert, write out to file, retrieve k8s CA
   ansible.builtin.shell:
     cmd: |
-      serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
-      echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
+      # serverCert=$(kubectl get csr vault-csr -o jsonpath='{.status.certificate}')
+      # echo "${serverCert}" | openssl base64 -d -A -out {{ dest }}vault.crt
+      kubectl get csr vault-csr -o jsonpath='{.status.certificate}' | openssl base64 -d -A -out {{ dest }}/vault.crt
       kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 -d > {{ dest }}vault.ca
+
+- name: Create vault-values file
+  ansible.builtin.template:
+    src: vault-ha-raft-azure-values.yaml.j2
+    dest: "{{ dest }}vault-values.yaml"
+    mode: '0644'
 
 - name: Get contents of vault.ca
   ansible.builtin.slurp:
@@ -164,36 +171,30 @@
     cmd: |
       cat {{ dest }}init-keys.json | jq -r ".root_token" > {{ dest }}root_token
 
-- name: Get contents of files
-  # tags:
-  #   - show_token
-  #   - unseal
-  block:
-    - name: Get content of root_token
-      ansible.builtin.slurp:
-        src: "{{ dest }}root_token"
-      register: root_token_enc
+- name: Get content of root_token
+  ansible.builtin.slurp:
+    src: "{{ dest }}root_token"
+  register: root_token_enc
 
-    - name: Decode remote content
-      ansible.builtin.set_fact:
-        root_token: "{{ root_token_enc['content'] | b64decode }}"
+- name: Decode remote content
+  ansible.builtin.set_fact:
+    root_token: "{{ root_token_enc['content'] | b64decode }}"
 
-    - name: Get content of init-keys.json
-      ansible.builtin.slurp:
-        src: "{{ dest }}init-keys.json"
-      register: init_keys_enc
+- name: Get content of init-keys.json
+  ansible.builtin.slurp:
+    src: "{{ dest }}init-keys.json"
+  register: init_keys_enc
 
-    - name: Decode remote content
-      ansible.builtin.set_fact:
-        init_keys: "{{ init_keys_enc['content'] | b64decode }}"
+- name: Decode remote content
+  ansible.builtin.set_fact:
+    init_keys: "{{ init_keys_enc['content'] | b64decode }}"
 
 - name: Create policies
   ansible.builtin.shell:
     cmd: |
+      kubectl exec vault-0 -n vault -- vault login {{ root_token }}
       kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}ansible-policy.sh`"
       kubectl exec vault-0 -n vault -- /bin/sh -c "`cat {{ dest }}admins-policy.sh`"
-  tags:
-    - update_vaultconf
 
 - name: Configure auth
   ansible.builtin.shell:

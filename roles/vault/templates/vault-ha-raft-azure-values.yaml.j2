@@ -18,7 +18,7 @@ global:
   #   - name: image-pull-secret
 
   # TLS for end-to-end encrypted transport
-  tlsDisable: true
+  tlsDisable: false
 
   # External vault server address for the injector and CSI provider to use.
   # Setting this will disable deployment of a vault server.
@@ -281,7 +281,7 @@ injector:
   # extraEnvironmentVars is a list of extra environment variables to set in the
   # injector deployment.
   extraEnvironmentVars:
-    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
+    # VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
     # KUBERNETES_SERVICE_HOST: kubernetes.default.svc
 {% raw %}
   # Affinity Settings for injector pods
@@ -433,7 +433,7 @@ server:
     # configure the ingress to point to the Vault active service.
     activeService: true
     hosts:
-      - host: vault-k3s.local.lan
+      - host: vault-{{ cluster }}.local.lan
         paths: []
     ## Extra paths to prepend to the host configuration. This is useful when working with annotation based services.
     extraPaths: []
@@ -571,7 +571,10 @@ server:
 
   # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
   # used to include variables required for auto-unseal.
-  extraEnvironmentVars: {}
+  extraEnvironmentVars:
+    VAULT_TLSCERT: /vault/userconfig/vault-server-tls/tls.crt
+    VAULT_TLSKEY: /vault/userconfig/vault-server-tls/tls.key
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
     # GOOGLE_REGION: global
     # GOOGLE_PROJECT: myproject
     # GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/myproject/myproject-creds.json
@@ -887,7 +890,7 @@ server:
   # different HA backend.
   ha:
     enabled: true
-    replicas: 1
+    replicas: 3
 
     # Set the api_addr configuration for Vault HA
     # See https://developer.hashicorp.com/vault/docs/configuration#api_addr
@@ -910,7 +913,7 @@ server:
       # Enables Raft integrated storage
       enabled: true
       # Set the Node Raft ID to the name of the pod
-      setNodeId: false
+      setNodeId: true
 
       # Note: Configuration files are stored in ConfigMaps so sensitive data
       # such as passwords should be either mounted through extraSecretEnvironmentVars
@@ -930,7 +933,7 @@ server:
           tls_disable_client_certs = true
           # Enable unauthenticated metrics access (necessary for Prometheus Operator)
           telemetry {
-           unauthenticated_metrics_access = "true"
+            unauthenticated_metrics_access = "true"
           }
         }
 

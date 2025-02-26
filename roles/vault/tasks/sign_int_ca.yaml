@@ -100,9 +100,9 @@
         src: "{{ certstrap_dest }}{{ cluster }}/out/Homelab_local.lan_Root_Int{{ suffix }}_CA.crt"
       register: vault_int_ca_enc
 
-    - name: Display Homelab_local.lan_Root_Int{{ suffix }}_CA.crt contents
-      ansible.builtin.debug:
-        msg: "{{ vault_int_ca_enc.content | b64decode }}"
+    # - name: Display Homelab_local.lan_Root_Int{{ suffix }}_CA.crt contents
+    #   ansible.builtin.debug:
+    #     msg: "{{ vault_int_ca_enc.content | b64decode }}"
 
     # - name: Closing comments
     #   ansible.builtin.debug:
