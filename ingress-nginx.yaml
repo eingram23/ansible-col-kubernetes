@@ -16,6 +16,6 @@
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
-    - name: Deploy argocd
+    - name: Deploy ingress-nginx
       ansible.builtin.include_role:
-        name: eingram23.kubernetes.ingress-nginx
+        name: eingram23.kubernetes.ingress_nginx
