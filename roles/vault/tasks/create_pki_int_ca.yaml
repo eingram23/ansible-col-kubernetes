@@ -35,13 +35,18 @@
     vault_int_csr: "{{ vault_int_csr_enc['content'] | b64decode }}"
 
 - name: Include task to sign intermediate CA
-  include_tasks: sign_int_ca.yaml
+  ansible.builtin.include_tasks: sign_int_ca.yaml
+
+- name: Create vault_int_ca on remote host
+  ansible.builtin.copy:
+    content: "{{ vault_int_ca_enc['content'] | b64decode }}"
+    dest: "{{ dest }}vault_int_ca.crt"
 
 - name: Import intermediate CA certificate into Vault
   ansible.builtin.shell:
     cmd: |
       # Set the signed certificate in Vault
-      echo "{{ vault_int_ca_enc.content | b64decode }}" | kubectl exec vault-0 -n vault -- vault write pki_int/intermediate/set-signed certificate=-
+      cat {{ dest }}vault_int_ca.crt | kubectl exec -i vault-0 -n vault -- vault write pki_int/intermediate/set-signed certificate=-
 
 - name: Set URL config and configure a role
   ansible.builtin.shell:

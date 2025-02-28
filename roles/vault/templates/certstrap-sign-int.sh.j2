@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
+
 cd "$(dirname "$0")"
 
 chmod 400 ./out/Homelab*
-./certstrap --password {{ lookup('hashi_vault', 'secret/ssh/ansible:ssh_password') }}sign \
-    --expires "5 years" \
-    --csr csr/vault_int{{ suffix }}.csr \
-    --cert out/Homelab_Int{{ suffix }}_CA.crt \
-    --intermediate \
-    --CA "Homelab local.lan Root CA" \
-    "Homelab{{ suffix }} local.lan Intermediate Authority"
+if ./certstrap sign --passphrase {{ lookup('hashi_vault', 'secret/ssh/ansible:ssh_password') }} \
+               --expires "5 years" \
+               --csr csr/vault_int{{ suffix }}.csr \
+               --cert out/Homelab_Int{{ suffix }}_CA.crt \
+               --intermediate \
+               --CA "Homelab local.lan Root CA" \
+               "Homelab{{ suffix }} local.lan Intermediate Authority"; then
+    echo "Certificate signed successfully."
+else
+    echo "Certificate signing failed."
+    exit 1
+fi
 cd ./out
 cat Homelab_Int{{ suffix }}_CA.crt \
     Homelab_local.lan_Root_CA.crt \
