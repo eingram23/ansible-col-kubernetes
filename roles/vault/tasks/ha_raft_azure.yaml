@@ -92,6 +92,12 @@
     src: "{{ dest }}vault.ca"
   register: vault_ca_enc
 
+- name: Write encoded vault.ca to vault secrets engine
+  community.hashi_vault.vault_write:
+    path: "secret/certs/vault-{{ cluster }}"
+    data:
+      cabundle_b64: "{{ vault_ca_enc['content'] }}"
+
 - name: Decode vault.ca
   ansible.builtin.set_fact:
     vault_ca: "{{ vault_ca_enc['content'] | b64decode }}"
