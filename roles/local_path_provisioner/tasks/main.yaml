@@ -3,3 +3,13 @@
   kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('file', 'lpp_storageclass.yaml') | from_yaml }}"
+
+- name: Check for k3s
+  ansible.builtin.command: k3s --version
+  register: k3s_version
+  failed_when: false
+  changed_when: false
+
+- name: Patch local-path-provisioner to fix auto delete pv when running k3s
+  when: k3s_version.stdout is defined and k3s_version.stdout | search('k3s')
+  ansible.builtin.include_tasks: patch_delete_pv.yaml

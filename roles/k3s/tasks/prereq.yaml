@@ -1,13 +1,8 @@
 ---
-# - name: SELinux policy
-#   ansible.builtin.shell: |
-#     ausearch -c 'iptables' --raw | audit2allow -M my-iptables
-#     semodule -X 300 -i my-iptables.pp
-
 - name: Disable swap for current session
   when: ansible_swaptotal_mb > 0
   ansible.builtin.command: swapoff -a
-  
+
 - name: Disable swap permanently, persist reboots
   ansible.builtin.lineinfile:
     path: /etc/fstab
@@ -17,6 +12,7 @@
     backup: true
 
 - name: Disable firewall (RHEL/Rocky)
+  when: ansible_os_family == 'RedHat'
   ansible.builtin.systemd:
     name: firewalld
     state: stopped
@@ -25,6 +21,17 @@
 - name: Setup dedicated volume for storage
   when: storage == "longhorn"
   block:
+    - name: Check that /dev/sdb exist
+      ansible.builtin.command: ls /dev/sdb
+      register: check_sdb
+      changed_when: false
+      ignore_errors: true
+
+    - name: Fail if /dev/sdb doesn't exist
+      when: check_sdb.stdout == ""
+      ansible.builtin.fail:
+        msg: /dev/sdb does not exist, cannot create Longhorn storage
+
     - name: Create mount point
       ansible.builtin.file:
         path: /var/lib/rancher/k3s/storage

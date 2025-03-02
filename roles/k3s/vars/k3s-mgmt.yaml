@@ -1,0 +1,11 @@
+---
+cp_count: 1
+worker_count: 2
+cluster: k3s-mgmt
+storage: lpp
+
+base_components:
+  - ingress-nginx
+  - k3s-metrics-service
+  - metallb
+  - argocd

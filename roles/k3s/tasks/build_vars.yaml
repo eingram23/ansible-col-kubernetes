@@ -1,0 +1,16 @@
+---
+- name: Load build vars
+  ansible.builtin.include_vars:
+    file: "{{ build }}.yaml"
+
+- name: Set cp_nodes
+  ansible.builtin.set_fact:
+    cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-cp\\1.local.lan') | list }}"
+
+- name: Set worker_nodes
+  ansible.builtin.set_fact:
+    worker_nodes: "{{ range(1, worker_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-worker\\1.local.lan') | list }}"
+
+- name: Set k3s_token
+  ansible.builtin.set_fact:
+    k3s_token: "{{ lookup('hashi_vault', 'secret=secret/ssh/ansible:ssh_password') }}"

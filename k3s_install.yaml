@@ -1,33 +1,15 @@
 ---
-- name: Precheck and set node names
+- name: Set build vars
   hosts: localhost
-  gather_facts: true
+  gather_facts: false
   become: false
 
   tasks:
 
-    - name: Assert vars set
-      ansible.builtin.assert:
-        that:
-          - cluster is defined
-          - cp_count is defined and cp_count | int > 0
-          - worker_count is defined and worker_count | int > -1
-          - storage in ["lpp", "longhorn"]
-          - lb_ip | regex_search('^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$') is not none
-          - ingress in ["traefik", "nginx"]
-        msg: "cluster, cp_count, worker_count, storage, lb_ip, and ingress must be defined"
-
-    - name: Set cp_nodes
-      ansible.builtin.set_fact:
-        cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-cp\\1.local.lan') | list }}"
-
-    - name: Set worker_nodes
-      ansible.builtin.set_fact:
-        worker_nodes: "{{ range(1, worker_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-worker\\1.local.lan') | list }}"
-
-    - name: Set k3s_token
-      ansible.builtin.set_fact:
-        k3s_token: "{{ lookup('hashi_vault', 'secret=secret/ssh/ansible:ssh_password') }}"
+    - name: Set build vars
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: build_vars
 
 - name: Install k3s control plane
   hosts: "{{ hostvars['localhost']['cp_nodes'] | default([]) }}"
@@ -81,35 +63,9 @@
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
-    - name: Deploy local-path-provisioner patch to fix auto delete pv
-      when: storage == "lpp"
+    - name: Deploy base components
       ansible.builtin.include_role:
-        name: eingram23.kubernetes.local_path_provisioner
-        tasks_from: patch_delete_pv
-
-    - name: Deploy k3s-metrics-service # Exposes metrics from single endpoint
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.k3s
-        tasks_from: install_k3s-metrics-service
-
-    - name: Deploy ingress-nginx
-      when: ingress == "nginx"
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.ingress_nginx
-
-    - name: Deploy metallb
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.metallb
-
-    # - name: Deploy kubernetes dashboard
-    #   ansible.builtin.import_role:
-    #     name: eingram23.kubernetes.kubernetes_dashboard
-
-    - name: Deploy argocd
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.argocd
-
-    - name: Deploy traefik_ingress
-      when: ingress == "traefik"
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.traefik_ingress
+        name: eingram23.kubernetes.{{ component_item }}
+      loop: "{{ base_components }}"
+      loop_control:
+        loop_var: component_item

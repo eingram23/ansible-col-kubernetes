@@ -28,7 +28,7 @@
     loop_var: base_item
   loop:
   - namespace.yaml
-  - "{{ 'ingress.yaml' if ingress == 'nginx' else 'ingressroute.yaml' if ingress == 'traefik' }}"
+  - "{{ 'ingress.yaml' if ingress == 'ingress-nginx' else 'ingressroute.yaml' if ingress == 'traefik' }}"
   - cmp-plugin.yaml
   - argocd-repo-server-rbac.yaml
 
