@@ -1,0 +1,3 @@
+---
+technitium_url: "http://localhost:5380/api/zones/records/add?"
+technitium_token: "{{ lookup('hashi_vault', 'secret=secret/technitium/token:ansible') }}"

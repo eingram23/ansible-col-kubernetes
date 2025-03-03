@@ -1,15 +1,15 @@
 ---
-- name: Set build vars
+- name: Set build env
   hosts: localhost
   gather_facts: false
   become: false
 
   tasks:
 
-    - name: Set build vars
+    - name: Set build env
       ansible.builtin.include_role:
         name: eingram23.kubernetes.k3s
-        tasks_from: build_vars
+        tasks_from: build_env
 
 - name: Install k3s control plane
   hosts: "{{ hostvars['localhost']['cp_nodes'] | default([]) }}"

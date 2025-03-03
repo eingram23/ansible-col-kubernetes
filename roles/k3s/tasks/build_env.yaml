@@ -14,3 +14,8 @@
 - name: Set k3s_token
   ansible.builtin.set_fact:
     k3s_token: "{{ lookup('hashi_vault', 'secret=secret/ssh/ansible:ssh_password') }}"
+
+- name: Add CNAME record to primary DNS zone for {{ cluster }}
+  ansible.builtin.uri:
+    url: "{{ technitium_url }}token={{ technitium_token }}&domain={{ cluster }}-lb&zone=local.lan&type=CNAME&cname={{ cluster }} }}
+    data
