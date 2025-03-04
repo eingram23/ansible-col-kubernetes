@@ -3,6 +3,7 @@ cp_count: 1
 worker_count: 2
 cluster: k3s-mgmt
 storage: lpp
+lb_ip: "10.10.0.205"
 
 base_components:
   - ingress-nginx
