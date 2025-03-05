@@ -3,7 +3,7 @@ cp_count: 1
 worker_count: 2
 storage: lpp
 ingress: ingress-nginx
-lb_ip: "10.10.0.205"
+lb_ip: "10.10.0.210"
 
 base_components:
   - ingress_nginx

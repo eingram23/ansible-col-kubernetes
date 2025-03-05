@@ -1,0 +1,8 @@
+---
+- name: Deploy vault
+  ansible.builtin.include_tasks:
+    file: ha_raft_azure.yaml
+
+- name: Create pki and int CA
+  ansible.builtin.include_tasks:
+    file: create_pki_int_ca.yaml

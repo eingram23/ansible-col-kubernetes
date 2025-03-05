@@ -6,10 +6,10 @@
 
   tasks:
 
-    - name: Set build env
+    - name: Set cluster env
       ansible.builtin.include_role:
         name: eingram23.kubernetes.k3s
-        tasks_from: build_env
+        tasks_from: cluster_env
 
 - name: Install k3s control plane
   hosts: "{{ hostvars['localhost']['cp_nodes'] | default([]) }}"
@@ -62,6 +62,11 @@
       ansible.builtin.include_role:
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
+
+    - name: Deploy k3s-metrics-service
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: k3s-metrics-service
 
     - name: Deploy base components
       ansible.builtin.include_role:

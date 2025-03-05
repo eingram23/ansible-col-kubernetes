@@ -1,23 +1,11 @@
 ---
-- name: Set cp_nodes
-  ansible.builtin.set_fact:
-    cp_nodes: "{{ range(1, cp_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-cp\\1.local.lan') | list }}"
-
-- name: Set worker_nodes
-  ansible.builtin.set_fact:
-    worker_nodes: "{{ range(1, worker_count | int + 1) | map('regex_replace', '^(.*)$', cluster + '-worker\\1.local.lan') | list }}"
-
-- name: Set k3s_token
-  ansible.builtin.set_fact:
-    k3s_token: "{{ lookup('hashi_vault', 'secret=secret/ssh/ansible:ssh_password') }}"
-
 - name: Populate service facts
   ansible.builtin.service_facts:
 
 - name: Set fact for --disable=traefik
   ansible.builtin.set_fact:
     disable_traefik: "{{ '--disable=traefik' }}"
-  when: not ingress == "traefik"
+  when: not hostvars['localhost']['ingress'] == "traefik"
 
 - name: Install k3s with etcd database
   when:
@@ -36,7 +24,7 @@
     --kubelet-arg image-gc-high-threshold=50
     --kubelet-arg image-gc-low-threshold=40
     --etcd-expose-metrics=true
-    --tls-san {{ lb_ip }}
+    --tls-san {{ hostvars['localhost']['lb_ip'] }}
     --kube-controller-manager-arg 'bind-address=0.0.0.0'
     --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
     --kube-scheduler-arg 'bind-address=0.0.0.0'

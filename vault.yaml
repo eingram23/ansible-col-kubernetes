@@ -22,9 +22,3 @@
     - name: Deploy vault
       ansible.builtin.include_role:
         name: eingram23.kubernetes.vault
-        tasks_from: ha_raft_azure
-
-    - name: Create pki and int CA
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.vault
-        tasks_from: create_pki_int_ca

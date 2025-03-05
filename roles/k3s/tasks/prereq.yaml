@@ -19,7 +19,7 @@
     enabled: false
 
 - name: Setup dedicated volume for storage
-  when: storage == "longhorn"
+  when: hostvars['localhost']['storage'] == "longhorn"
   block:
     - name: Check that /dev/sdb exist
       ansible.builtin.command: ls /dev/sdb
