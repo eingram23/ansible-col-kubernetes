@@ -1,0 +1,41 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
+
+- name: Create vsphere-csi k8s namespace
+  kubernetes.core.k8s:
+    name: vsphere-csi
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Download files to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - ccm-rbac.yaml
+    - csi.yaml
+    - storageclass.yaml
+    - vsphere-cloud-config.yaml
+
+- name: Create vsphere-cloud-secret
+  ansible.builtin.template:
+    src: vsphere-cloud-secret.yaml.j2
+    dest: "{{ dest }}vsphere-cloud-secret.yaml"
+    mode: '0644'
+
+- name: Deploy vsphere-csi manifests
+  kubernetes.core.k8s:
+    src: "{{ item }}"
+    namespace: vsphere-csi
+  loop:
+    - vsphere-cloud-secret.yaml
+    - ccm-rbac.yaml
+    - csi.yaml
+    - vsphere-cloud-config.yaml
+    - storageclass.yaml

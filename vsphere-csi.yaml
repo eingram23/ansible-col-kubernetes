@@ -1,0 +1,24 @@
+# Usage:
+# ansible-playbook -i inventory_file -e "cluster=your_cluster_name" /path/to/argocd.yaml
+
+---
+- name: Initial deployment of vsphere-csi on new cluster
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Assert cluster set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
+
+    - name: Deploy vsphere-csi
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.vsphere_csi

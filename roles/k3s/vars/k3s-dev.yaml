@@ -1,12 +1,13 @@
 ---
 cp_count: 1
-worker_count: 2
-storage: lpp
-ingress: ingress-nginx
+worker_count: 0
+# storage: vsphere-csi
+# ingress: ingress-nginx
 lb_ip: "10.10.0.210"
 
 base_components:
+  - vsphere_csi
   - ingress_nginx
-  - metallb
-  - argocd
-  - vault
+  # - metallb
+  # - argocd
+  # - vault

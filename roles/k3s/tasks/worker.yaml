@@ -3,7 +3,9 @@
   ansible.builtin.service_facts:
 
 - name: Run k3s install script
-  when: ansible_facts['services']['k3s-agent.service']['status'] is not defined
+  when:
+    - ansible_facts['services']['k3s-agent.service']['status'] is not defined
+    - "'vsphere_csi' not in hostvars['localhost']['base_components']"
   ansible.builtin.shell: >
     curl -sfL https://get.k3s.io |
     INSTALL_K3S_VERSION={{ k3s_ver }}
@@ -14,6 +16,35 @@
     --node-label 'node_type=worker'
     --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
   register: k3s_worker_install_status
+
+- name: Install k3s with etcd database and vsphere-csi
+  when:
+    - ansible_facts['services']['k3s.service']['status'] is not defined
+    - "'vsphere_csi' in hostvars['localhost']['base_components']"
+  block:
+    - name: Get VM ID
+      delegate_to: localhost
+      community.vmware.vmware_vm_info:
+        hostname: vcsa-1.local.lan
+        username: "{{ lookup('hashi_vault', 'secret/vsphere/vcsa:vsphere_username') }}"
+        password: "{{ lookup('hashi_vault', 'secret/vsphere/vcsa:vsphere_password') }}"
+        validate_certs: false
+        vm_name: "{{ hostvars[inventory_hostname]['ansible_hostname'] }}"
+      register: vm_info
+
+    - name: Install k3s with etcd database and vsphere-csi
+      ansible.builtin.shell: >
+        curl -sfL https://get.k3s.io |
+        INSTALL_K3S_VERSION={{ k3s_ver }}
+        K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }}
+        sh -s - agent
+        --server https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443
+        --selinux
+        --node-label 'node_type=worker'
+        --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
+        --kubelet-arg provider-id=vsphere://{{ vm_info.virtual_machines[0].moid }}
+        --kubelet-arg="cloud-provider=external"
+      register: k3s_worker_install_status
 
 - name: Install k3s service
   ansible.builtin.systemd:

@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vsphere-cloud-config
+  labels:
+    vsphere-cpi-infra: config
+    component: cloud-controller-manager
+  namespace: kube-system
+data:
+  # NOTE: this is just an example configuration, update with real values based on your environment
+  vsphere.conf: |
+    # Global properties in this section will be used for all specified vCenters unless overriden in VirtualCenter section.
+    global:
+      port: 443
+      # set insecureFlag to true if the vCenter uses a self-signed cert
+      insecureFlag: true
+      # settings for using k8s secret
+      secretName: vsphere-cloud-secret
+      secretNamespace: kube-system
+
+    # vcenter section
+    vcsa-1:
+        server: 192.168.1.200
+        datacenters:
+          - HomeLab Datacenter
+        secretName: vsphere-cloud-secret
+        secretNamespace: kube-system
+
+    # labels for regions and zones
+    labels:
+      region: k8s-region
+      zone: k8s-zone

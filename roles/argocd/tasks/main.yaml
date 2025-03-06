@@ -28,18 +28,18 @@
     loop_var: base_item
   loop:
   - namespace.yaml
-  - cmp-plugin.yaml
-  - argocd-repo-server-rbac.yaml
+  # - cmp-plugin.yaml
+  # - argocd-repo-server-rbac.yaml
 
-- name: Copy overlay files
-  ansible.builtin.copy:
-    src: "{{ overlay_item }}"
-    dest: "{{ dest }}overlays"
-    mode: '0644'
-  loop_control:
-    loop_var: overlay_item
-  loop:
-  - argocd-repo-server.yaml
+# - name: Copy overlay files
+#   ansible.builtin.copy:
+#     src: "{{ overlay_item }}"
+#     dest: "{{ dest }}overlays"
+#     mode: '0644'
+#   loop_control:
+#     loop_var: overlay_item
+#   loop:
+#   - argocd-repo-server.yaml
 
 - name: Create templated base manifest files
   ansible.builtin.template:
@@ -49,7 +49,7 @@
   loop_control:
     loop_var: tmp_base_item
   loop:
-  - argocd-vault-plugin-credentials.yaml
+  # - argocd-vault-plugin-credentials.yaml
   - kustomization.yaml
   - "{{ 'ingress.yaml' if ingress == 'ingress-nginx' else 'ingressroute.yaml' if ingress == 'traefik' }}"
 
@@ -61,7 +61,7 @@
   loop_control:
     loop_var: tmp_base_item
   loop:
-  - argocd-secret.yaml
+    - argocd-secret.yaml
 
 - name: Create a k8s namespace
   kubernetes.core.k8s:

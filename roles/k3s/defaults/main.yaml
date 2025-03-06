@@ -1,7 +1,7 @@
 ---
-technitium_url: "http://dietpi2.local.lan:5380/api/zones/records/add?"
-technitium_token: "{{ lookup('hashi_vault', 'secret=secret/technitium/token:ansible') }}"
-technitium_domain: "{{ cluster }}.local.lan"
-technitium_zone: "local.lan"
-technitium_ip: "{{ lb_ip }}"
-technitium_ptr_zone: "0.10.10.in-addr.arpa"
+# technitium_url: "http://dietpi2.local.lan:5380/api/zones/records/add?"
+# technitium_token: "{{ lookup('hashi_vault', 'secret=secret/technitium/token:ansible') }}"
+# technitium_domain: "{{ cluster }}.local.lan"
+# technitium_zone: "local.lan"
+# technitium_ip: "{{ lb_ip }}"
+# technitium_ptr_zone: "0.10.10.in-addr.arpa"
