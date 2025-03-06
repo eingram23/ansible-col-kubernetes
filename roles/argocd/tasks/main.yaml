@@ -49,9 +49,9 @@
   loop_control:
     loop_var: tmp_base_item
   loop:
-  # - argocd-vault-plugin-credentials.yaml
-  - kustomization.yaml
-  - "{{ 'ingress.yaml' if ingress == 'ingress-nginx' else 'ingressroute.yaml' if ingress == 'traefik' }}"
+    # - argocd-vault-plugin-credentials.yaml
+    - kustomization.yaml
+    - "{{ 'ingress.yaml' if 'ingress-nginx' in base_components else 'ingressroute.yaml' if 'traefik' in base_components }}"
 
 - name: Create templated overlay manifest files
   ansible.builtin.template:

@@ -8,7 +8,6 @@ metadata:
     component: cloud-controller-manager
   namespace: kube-system
 data:
-  # NOTE: this is just an example configuration, update with real values based on your environment
   vsphere.conf: |
     # Global properties in this section will be used for all specified vCenters unless overriden in VirtualCenter section.
     global:
@@ -20,14 +19,10 @@ data:
       secretNamespace: kube-system
 
     # vcenter section
-    vcsa-1:
+    vcenter:
+      vcsa-1:
         server: 192.168.1.200
+        user: csi@vsphere.local
+        password: {{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }} }}
         datacenters:
           - HomeLab Datacenter
-        secretName: vsphere-cloud-secret
-        secretNamespace: kube-system
-
-    # labels for regions and zones
-    labels:
-      region: k8s-region
-      zone: k8s-zone

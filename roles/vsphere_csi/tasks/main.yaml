@@ -21,7 +21,6 @@
     - ccm-rbac.yaml
     - csi.yaml
     - storageclass.yaml
-    - vsphere-cloud-config.yaml
 
 - name: Create templated files
   ansible.builtin.template:
@@ -30,6 +29,7 @@
     mode: '0644'
   loop:
     - vsphere-cloud-secret.yaml
+    - vsphere-cloud-config.yaml
     - csi-vsphere.conf
   loop_control:
     loop_var: csi_item
@@ -40,6 +40,7 @@
       kubectl create secret generic vsphere-config-secret
       --namespace=vmware-system-csi
       --from-file={{ dest }}csi-vsphere.conf
+      --dry-run=client
       -o yaml | kubectl apply -f -
 
 - name: Deploy vsphere-csi manifests
