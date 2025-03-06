@@ -5,9 +5,9 @@
     state: directory
     mode: '0755'
 
-- name: Create vsphere-csi k8s namespace
+- name: Create vmware-system-csi k8s namespace
   kubernetes.core.k8s:
-    name: vsphere-csi
+    name: vmware-system-csi
     api_version: v1
     kind: Namespace
     state: present
@@ -23,16 +23,29 @@
     - storageclass.yaml
     - vsphere-cloud-config.yaml
 
-- name: Create vsphere-cloud-secret
+- name: Create templated files
   ansible.builtin.template:
-    src: vsphere-cloud-secret.yaml.j2
-    dest: "{{ dest }}vsphere-cloud-secret.yaml"
+    src: "{{ csi_item }}.j2"
+    dest: "{{ dest }}{{ csi_item }}"
     mode: '0644'
+  loop:
+    - vsphere-cloud-secret.yaml
+    - csi-vsphere.conf
+  loop_control:
+    loop_var: csi_item
+
+- name: Create secret from csi-vsphere.conf
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic vsphere-config-secret
+      --namespace=vmware-system-csi
+      --from-file={{ dest }}csi-vsphere.conf
+      -o yaml | kubectl apply -f -
 
 - name: Deploy vsphere-csi manifests
   kubernetes.core.k8s:
-    src: "{{ item }}"
-    namespace: vsphere-csi
+    src: "{{ dest }}{{ item }}"
+    state: present
   loop:
     - vsphere-cloud-secret.yaml
     - ccm-rbac.yaml

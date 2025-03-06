@@ -211,7 +211,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane=true
+              - key: node-role.kubernetes.io/control-plane
                 operator: Exists
             - matchExpressions:
               - key: node-role.kubernetes.io/controlplane

@@ -1,0 +1,10 @@
+[Global]
+cluster-id = "{{ cluster }}"
+cluster-distribution = "k3s"
+
+[VirtualCenter "192.168.1.200"]
+insecure-flag = "true"
+user = "csi@vsphere.local"
+password = "{{ lookup('hashi_vault', 'secret/vsphere/vcsa:vsphere_password') }}"
+port = "443"
+datacenters = "HomeLab Datacenter"
