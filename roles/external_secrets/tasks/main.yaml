@@ -14,7 +14,7 @@
 
 - name: Download external-secrets CRD bundle
   ansible.builtin.uri:
-    url: https://raw.githubusercontent.com/external-secrets/external-secrets/{{ ver }}/deploy/crds/bundle.yaml
+    url: https://raw.githubusercontent.com/external-secrets/external-secrets/{{ eso_ver }}/deploy/crds/bundle.yaml
     dest: "{{ dest }}external-secrets-crd.yaml"
     mode: '0644'
 
@@ -28,11 +28,10 @@
     release_name: external-secrets
     release_namespace: eso
     create_namespace: false
-    chart_ref: external-secrets
+    chart_ref: external-secrets/external-secrets
     chart_version: "{{ eso_chart_ver }}"
     wait: true
     update_repo_cache: true
-    values_files: "{{ dest }}external-secrets-values.yaml"
     skip_crds: true
 
 - name: Download files to host
@@ -41,13 +40,14 @@
     dest: "{{ dest }}"
     mode: '0644'
   loop:
-    - vault-secretstore.yaml
+    - vault-clustersecretstore.yaml
 
 - name: Create vault secret
   ansible.builtin.shell:
     cmd: >
       kubectl create secret generic vault-secretid
       --namespace eso
+      --dry-run=client
       --from-literal=secret={{ lookup('hashi_vault', 'secret/approle/ansible:secret_id') }}
 
 - name: Deploy eso manifests
@@ -55,4 +55,4 @@
     src: "{{ item }}"
     namespace: eso
   loop:
-    - vault-secretstore.yaml
+    - vault-clustersecretstore.yaml
