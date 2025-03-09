@@ -10,7 +10,7 @@ namespace: argocd
 resources:
 - base/namespace.yaml
 {{ '- base/ingressroute.yaml' if 'traefik' in base_components | default(omit) }}
-{{ '- base/ingress.yaml' if 'ingress-nginx' in base_components | default(omit) }}
+{{ '- base/ingress.yaml' if 'ingress_nginx' in base_components | default(omit) }}
 # - base/argocd-repo-server-rbac.yaml
 # - base/argocd-vault-plugin-credentials.yaml
 # - base/cmp-plugin.yaml
