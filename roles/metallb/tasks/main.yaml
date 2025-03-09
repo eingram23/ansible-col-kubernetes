@@ -1,25 +1,42 @@
 ---
-- name: Download metallb definitions manifest
-  ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_ver }}/config/manifests/metallb-native.yaml"
-    dest: "~/metallb-native.yaml"
-    mode: '0644'
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
 
-- name: Deploy metallb
-  kubernetes.core.k8s:
-    state: present
-    src: "~/metallb-native.yaml"
-  register: metallb
+- name: Check if metallb pods are running
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Pod
+    namespace: metallb-system
+  register: metallb_pods
 
-- name: Pause for 20 seconds
-  ansible.builtin.pause:
-    seconds: 20
-  when: metallb.changed
+- name: Deploy metallb if not already deployed
+  when: metallb_pods.resources | length == 0 or
+        metallb_pods.resources | selectattr('status.phase', 'equalto', 'Running') | list | length < metallb_pods.resources | length
+  block:
+    - name: Download metallb definitions manifest
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_ver }}/config/manifests/metallb-native.yaml"
+        dest: "{{ dest }}metallb-native.yaml"
+        mode: '0644'
 
-- name: Wait for metallb pods to become ready
-  shell: "kubectl wait --namespace=metallb-system --for=condition=Ready pods --all --timeout=600s"
+    - name: Deploy metallb
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ dest }}metallb-native.yaml"
+      register: metallb
 
-- name: Deploy metallb ippool
-  kubernetes.core.k8s:
-    state: present
-    template: "metallb-ippool.yaml.j2"
+    - name: Pause for 20 seconds
+      ansible.builtin.pause:
+        seconds: 20
+      when: metallb.changed
+
+    - name: Wait for metallb pods to become ready
+      shell: "kubectl wait --namespace=metallb-system --for=condition=Ready pods --all --timeout=600s"
+
+    - name: Deploy metallb ippool
+      kubernetes.core.k8s:
+        state: present
+        template: "metallb-ippool.yaml.j2"
