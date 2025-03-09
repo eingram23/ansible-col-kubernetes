@@ -1,0 +1,44 @@
+---
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
+
+- name: Create external-dns k8s namespace
+  kubernetes.core.k8s:
+    name: external-dns
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Create secret for TSIG key
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic tsig-key
+      --namespace external-dns
+      --dry-run=client
+      --from-literal=rfc2136_tsig_secret={{ lookup('hashi_vault', 'secret/technitium/tsig:external-dns') }}
+      -o yaml | kubectl apply -f -
+
+- name: Create values file
+  ansible.builtin.template:
+    src: values.yaml.j2
+    dest: "{{ dest }}values.yaml"
+
+- name: Add external-dns chart repo
+  kubernetes.core.helm_repository:
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: Install external-dns chart from repo
+  kubernetes.core.helm:
+    release_name: external-dns
+    release_namespace: external-dns
+    create_namespace: false
+    chart_ref: bitnami/external-dns
+    chart_version: "{{ external_dns_chart_ver }}"
+    wait: true
+    update_repo_cache: true
+    skip_crds: false
+    values_files: "{{ dest }}values.yaml"

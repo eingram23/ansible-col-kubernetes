@@ -1,0 +1,3 @@
+---
+app_name: "external-dns"
+dest: "/var/tmp/ansible/k8s/{{ app_name }}/"
