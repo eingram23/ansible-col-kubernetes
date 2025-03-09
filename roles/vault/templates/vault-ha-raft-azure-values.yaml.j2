@@ -583,10 +583,16 @@ server:
 
   # extraSecretEnvironmentVars is a list of extra environment variables to set with the stateful set.
   # These variables take value from existing Secret objects.
-  extraSecretEnvironmentVars: []
-    # - envName: AWS_SECRET_ACCESS_KEY
-    #   secretName: vault
-    #   secretKey: AWS_SECRET_ACCESS_KEY
+  extraSecretEnvironmentVars:
+    - envName: AZURE_TENANT_ID
+      secretName: azure-credentials
+      secretKey: AZURE_TENANT_ID
+    - envName: AZURE_CLIENT_ID
+      secretName: azure-credentials
+      secretKey: AZURE_CLIENT_ID
+    - envName: AZURE_CLIENT_SECRET
+      secretName: azure-credentials
+      secretKey: AZURE_CLIENT_SECRET
 
   # Deprecated: please use 'volumes' instead.
   # extraVolumes is a list of extra volumes to mount. These will be exposed
@@ -892,7 +898,7 @@ server:
   # different HA backend.
   ha:
     enabled: true
-    replicas: 3
+    replicas: 1
 
     # Set the api_addr configuration for Vault HA
     # See https://developer.hashicorp.com/vault/docs/configuration#api_addr
@@ -956,9 +962,9 @@ server:
         # GKMS keys must already exist, and the cluster must have a service account
         # that is authorized to access GCP KMS.
         seal "azurekeyvault" {
-          client_id     = "{{ lookup('hashi_vault', 'secret/azure/app/vault:id') }}"
-          client_secret     = "{{ lookup('hashi_vault', 'secret/azure/app/vault:secret') }}"
-          tenant_id    = "{{ lookup('hashi_vault', 'secret/azure/tenant:id') }}"
+          client_id     = ""
+          client_secret     = ""
+          tenant_id    = ""
           vault_name  = "vault-key-data"
           key_name    = "vault-unseal-key"
           use_rbac    = "true"
