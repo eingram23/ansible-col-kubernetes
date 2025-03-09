@@ -1,8 +1,6 @@
 ---
 cp_count: 1
 worker_count: 0
-# storage: vsphere-csi
-# ingress: ingress-nginx
 lb_ip: "10.10.0.210"
 
 base_components:
@@ -11,3 +9,5 @@ base_components:
   - metallb
   - argocd
   - vault
+  - external_secrets
+  - external_dns
