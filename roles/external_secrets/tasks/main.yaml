@@ -5,16 +5,16 @@
     state: directory
     mode: '0755'
 
-- name: Create eso k8s namespace
+- name: Create external-secrets k8s namespace
   kubernetes.core.k8s:
-    name: eso
+    name: external-secrets
     api_version: v1
     kind: Namespace
     state: present
 
 - name: Download external-secrets CRD bundle
   ansible.builtin.uri:
-    url: https://raw.githubusercontent.com/external-secrets/external-secrets/{{ eso_ver }}/deploy/crds/bundle.yaml
+    url: https://raw.githubusercontent.com/external-secrets/external-secrets/{{ external_secrets_ver }}/deploy/crds/bundle.yaml
     dest: "{{ dest }}external-secrets-crd.yaml"
     mode: '0644'
 
@@ -26,10 +26,10 @@
 - name: Install external-secrets chart from repo
   kubernetes.core.helm:
     release_name: external-secrets
-    release_namespace: eso
+    release_namespace: external-secrets
     create_namespace: false
     chart_ref: external-secrets/external-secrets
-    chart_version: "{{ eso_chart_ver }}"
+    chart_version: "{{ external_secrets_chart_ver }}"
     wait: true
     update_repo_cache: true
     skip_crds: true
@@ -46,13 +46,13 @@
   ansible.builtin.shell:
     cmd: >
       kubectl create secret generic vault-secretid
-      --namespace eso
+      --namespace external-secrets
       --dry-run=client
       --from-literal=secret={{ lookup('hashi_vault', 'secret/approle/ansible:secret_id') }}
 
-- name: Deploy eso manifests
+- name: Deploy external-secrets manifests
   kubernetes.core.k8s:
     src: "{{ item }}"
-    namespace: eso
+    namespace: external-secrets
   loop:
     - vault-clustersecretstore.yaml
