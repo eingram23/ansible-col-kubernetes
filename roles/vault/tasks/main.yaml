@@ -1,8 +1,18 @@
 ---
-- name: Deploy vault
-  ansible.builtin.include_tasks:
-    file: ha_raft_azure.yaml
+- name: Check if vault-0 pod running
+  kubernetes.core.k8s_info:
+    kind: Pod
+    name: vault-0
+    namespace: vault
+  register: vault_0
 
-- name: Create pki and int CA
-  ansible.builtin.include_tasks:
-    file: create_pki_int_ca.yaml
+- name: Deploy vault if not already deployed
+  when: vault_0.resources | length == 0
+  block:
+    - name: Deploy vault
+      ansible.builtin.include_tasks:
+        file: ha_raft_azure.yaml
+
+    - name: Create pki and int CA
+      ansible.builtin.include_tasks:
+        file: create_pki_int_ca.yaml
