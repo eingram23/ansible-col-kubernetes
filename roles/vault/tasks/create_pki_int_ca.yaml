@@ -18,6 +18,7 @@
                                        bound_service_account_names=vault-issuer \
                                        bound_service_account_namespaces=cert-manager \
                                        audience="vault://vault-issuer" \
+                                       require_cn=false \
                                        policies=pki ttl=20m
 
 - name: Generate Int CSR
