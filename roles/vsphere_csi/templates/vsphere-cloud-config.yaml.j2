@@ -22,7 +22,9 @@ data:
     vcenter:
       vcsa-1:
         server: 192.168.1.200
-        user: csi@vsphere.local
-        password: {{ lookup('hashi_vault', 'secret=secret/vsphere/vcsa:vsphere_password') }} }}
         datacenters:
           - HomeLab Datacenter
+
+    labels:
+      region: k8s-region
+      zone: k8s-zone

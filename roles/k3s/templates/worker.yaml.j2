@@ -1,0 +1,6 @@
+server: https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443
+selinux: true
+node-label:
+  - 'node_type=worker'
+kube-proxy-arg:
+  - 'metrics-bind-address=0.0.0.0'

@@ -2,40 +2,29 @@
 - name: Populate service facts
   ansible.builtin.service_facts:
 
-- name: Set fact for --disable=traefik
-  ansible.builtin.set_fact:
-    disable_traefik: "{{ '--disable=traefik' }}"
-  when: "'traefik' not in hostvars['localhost']['base_components']"
+- name: Create k3s config directory
+  ansible.builtin.file:
+    path: "/etc/rancher/k3s/config.yaml.d"
+    state: directory
+    mode: '0755'
+    recurse: true
 
-- name: Install k3s with etcd database
-  when:
-    - ansible_facts['services']['k3s.service']['status'] is not defined
-    - "'vsphere_csi' not in hostvars['localhost']['base_components']"
-  ansible.builtin.shell: >
-    curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ k3s_ver }}
-    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
-    --disable=servicelb
-    {{ disable_traefik | default(omit) }}
-    --selinux
-    --write-kubeconfig-mode 644
-    --cluster-init
-    --kubelet-arg container-log-max-files=4
-    --kubelet-arg container-log-max-size=50Mi
-    --kubelet-arg image-gc-high-threshold=50
-    --kubelet-arg image-gc-low-threshold=40
-    --etcd-expose-metrics=true
-    --tls-san {{ hostvars['localhost']['lb_ip'] }}
-    --kube-controller-manager-arg 'bind-address=0.0.0.0'
-    --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
-    --kube-scheduler-arg 'bind-address=0.0.0.0'
-    --kube-controller-manager-arg 'terminated-pod-gc-threshold=10'
-  register: k3s_cp_install_status
+- name: Create k3s base config file for first cp node
+  when: inventory_hostname == hostvars['localhost']['cp_nodes'][0]
+  ansible.builtin.template:
+    src: "cp-cluster-init.yaml.j2"
+    dest: "/etc/rancher/k3s/config.yaml"
+    mode: '0644'
 
-- name: Install k3s with etcd database and vsphere-csi
-  when:
-    - ansible_facts['services']['k3s.service']['status'] is not defined
-    - "'vsphere_csi' in hostvars['localhost']['base_components']"
+- name: Create k3s base config file for additional cp nodes
+  when: inventory_hostname != hostvars['localhost']['cp_nodes'][0]
+  ansible.builtin.template:
+    src: "cp-join.yaml.j2"
+    dest: "/etc/rancher/k3s/config.yaml"
+    mode: '0644'
+
+- name: Create vsphere_csi config file
+  when: "'vsphere_csi' in hostvars['localhost']['base_components']"
   block:
     - name: Get VM ID
       delegate_to: localhost
@@ -47,34 +36,30 @@
         vm_name: "{{ hostvars[inventory_hostname]['ansible_hostname'] }}"
       register: vm_info
 
-    - name: Install k3s with etcd database and vsphere-csi
-      ansible.builtin.shell: >
-        curl -sfL https://get.k3s.io |
-        INSTALL_K3S_VERSION={{ k3s_ver }}
-        K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
-        --disable=servicelb
-        --disable-cloud-controller
-        --disable local-storage
-        {{ disable_traefik | default(omit) }}
-        --selinux
-        --write-kubeconfig-mode 644
-        --cluster-init
-        --kubelet-arg container-log-max-files=4
-        --kubelet-arg container-log-max-size=50Mi
-        --kubelet-arg image-gc-high-threshold=50
-        --kubelet-arg image-gc-low-threshold=40
-        --kubelet-arg cloud-provider=external
-        --kubelet-arg provider-id=vsphere://{{ vm_info.virtual_machines[0].moid }}
-        --etcd-expose-metrics=true
-        --tls-san {{ hostvars['localhost']['lb_ip'] }}
-        --kube-controller-manager-arg 'bind-address=0.0.0.0'
-        --kube-proxy-arg 'metrics-bind-address=0.0.0.0'
-        --kube-scheduler-arg 'bind-address=0.0.0.0'
-        --kube-controller-manager-arg 'terminated-pod-gc-threshold=10'
-      register: k3s_cp_install_status
+    - name: Create vsphere_csi config file
+      ansible.builtin.template:
+        src: "vsphere_csi_cp.yaml.j2"
+        dest: "/etc/rancher/k3s/config.yaml.d/vsphere-csi.yaml"
+        mode: '0644'
+
+- name: Create ingress-nginx config file
+  when: "'ingress_nginx' in hostvars['localhost']['base_components']"
+  ansible.builtin.template:
+    src: "ingress_nginx.yaml.j2"
+    dest: "/etc/rancher/k3s/config.yaml.d/ingress-nginx.yaml"
+    mode: '0644'
+
+- name: Install k3s
+  when:
+    - ansible_facts['services']['k3s.service']['status'] is not defined
+  ansible.builtin.shell: >
+    curl -sfL https://get.k3s.io |
+    INSTALL_K3S_VERSION={{ k3s_ver }}
+    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }} sh -s - server
+  register: k3s_cp_install_status
 
 - name: Check installation status
-  debug:
+  ansible.builtin.debug:
     var: k3s_cp_install_status
 
 - name: Install k3s service

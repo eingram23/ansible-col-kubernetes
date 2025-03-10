@@ -1,0 +1,6 @@
+disable-cloud-controller: true
+disable+:
+  - local-storage
+kubelet-arg+:
+  - cloud-provider=external
+  - provider-id=vsphere://{{ vm_info.virtual_machines[0].moid }}

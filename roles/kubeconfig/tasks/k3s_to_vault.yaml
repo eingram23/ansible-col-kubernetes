@@ -1,11 +1,11 @@
 - name: Read kubeconfig
   ansible.builtin.slurp:
     src: "/etc/rancher/k3s/k3s.yaml"
-  register: kubeconfig_enc
+  register: kubeconfig_base_enc
 
 - name: Decode remote content
   ansible.builtin.set_fact:
-    kubeconfig: "{{ kubeconfig_enc['content'] | b64decode | from_yaml }}"
+    kubeconfig_base: "{{ kubeconfig_base_enc['content'] | b64decode | from_yaml }}"
 
 - name: Write vault secret
   delegate_to: localhost

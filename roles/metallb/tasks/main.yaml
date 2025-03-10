@@ -1,10 +1,4 @@
 ---
-- name: Create staging folders
-  ansible.builtin.file:
-    path: "{{ dest }}"
-    state: directory
-    mode: '0755'
-
 - name: Check if metallb pods are running
   kubernetes.core.k8s_info:
     api_version: v1
@@ -16,6 +10,12 @@
   when: metallb_pods.resources | length == 0 or
         metallb_pods.resources | selectattr('status.phase', 'equalto', 'Running') | list | length < metallb_pods.resources | length
   block:
+    - name: Create staging folders
+      ansible.builtin.file:
+        path: "{{ dest }}"
+        state: directory
+        mode: '0755'
+  
     - name: Download metallb definitions manifest
       ansible.builtin.get_url:
         url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_ver }}/config/manifests/metallb-native.yaml"

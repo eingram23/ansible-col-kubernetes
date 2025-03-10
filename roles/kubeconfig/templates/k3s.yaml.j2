@@ -1,7 +1,7 @@
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: {{ kubeconfig | json_query('clusters[0].cluster."certificate-authority-data"') }}
+    certificate-authority-data: {{ kubeconfig_base | json_query('clusters[0].cluster."certificate-authority-data"') }}
     server: https://{{ inventory_hostname }}:6443
   name: {{ ansible_hostname }}
 contexts:
@@ -15,5 +15,5 @@ preferences: {}
 users:
 - name: default-{{ cluster}}
   user:
-    client-certificate-data: {{ kubeconfig | json_query('users[0].user."client-certificate-data"') }}
-    client-key-data: {{ kubeconfig | json_query('users[0].user."client-key-data"') }}
+    client-certificate-data: {{ kubeconfig_base | json_query('users[0].user."client-certificate-data"') }}
+    client-key-data: {{ kubeconfig_base | json_query('users[0].user."client-key-data"') }}
