@@ -49,6 +49,7 @@
       --namespace external-secrets
       --dry-run=client
       --from-literal=secret={{ lookup('hashi_vault', 'secret/approle/ansible:secret_id') }}
+      -o yaml | kubectl apply -f -
 
 - name: Deploy external-secrets manifests
   kubernetes.core.k8s:

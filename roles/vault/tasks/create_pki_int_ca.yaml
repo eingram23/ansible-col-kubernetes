@@ -14,9 +14,10 @@
 - name: Create pki auth
   ansible.builtin.shell:
     cmd: |
-      kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/issuer \
-                                       bound_service_account_names=issuer \
+      kubectl exec vault-0 -n vault -- vault write auth/kubernetes/role/vault-issuer \
+                                       bound_service_account_names=vault-issuer \
                                        bound_service_account_namespaces=cert-manager \
+                                       audience="vault://vault-issuer" \
                                        policies=pki ttl=20m
 
 - name: Generate Int CSR
