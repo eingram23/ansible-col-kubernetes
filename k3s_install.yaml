@@ -75,11 +75,6 @@
 
   tasks:
 
-    - name: Deploy k3s-metrics-service
-      ansible.builtin.include_role:
-        name: eingram23.kubernetes.k3s
-        tasks_from: k3s-metrics-service
-
     - name: Deploy base components
       ansible.builtin.include_role:
         name: eingram23.kubernetes.{{ component_item }}
@@ -104,3 +99,14 @@
         name: eingram23.kubernetes.k3s
         tasks_from: worker
 
+- name: Deploy k3s-metrics-service
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Deploy k3s-metrics-service
+      ansible.builtin.include_role:
+        name: eingram23.kubernetes.k3s
+        tasks_from: k3s-metrics-service
