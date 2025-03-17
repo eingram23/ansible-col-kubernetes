@@ -53,15 +53,15 @@
     - kustomization.yaml
     - "{{ 'ingress.yaml' if 'ingress_nginx' in base_components else 'ingressroute.yaml' if 'traefik' in base_components }}"
 
-- name: Create templated overlay manifest files
-  ansible.builtin.template:
-    src: "{{ tmp_base_item }}.j2"
-    dest: "{{ dest }}overlays/{{ tmp_base_item }}"
-    mode: '0644'
-  loop_control:
-    loop_var: tmp_base_item
-  loop:
-    - argocd-secret.yaml
+# - name: Create templated overlay manifest files
+#   ansible.builtin.template:
+#     src: "{{ tmp_base_item }}.j2"
+#     dest: "{{ dest }}overlays/{{ tmp_base_item }}"
+#     mode: '0644'
+#   loop_control:
+#     loop_var: tmp_base_item
+#   loop:
+#     - argocd-secret.yaml
 
 - name: Create a k8s namespace
   kubernetes.core.k8s:
