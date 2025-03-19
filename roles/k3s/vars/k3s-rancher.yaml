@@ -1,0 +1,9 @@
+---
+cp_count: 1
+worker_count: 0
+lb_ip: "10.10.0.215"
+
+base_components:
+  - vsphere_csi
+  - ingress_nginx
+  - metallb
