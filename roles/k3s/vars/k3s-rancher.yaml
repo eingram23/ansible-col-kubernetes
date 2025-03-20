@@ -7,3 +7,4 @@ base_components:
   - vsphere_csi
   - ingress_nginx
   - metallb
+  - external_secrets
