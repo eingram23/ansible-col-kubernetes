@@ -257,6 +257,12 @@
                                       secret_id_num_uses=0 \
                                       token_no_default_policy=false \
                                       token_policies="ansible"
+      kubectl exec vault-0 -n vault -- vault write auth/approle/role/cert-manager \
+                                      token_num_uses=0 \
+                                      token_ttl=0m \
+                                      secret_id_num_uses=0 \
+                                      token_no_default_policy=false \
+                                      token_policies="pki"
       kubectl exec vault-0 -n vault -- vault auth enable userpass
       kubectl exec vault-0 -n vault -- vault write auth/userpass/users/eingram \
                                       password=temppassword \
