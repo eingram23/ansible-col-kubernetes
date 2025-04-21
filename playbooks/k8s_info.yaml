@@ -1,0 +1,27 @@
+---
+- name: k8s info
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Assert necessary vars set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
+
+    - name: Get k8s info
+      kubernetes.core.k8s_info:
+        kind: storageclass
+        api_version: storage.k8s.io/v1
+      register: k8s_info
+
+    - name: Print k8s info
+      ansible.builtin.debug:
+        var: k8s_info
