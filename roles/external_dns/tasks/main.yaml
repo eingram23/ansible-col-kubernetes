@@ -12,14 +12,14 @@
     kind: Namespace
     state: present
 
-- name: Create secret for TSIG key
-  ansible.builtin.shell:
-    cmd: >
-      kubectl create secret generic tsig-key
-      --namespace external-dns
-      --dry-run=client
-      --from-literal=rfc2136_tsig_secret={{ lookup('hashi_vault', 'secret/technitium/tsig:external-dns') }}
-      -o yaml | kubectl apply -f -
+# - name: Create secret for TSIG key
+#   ansible.builtin.shell:
+#     cmd: >
+#       kubectl create secret generic tsig-key
+#       --namespace external-dns
+#       --dry-run=client
+#       --from-literal=rfc2136_tsig_secret={{ lookup('hashi_vault', 'secret/technitium/tsig:external-dns') }}
+#       -o yaml | kubectl apply -f -
 
 - name: Create values file
   ansible.builtin.template:
