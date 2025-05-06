@@ -1,74 +1,63 @@
 ---
-- name: Check if vsphere-csi is already installed
-  kubernetes.core.k8s_info:
+- name: Create staging folders
+  ansible.builtin.file:
+    path: "{{ dest }}"
+    state: directory
+    mode: '0755'
+
+- name: Create vmware-system-csi k8s namespace
+  kubernetes.core.k8s:
+    name: vmware-system-csi
     api_version: v1
-    kind: Pod
-    namespace: vmware-system-csi
-  register: vmware_system_csi_pods
+    kind: Namespace
+    state: present
 
-- name: Deploy vsphere-csi if not already deployed
-  # when: vmware_system_csi_pods.resources | length == 0 or
-  #       vmware_system_csi_pods.resources | selectattr('status.phase', 'equalto', 'Running') | list | length < vmware_system_csi_pods.resources | length
-  block:
-    - name: Create staging folders
-      ansible.builtin.file:
-        path: "{{ dest }}"
-        state: directory
-        mode: '0755'
+- name: Download files to host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+    mode: '0644'
+  loop:
+    - ccm-rbac.yaml
+    - csi.yaml
+    - storageclass.yaml
 
-    - name: Create vmware-system-csi k8s namespace
-      kubernetes.core.k8s:
-        name: vmware-system-csi
-        api_version: v1
-        kind: Namespace
-        state: present
+- name: Create templated files
+  ansible.builtin.template:
+    src: "{{ csi_item }}.j2"
+    dest: "{{ dest }}{{ csi_item }}"
+    mode: '0644'
+  loop:
+    - vsphere-cloud-secret.yaml
+    - vsphere-cloud-config.yaml
+    - csi-vsphere.conf
+  loop_control:
+    loop_var: csi_item
 
-    - name: Download files to host
-      ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: "{{ dest }}"
-        mode: '0644'
-      loop:
-        - ccm-rbac.yaml
-        - csi.yaml
-        - storageclass.yaml
+- name: Create secret from csi-vsphere.conf
+  ansible.builtin.shell:
+    cmd: >
+      kubectl create secret generic vsphere-config-secret
+      --namespace=vmware-system-csi
+      --from-file={{ dest }}csi-vsphere.conf
+      --dry-run=client
+      -o yaml | kubectl apply -f -
 
-    - name: Create templated files
-      ansible.builtin.template:
-        src: "{{ csi_item }}.j2"
-        dest: "{{ dest }}{{ csi_item }}"
-        mode: '0644'
-      loop:
-        - vsphere-cloud-secret.yaml
-        - vsphere-cloud-config.yaml
-        - csi-vsphere.conf
-      loop_control:
-        loop_var: csi_item
+- name: Deploy vsphere-csi manifests
+  kubernetes.core.k8s:
+    src: "{{ dest }}{{ item }}"
+    state: present
+  loop:
+    - vsphere-cloud-secret.yaml
+    - ccm-rbac.yaml
+    - csi.yaml
+    - vsphere-cloud-config.yaml
+    - storageclass.yaml
 
-    - name: Create secret from csi-vsphere.conf
-      ansible.builtin.shell:
-        cmd: >
-          kubectl create secret generic vsphere-config-secret
-          --namespace=vmware-system-csi
-          --from-file={{ dest }}csi-vsphere.conf
-          --dry-run=client
-          -o yaml | kubectl apply -f -
-
-    - name: Deploy vsphere-csi manifests
-      kubernetes.core.k8s:
-        src: "{{ dest }}{{ item }}"
-        state: present
-      loop:
-        - vsphere-cloud-secret.yaml
-        - ccm-rbac.yaml
-        - csi.yaml
-        - vsphere-cloud-config.yaml
-        - storageclass.yaml
-
-    - name: Set vsphere-csi as default storageclass
-      ansible.builtin.shell: |
-        for i in $(kubectl get storageclass | grep '(default)' | cut -d ' ' -f 1); do
-          if [ "$i" != "vsphere-csi" ]; then
-            kubectl patch storageclass $i -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-          fi
-        done
+- name: Set vsphere-csi as default storageclass
+  ansible.builtin.shell: |
+    for i in $(kubectl get storageclass | grep '(default)' | cut -d ' ' -f 1); do
+      if [ "$i" != "vsphere-csi" ]; then
+        kubectl patch storageclass $i -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+      fi
+    done
