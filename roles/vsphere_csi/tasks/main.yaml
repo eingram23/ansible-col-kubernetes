@@ -70,7 +70,6 @@
     kubectl patch storageclass vsphere-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
   register: patch_result
   changed_when: patch_result.stdout != ""
-  failed_when: patch_result.rc != 0
 
 - name: Debug patch result
   ansible.builtin.debug:
