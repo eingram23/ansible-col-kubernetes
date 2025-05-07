@@ -61,7 +61,7 @@
     IFS=$'\n' read -r -d '' -a array <<< "$storageclass_list"
     IFS=$CURRENT_IFS
 
-    for (( i=0; i<${#array[@]}; i++ )) do
+    for (( i=0; i<${{ "{" }}{{ "#" }}array[@]}; i++ )) do
       if [ "${array[$i]}" != "vsphere-csi" ]; then
           kubectl patch storageclass "${array[$i]}" -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
         fi
