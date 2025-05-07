@@ -67,6 +67,8 @@
         fi
     done
     kubectl patch storageclass vsphere-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  args:
+    executable: /bin/bash
   register: patch_result
   changed_when: patch_result.stdout != ""
 
