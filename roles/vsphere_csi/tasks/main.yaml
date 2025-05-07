@@ -11,6 +11,7 @@
     api_version: v1
     kind: Namespace
     state: present
+    kubeconfig: ~/.kube/config
 
 - name: Download files to host
   ansible.builtin.copy:
