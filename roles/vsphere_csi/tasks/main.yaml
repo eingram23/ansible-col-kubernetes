@@ -76,4 +76,3 @@
   ansible.builtin.debug:
     msg: "{{ patch_result.stdout }}"
   when: patch_result.stdout != ""
-
