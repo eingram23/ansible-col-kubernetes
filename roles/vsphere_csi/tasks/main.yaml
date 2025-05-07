@@ -56,13 +56,14 @@
 
 - name: Set vsphere-csi as default storageclass
   ansible.builtin.shell: |
-    storageclass=$(kubectl get storageclass | grep '(default)' | cut -d ' ' -f 1)
+    storageclass_list=$(kubectl get storageclass | grep '(default)' | cut -d ' ' -f 1)
+    CURRENT_IFS=$IFS
     IFS=$'\n'
-    lines=($storageclass)
-    IFS=$' \t\n'
-    for i in "${lines[@]}"; do
+    storageclass_list=($storageclass_list)
+    IFS=$CURRENT_IFS
+
+    for i in "${storageclass_list[@]}"; do
       if [ "$i" != "vsphere-csi" ]; then
         kubectl patch storageclass $i -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
       fi
     done
-    kubectl patch storageclass vsphere-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
