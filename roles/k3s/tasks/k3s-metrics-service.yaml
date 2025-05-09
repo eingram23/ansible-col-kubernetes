@@ -2,7 +2,10 @@
 - name: Create list of IPs from all nodes
   ansible.builtin.shell: |
     set -o pipefail && kubectl get node -o wide | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ '
+  args:
+    executable: /bin/bash
   register: k3s_node_ips
+  changed_when: false
 
 - name: Create manifest
   ansible.builtin.template:
