@@ -1,24 +1,24 @@
 ---
-# VARS: cert, env
-- name: Prepare kubeconfig
+# VARS: cert, env, master_node
+- name: Deploy gitea to k3s
   hosts: localhost
   gather_facts: false
   become: false
 
   tasks:
 
+    - name: Assert vars set
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+          - cp_node is defined
+
     - name: Set environment
       ansible.builtin.import_role:
         name: eingram23.kubernetes.kubeconfig
-
-- name: Deploy gitea certs to k3s
-  hosts: "{{ hostvar | default([]) }}"
-  gather_facts: false
-  become: true
-
-  tasks:
+        tasks_from: create_local_kube
 
     - name: Deploy gitea
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: eingram23.kubernetes.gitea
         tasks_from: copy_certs
