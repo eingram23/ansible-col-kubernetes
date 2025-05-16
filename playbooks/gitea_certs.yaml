@@ -18,7 +18,7 @@
         name: eingram23.kubernetes.kubeconfig
         tasks_from: create_local_kube
 
-    - name: Deploy gitea
+    - name: Deploy gitea certs to k3s nodes
       ansible.builtin.import_role:
         name: eingram23.kubernetes.gitea
         tasks_from: copy_certs
