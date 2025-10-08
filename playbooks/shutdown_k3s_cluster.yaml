@@ -1,0 +1,79 @@
+---
+- name: Shutdown k3s cluster for maintenance
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  tasks:
+
+    - name: Assert cluster name is defined
+      ansible.builtin.assert:
+        that:
+          - cluster is defined
+        fail_msg: "The 'cluster' variable must be defined."
+        success_msg: "The 'cluster' variable is defined."
+
+    - name: Set environment
+      ansible.builtin.import_role:
+        name: eingram23.kubernetes.kubeconfig
+        tasks_from: create_local_kube
+
+    - name: Determine control plane node names
+      command: kubectl get nodes --selector=node-role.kubernetes.io/control-plane -o jsonpath='{.items[0].metadata.name}'
+      register: control_plane_nodes
+
+    - name: Continue with drain and shutdown if control plane node found
+      when: control_plane_nodes.stdout != ""
+      block:
+        - name: Display control plane nodes
+          ansible.builtin.debug:
+            msg: "Control plane nodes: {{ control_plane_nodes.stdout }}"
+
+        - name: Determine worker node names
+          command: kubectl get nodes --selector='!node-role.kubernetes.io/control-plane' -o jsonpath='{.items[*].metadata.name}'
+          register: worker_nodes
+
+        - name: Display worker nodes
+          when: worker_nodes.stdout != ""
+          ansible.builtin.debug:
+            msg: "Worker nodes: {{ worker_nodes.stdout }}"
+
+        - name: Create in mem inventory with node names
+          ansible.builtin.add_host:
+            hostname: "{{ node_item }}"
+            ansible_host: "{{ node_item if node_item.endswith('.local.lan') else node_item + '.local.lan' }}"
+            groups: Linux
+          loop: "{{ worker_nodes.stdout.split() + control_plane_nodes.stdout.split() }}"
+          loop_control:
+            loop_var: node_item
+
+        - name: Drain worker nodes
+          when: worker_nodes.stdout != ""
+          command: kubectl drain {{ worker_item }} --ignore-daemonsets --delete-emptydir-data --force
+          loop: "{{ worker_nodes.stdout.split() }}"
+          loop_control:
+            loop_var: worker_item
+
+        - name: Drain control plane nodes
+          command: kubectl drain {{ cp_item }} --ignore-daemonsets --delete-emptydir-data --force
+          loop: "{{ control_plane_nodes.stdout.split() }}"
+          loop_control:
+            loop_var: cp_item
+
+        - name: Run killall script on all nodes
+          ansible.builtin.shell: /usr/local/bin/k3s-killall.sh
+          ignore_errors: true
+          delegate_to: "{{ node_item }}"
+          become: true
+          loop: "{{ worker_nodes.stdout.split() + control_plane_nodes.stdout.split() }}"
+          loop_control:
+            loop_var: node_item
+
+        - name: Shutdown all nodes
+          ansible.builtin.shell: shutdown -h now
+          ignore_errors: true
+          delegate_to: "{{ node_item }}"
+          become: true
+          loop: "{{ worker_nodes.stdout.split() + control_plane_nodes.stdout.split() }}"
+          loop_control:
+            loop_var: node_item
