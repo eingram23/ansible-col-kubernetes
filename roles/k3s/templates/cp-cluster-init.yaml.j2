@@ -8,7 +8,16 @@ kubelet-arg:
   - container-log-max-size=50Mi
   - image-gc-high-threshold=50
   - image-gc-low-threshold=40
+  - max-requests-inflight=100
+  - max-mutating-requests-inflight=50
+  - min-request-timeout=300
+  - config=/etc/rancher/k3s/kubelet.yaml
 etcd-expose-metrics: true
+etcd-arg:
+  - auto-compaction-mode=periodic
+  - auto-compaction-retention=1h
+  - snapshot-count=5000
+  - quota-backend-bytes=2147483648
 tls-san: 
   - "{{ hostvars['localhost']['lb_ip'] }}"
 kube-controller-manager-arg:
@@ -18,3 +27,4 @@ kube-proxy-arg:
   - 'metrics-bind-address=0.0.0.0'
 kube-scheduler-arg: 
   - 'bind-address=0.0.0.0'
+  - 'config=/etc/rancher/k3s/scheduler-config.yaml'

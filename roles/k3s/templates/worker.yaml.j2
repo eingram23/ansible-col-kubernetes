@@ -1,5 +1,14 @@
 server: https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443
 selinux: true
+kubelet-arg:
+  - container-log-max-files=4
+  - container-log-max-size=50Mi
+  - image-gc-high-threshold=50
+  - image-gc-low-threshold=40
+  - max-requests-inflight=100
+  - max-mutating-requests-inflight=50
+  - min-request-timeout=300
+  - config=/etc/rancher/k3s/kubelet.yaml
 node-label:
   - 'node_type=worker'
 kube-proxy-arg:

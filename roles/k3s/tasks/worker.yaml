@@ -9,6 +9,18 @@
     mode: '0755'
     recurse: true
 
+- name: Create kubelet config file
+  ansible.builtin.copy:
+    src: "kubelet.yaml"
+    dest: "/etc/rancher/k3s/kubelet.yaml"
+    mode: '0644'
+
+- name: Create containerd config template file
+  ansible.builtin.copy:
+    src: "config.toml.tmpl"
+    dest: "/etc/rancher/k3s/containerd/config.toml.tmpl"
+    mode: '0644'
+
 - name: Create k3s base config file for worker nodes
   ansible.builtin.template:
     src: "worker.yaml.j2"
