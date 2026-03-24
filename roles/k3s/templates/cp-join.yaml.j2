@@ -8,10 +8,6 @@ kubelet-arg:
   - container-log-max-size=50Mi
   - image-gc-high-threshold=50
   - image-gc-low-threshold=40
-  - max-requests-inflight=100
-  - max-mutating-requests-inflight=50
-  - min-request-timeout=300
-  - config=/etc/rancher/k3s/kubelet.yaml
 etcd-expose-metrics: true
 tls-san: 
   - "{{ hostvars['localhost']['lb_ip'] }}"
@@ -22,5 +18,8 @@ kube-proxy-arg:
   - 'metrics-bind-address=0.0.0.0'
 kube-scheduler-arg: 
   - 'bind-address=0.0.0.0'
-  - 'config=/etc/rancher/k3s/scheduler-config.yaml'
+kube-apiserver-arg:
+  - max-requests-inflight=400
+  - max-mutating-requests-inflight=200
+  - min-request-timeout=300
 server: https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443

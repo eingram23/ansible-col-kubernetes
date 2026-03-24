@@ -11,14 +11,8 @@
 
 - name: Create kubelet config file
   ansible.builtin.copy:
-    src: "kubelet.yaml"
-    dest: "/etc/rancher/k3s/kubelet.yaml"
-    mode: '0644'
-
-- name: Create containerd config template file
-  ansible.builtin.copy:
-    src: "config.toml.tmpl"
-    dest: "/etc/rancher/k3s/containerd/config.toml.tmpl"
+    src: "kubelet-limits.yaml"
+    dest: "/etc/rancher/k3s/config.yaml.d/kubelet-limits.yaml"
     mode: '0644'
 
 - name: Create k3s base config file for worker nodes

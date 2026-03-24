@@ -11,14 +11,8 @@
 
 - name: Create kubelet config file
   ansible.builtin.copy:
-    src: "kubelet.yaml"
-    dest: "/etc/rancher/k3s/kubelet.yaml"
-    mode: '0644'
-
-- name: Create containerd config template file
-  ansible.builtin.copy:
-    src: "config.toml.tmpl"
-    dest: "/etc/rancher/k3s/containerd/config.toml.tmpl"
+    src: "kubelet-limits.yaml"
+    dest: "/etc/rancher/k3s/config.yaml.d/kubelet-limits.yaml"
     mode: '0644'
 
 - name: Create k3s base config file for first cp node
@@ -56,8 +50,8 @@
 
 - name: Create ingress-nginx config file
   when: "'ingress_nginx' in hostvars['localhost']['base_components']"
-  ansible.builtin.template:
-    src: "ingress_nginx.yaml.j2"
+  ansible.builtin.copy:
+    src: "ingress_nginx.yaml"
     dest: "/etc/rancher/k3s/config.yaml.d/ingress-nginx.yaml"
     mode: '0644'
 
