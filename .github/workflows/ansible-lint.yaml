@@ -11,7 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v46
+        with:
+          files: |
+            **/*.yaml
+            **/*.yml
 
       - name: Run ansible-lint
+        if: steps.changed-files.outputs.any_changed == 'true'
         uses: ansible/ansible-lint@v26.3.0
+        with:
+          args: ${{ steps.changed-files.outputs.all_changed_files }}
