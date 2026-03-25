@@ -1,12 +1,12 @@
 ---
 collections:
-- ansible.posix
-- ansible.utils
-- community.crypto
-- community.general
-- community.hashi_vault
-- community.vmware
-- kubernetes.core
-- name: https://github.com/eingram23/ansible-col-gcp.git
-  type: git
-  version: main
+  - ansible.posix
+  - ansible.utils
+  - community.crypto
+  - community.general
+  - community.hashi_vault
+  - community.vmware
+  - kubernetes.core
+  - name: https://github.com/eingram23/ansible-col-gcp.git
+    type: git
+    version: main
