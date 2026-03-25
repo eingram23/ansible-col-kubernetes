@@ -3,4 +3,4 @@ disable+:
   - local-storage
 kubelet-arg+:
   - cloud-provider=external
-  - provider-id=vsphere://{{ vm_info.virtual_machines[0].moid }}
+  - provider-id=vsphere://{{ k3s_vm_info.virtual_machines[0].moid }}

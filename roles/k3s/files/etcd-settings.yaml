@@ -1,0 +1,5 @@
+etcd-arg+:
+  - auto-compaction-mode=periodic
+  - auto-compaction-retention=1h
+  - snapshot-count=5000
+  - quota-backend-bytes=2147483648

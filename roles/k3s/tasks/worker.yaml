@@ -11,14 +11,8 @@
 
 - name: Create kubelet config file
   ansible.builtin.copy:
-    src: "kubelet.yaml"
-    dest: "/etc/rancher/k3s/kubelet.yaml"
-    mode: '0644'
-
-- name: Create containerd config template file
-  ansible.builtin.copy:
-    src: "config.toml.tmpl"
-    dest: "/etc/rancher/k3s/containerd/config.toml.tmpl"
+    src: "kubelet-limits.yaml"
+    dest: "/etc/rancher/k3s/config.yaml.d/kubelet-limits.yaml"
     mode: '0644'
 
 - name: Create k3s base config file for worker nodes
@@ -32,13 +26,13 @@
   block:
     - name: Get VM ID
       delegate_to: localhost
-      community.vmware.vmware_vm_info:
+      community.vmware.vmware_k3s_vm_info:
         hostname: vcsa-1.local.lan
         username: "{{ lookup('hashi_vault', 'secret/vsphere/vcsa:vsphere_username') }}"
         password: "{{ lookup('hashi_vault', 'secret/vsphere/vcsa:vsphere_password') }}"
         validate_certs: false
         vm_name: "{{ hostvars[inventory_hostname]['ansible_hostname'] }}"
-      register: vm_info
+      register: k3s_vm_info
 
     - name: Create vsphere_csi config file
       ansible.builtin.template:
@@ -46,15 +40,27 @@
         dest: "/etc/rancher/k3s/config.yaml.d/vsphere-csi.yaml"
         mode: '0644'
 
+- name: Download k3s installer script
+  when:
+    - ansible_facts['services']['k3s.service']['status'] is not defined
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/k3s-installer.sh
+    mode: '0755'
+
 - name: Run k3s install script
   when:
     - ansible_facts['services']['k3s-agent.service']['status'] is not defined
   ansible.builtin.shell: >
-    curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ k3s_ver }}
-    K3S_TOKEN={{ hostvars['localhost']['k3s_token'] }}
-    sh -s - agent
+    set -o pipefail &&
+    /tmp/k3s-installer.sh
+  environment:
+    INSTALL_K3S_EXEC: "agent"
+    K3S_URL: "https://{{ hostvars['localhost']['cp_nodes'][0] }}:6443"
+    INSTALL_K3S_VERSION: "{{ k3s_ver }}"
+    K3S_TOKEN: "{{ hostvars['localhost']['k3s_token'] }}"
   register: k3s_agent_install_status
+  changed_when: k3s_agent_install_status.rc == 0
 
 - name: Debug k3s install status
   ansible.builtin.debug:
